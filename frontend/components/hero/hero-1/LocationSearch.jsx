@@ -1,16 +1,14 @@
 
 'use client'
 
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { filterUpdate } from '@/store/slice/searchSlice'
+import { locationUpdate } from '@/store/slice/searchSlice'
 
 const SearchBar = () => {
   const dispatch = useDispatch();
 
   const locationSearchContent = useSelector((state) => state.common.locations)
   const search = useSelector((state) => state.search)
-  const filters = search.filters
 
   return (
     <>
@@ -27,8 +25,8 @@ const SearchBar = () => {
               type="search"
               placeholder="Where are you going?"
               className="js-search js-dd-focus"
-              value={filters.location ? filters.location : ''}
-              onChange={(e) => dispatch(filterUpdate({location: e.target.value}))}
+              value={search.location ? search.location : ''}
+              onChange={(e) => dispatch(locationUpdate({location: e.target.value}))}
             />
           </div>
         </div>
@@ -40,11 +38,11 @@ const SearchBar = () => {
               {locationSearchContent.map((item) => (
                 <li
                   className={`-link d-block col-12 text-left rounded-4 px-20 py-15 js-search-option mb-1 ${
-                    filters.location && filters.location === item.name ? "active" : ""
+                    search.location && search.location === item.name ? "active" : ""
                   }`}
                   key={item.id}
                   role="button"
-                  onClick={() => dispatch(filterUpdate({location: item.name}))}
+                  onClick={() => dispatch(locationUpdate({location: item.name}))}
                 >
                   <div className="d-flex">
                     <div className="icon-location-2 text-light-1 text-20 pt-4" />

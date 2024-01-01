@@ -1,27 +1,26 @@
 import {createSlice} from '@reduxjs/toolkit'
+import { DateObject } from "react-multi-date-picker";
 
 const initialState = {
-    filters: {
-        location: null,
-        date: {
-            from: null,
-            to: null
-        },
-        guest: {
-            adult: 1,
-            children: null,
-            room: null
-        },
-        propertyName: null,
-        price: {
-            from: null,
-            to: null
-        },
-        companyRating: null,
-        retreatRating: null,
-        category: [],
-        expense: null
-    }
+    location: null,
+    date: [
+        new DateObject(),
+        new DateObject().setDay(3)
+    ],
+    guest: {
+        adult: 1,
+        children: null,
+        room: null
+    },
+    propertyName: null,
+    price: {
+        from: null,
+        to: null
+    },
+    companyRating: null,
+    retreatRating: null,
+    category: [],
+    expense: null
 }
 
 const searchSlice = createSlice({
@@ -30,11 +29,11 @@ const searchSlice = createSlice({
     reducers: {
         locationUpdate: (state, action) => {
             const filter = action.payload
-            state.filters = {...state.filters, location: filter.location};
+            state.location = filter.location;
         },
         dateUpdate: (state, action) => {
             const filter = action.payload
-            state.filters = {...state.filters, date: {from: filter.dateFrom, to:filter.dateTo}};
+            state.date = filter
         },
         guestUpdate: (state, action) => {
             const filter = action.payload
@@ -67,6 +66,6 @@ const searchSlice = createSlice({
     }
 })
 
-export const { filterUpdate } = searchSlice.actions
+export const { locationUpdate, dateUpdate } = searchSlice.actions
 
 export default searchSlice.reducer;

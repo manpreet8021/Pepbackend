@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import findPlaceSlice from "../features/hero/findPlaceSlice";
 import searchSliceReducer from './slice/searchSlice';
 import commonSlice from './slice/commonSlice'
@@ -9,5 +9,6 @@ export const store = configureStore({
         search: searchSliceReducer,
         common: commonSlice
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
     devTools: true
 });
