@@ -1,12 +1,9 @@
 
 'use client'
 
+import { guestUpdate } from "@/store/slice/searchSlice";
 import React, { useState } from "react";
-const counters = [
-  { name: "Adults", defaultValue: 2 },
-  { name: "Children", defaultValue: 1 },
-  { name: "Rooms", defaultValue: 1 },
-];
+import { useDispatch, useSelector } from "react-redux";
 
 const Counter = ({ name, defaultValue, onCounterChange }) => {
   const [count, setCount] = useState(defaultValue);
@@ -62,14 +59,15 @@ const Counter = ({ name, defaultValue, onCounterChange }) => {
 };
 
 const GuestSearch = () => {
-  const [guestCounts, setGuestCounts] = useState({
-    Adults: 2,
-    Children: 1,
-    Rooms: 1,
-  });
+  const dispatch = useDispatch();
+
+  const common = useSelector((state) => state.common)
+  const search = useSelector((state) => state.search)
+  
   const handleCounterChange = (name, value) => {
-    setGuestCounts((prevState) => ({ ...prevState, [name]: value }));
+    dispatch(guestUpdate({name, value}))
   };
+
   return (
     <div className="searchMenu-guests px-30 lg:py-20 lg:px-0 js-form-dd js-form-counters position-relative">
       <div
@@ -80,21 +78,19 @@ const GuestSearch = () => {
       >
         <h4 className="text-15 fw-500 ls-2 lh-16">Guest</h4>
         <div className="text-15 text-light-1 ls-2 lh-16">
-          <span className="js-count-adult">{guestCounts.Adults}</span> adults -{" "}
-          <span className="js-count-child">{guestCounts.Children}</span>{" "}
-          childeren - <span className="js-count-room">{guestCounts.Rooms}</span>{" "}
-          room
+          <span className="js-count-adult">{search.guest.Adults}</span> adults -{" "}
+          <span className="js-count-child">{search.guest.Children}</span>{" "} childeren
         </div>
       </div>
       {/* End guest */}
 
       <div className="shadow-2 dropdown-menu min-width-400">
         <div className="bg-white px-30 py-30 rounded-4 counter-box">
-          {counters.map((counter) => (
+          {common.guest.map((counter) => (
             <Counter
               key={counter.name}
               name={counter.name}
-              defaultValue={counter.defaultValue}
+              defaultValue={search.guest[counter.name]}
               onCounterChange={handleCounterChange}
             />
           ))}

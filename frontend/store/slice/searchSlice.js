@@ -8,9 +8,8 @@ const initialState = {
         new DateObject().setDay(3)
     ],
     guest: {
-        adult: 1,
-        children: null,
-        room: null
+        Adults: 1,
+        Children: 0
     },
     propertyName: null,
     price: {
@@ -33,11 +32,11 @@ const searchSlice = createSlice({
         },
         dateUpdate: (state, action) => {
             const filter = action.payload
-            state.date = filter
+            state.date = JSON.parse(filter)
         },
         guestUpdate: (state, action) => {
-            const filter = action.payload
-            state.filters = {...state.filters, guest: {adult: filter.adult, children: filter.children, room: filter.room}};
+            const {name, value} = action.payload
+            state.guest = {...state.guest, [name]:value};
         },
         propertyNameUpdate: (state, action) => {
             const filter = action.payload
@@ -66,6 +65,6 @@ const searchSlice = createSlice({
     }
 })
 
-export const { locationUpdate, dateUpdate } = searchSlice.actions
+export const { locationUpdate, dateUpdate, guestUpdate } = searchSlice.actions
 
 export default searchSlice.reducer;

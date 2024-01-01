@@ -16,7 +16,7 @@ const DateSearch = () => {
         inputClass="custom_input-picker"
         containerClassName="custom_container-picker"
         value={dates.date}
-        onChange={(e)=>{dispatch(dateUpdate(e))}}
+        onChange={(e)=>{dispatch(dateUpdate(JSON.stringify(e)))}}
         numberOfMonths={2}
         offsetY={10}
         range

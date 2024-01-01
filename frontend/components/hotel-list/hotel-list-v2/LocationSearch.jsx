@@ -1,45 +1,14 @@
-
 'use client'
 
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { locationUpdate } from '@/store/slice/searchSlice'
 
 const SearchBar = () => {
-  const [searchValue, setSearchValue] = useState("");
-  const [selectedItem, setSelectedItem] = useState(null);
+  const dispatch = useDispatch();
 
-  const locationSearchContent = [
-    {
-      id: 1,
-      name: "London",
-      address: "Greater London, United Kingdom",
-    },
-    {
-      id: 2,
-      name: "New York",
-      address: "New York State, United States",
-    },
-    {
-      id: 3,
-      name: "Paris",
-      address: "France",
-    },
-    {
-      id: 4,
-      name: "Madrid",
-      address: "Spain",
-    },
-    {
-      id: 5,
-      name: "Santorini",
-      address: "Greece",
-    },
-  ];
-
-  const handleOptionClick = (item) => {
-    setSearchValue(item.name);
-    setSelectedItem(item);
-  };
-
+  const locationSearchContent = useSelector((state) => state.common.locations)
+  const search = useSelector((state) => state.search)
+  
   return (
     <>
       <div className="searchMenu-loc px-20 py-10 bg-white rounded-4 js-form-dd js-liverSearch">
@@ -55,8 +24,8 @@ const SearchBar = () => {
               type="search"
               placeholder="Where are you going?"
               className="js-search js-dd-focus"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              value={search.location ? search.location : ''}
+              onChange={(e) => dispatch(locationUpdate({location: e.target.value}))}
             />
           </div>
         </div>
@@ -68,7 +37,7 @@ const SearchBar = () => {
               {locationSearchContent.map((item) => (
                 <li
                   className={`-link d-block col-12 text-left rounded-4 px-20 py-15 js-search-option mb-1 ${
-                    selectedItem && selectedItem.id === item.id ? "active" : ""
+                    search.location && search.location === item.name ? "active" : ""
                   }`}
                   key={item.id}
                   role="button"

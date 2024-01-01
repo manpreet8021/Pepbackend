@@ -8,6 +8,10 @@ const initialState = {
         {id:4, name: 'Madrid', address: 'Spain'}
     ],
     category: [],
+    guest: [
+        { name: "Adults" },
+        { name: "Children" }
+    ]
 }
 
 const commonSlice = createSlice({
