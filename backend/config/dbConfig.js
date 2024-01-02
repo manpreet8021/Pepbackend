@@ -1,18 +1,12 @@
 import mongoose from "mongoose";
 
- const connect= async ()=> {
+ const connectDb = async ()=> {
   try {
-    
- const connect=await   mongoose.connect(process.env.MONGO_URL);
-    const connection = mongoose.connection;
-
-    connection.on("connected", () => {
-      console.log("MONGO CONNECTED SUCCESSFULLY!!");
-    });
+    const connection = await mongoose.connect('mongodb+srv://admin:Passw0rd@peprelier.7mpcnrw.mongodb.net/');
+    console.log(connection.connection.host)
   } catch (error) {
-    console.log("MONGODB Something went wrong!");
-    console.log(error);
+    console.log(error)
   }
 }
 
-export default connect
+export default connectDb
