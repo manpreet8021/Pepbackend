@@ -1,19 +1,28 @@
+'use client'
+import { categoryAdd, categoryRemove } from "@/store/slice/searchSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 const StyleFilter = () => {
-  const checkboxes = [
-    { label: "Budget", count: 92 },
-    { label: "Mid-range", count: 45 },
-    { label: "Luxury", count: 21 },
-    { label: "Family-friendly", count: 78 },
-    { label: "Business", count: 679 },
-  ];
+  const common = useSelector((state)=>state.common);
+  const search = useSelector((state)=>state.search);
+  const dispatch = useDispatch()
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target
+    if(checked) {
+      dispatch(categoryAdd(value))
+    } else {
+      dispatch(categoryRemove(value))
+    }
+  }
 
   return (
     <>
-      {checkboxes.map((checkbox, index) => (
+      {common.category.map((checkbox, index) => (
         <div className="row y-gap-10 items-center justify-between" key={index}>
           <div className="col-auto">
             <div className="form-checkbox d-flex items-center">
-              <input type="checkbox" name="name" />
+              <input type="checkbox" name="categoryList" value={checkbox.id} onChange={handleCheckboxChange}/>
               <div className="form-checkbox__mark">
                 <div className="form-checkbox__icon icon-check" />
               </div>

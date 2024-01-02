@@ -1,20 +1,19 @@
 import {createSlice} from '@reduxjs/toolkit'
-import { DateObject } from "react-multi-date-picker";
 
 const initialState = {
     location: null,
     date: [
-        new DateObject(),
-        new DateObject().setDay(3)
+        new Date().toISOString(),
+        new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000).toISOString()  // Adding 2 days and converting to string
     ],
     guest: {
         Adults: 1,
         Children: 0
     },
-    propertyName: null,
+    propertyName: '',
     price: {
-        from: null,
-        to: null
+        min: 1000,
+        max: 20000
     },
     companyRating: null,
     retreatRating: null,
@@ -32,6 +31,7 @@ const searchSlice = createSlice({
         },
         dateUpdate: (state, action) => {
             const filter = action.payload
+            console.log(JSON.parse(filter))
             state.date = JSON.parse(filter)
         },
         guestUpdate: (state, action) => {
@@ -40,11 +40,11 @@ const searchSlice = createSlice({
         },
         propertyNameUpdate: (state, action) => {
             const filter = action.payload
-            state.filters = {...state.filters, propertyName: filter.propertyName};
+            state.propertyName = filter.propertyName;
         },
         priceUpdate: (state, action) => {
             const filter = action.payload
-            state.filters = {...state.filters, price: {from: filter.from, to: filter.to}};
+            state.price = filter;
         },
         companyRatingUpdate: (state, action) => {
             const filter = action.payload
@@ -54,9 +54,13 @@ const searchSlice = createSlice({
             const filter = action.payload
             state.filters = {...state.filters, retreatRating: filter.retreatRating};
         },
-        categoryUpdate: (state, action) => {
+        categoryAdd: (state, action) => {
             const filter = action.payload
-            state.filters = {...state.filters, category: filter.category};
+            state.category = [...state.category, filter];
+        },
+        categoryRemove: (state, action) => {
+            const filter = action.payload
+            state.category = state.category.filter((value) => value != filter)
         },
         expenseUpdate: (state, action) => {
             const filter = action.payload
@@ -65,6 +69,6 @@ const searchSlice = createSlice({
     }
 })
 
-export const { locationUpdate, dateUpdate, guestUpdate } = searchSlice.actions
+export const { locationUpdate, dateUpdate, guestUpdate, propertyNameUpdate, priceUpdate, categoryAdd, categoryRemove } = searchSlice.actions
 
 export default searchSlice.reducer;

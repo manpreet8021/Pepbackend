@@ -2,13 +2,13 @@
 
 import { dateUpdate } from "@/store/slice/searchSlice";
 import React from "react";
-import DatePicker, { DateObject } from "react-multi-date-picker";
+import DatePicker from "react-multi-date-picker";
 import { useSelector, useDispatch } from "react-redux";
 
 const DateSearch = () => {
   const dates = useSelector((state)=>state.search)
   const dispatch = useDispatch();
-  const minDate = new DateObject()
+  const minDate = new Date()
   
   return (
     <div className="text-15 text-light-1 ls-2 lh-16 custom_dual_datepicker">

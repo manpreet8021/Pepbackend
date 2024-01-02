@@ -24,7 +24,7 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar__item -no-border">
-        <h5 className="text-18 fw-500 mb-10">Search by property name</h5>
+        <h5 className="text-18 fw-500 mb-10">Search by retreat name</h5>
         <SearchBox />
       </div>
       {/* End search box */}
@@ -100,9 +100,9 @@ const Sidebar = () => {
       </div>
       {/* End Aminities filter */}
 
-      <div className="sidebar__item -no-border position-relative">
+      {/* <div className="sidebar__item -no-border position-relative">
         <Map />
-      </div>
+      </div> */}
       {/* End find map */}
     </>
   );
