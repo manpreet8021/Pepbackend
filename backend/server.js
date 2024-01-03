@@ -6,6 +6,8 @@ import cors from 'cors';
 import connectDb from './config/dbConfig.js';
 import dotenv from 'dotenv'
 import authRoutes from './routes/authRoutes.js'
+import adminRoutes from './routes/admin/index.js'
+import { adminProtect } from './middleware/authMiddleware.js';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 
 const app = express();
@@ -22,6 +24,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/admin/', adminProtect, adminRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

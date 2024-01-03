@@ -1,5 +1,5 @@
-import asyncHandler from "./asyncHandler";
-import UserModel from "../models/userModel";
+import asyncHandler from "./asyncHandler.js";
+import UserModel from "../models/userModel.js";
 
 const adminProtect = asyncHandler(async(req, res, next) => {
     let token = '';
@@ -11,30 +11,30 @@ const adminProtect = asyncHandler(async(req, res, next) => {
             req.user = user
             next();
         } else {
-            res.statusCode(401);
+            res.status(401);
             throw new Error("Unauthorized")
         }
     } else {
-        res.statusCode(401);
+        res.status(401);
         throw new Error("Token is not valid please login again")
     }
 }) 
 
 const protect = asyncHandler(async(req, res, next) => {
     let token = '';
-    token = req.cookies.token;
+    token = req.cookies['PEPRELIER-AUTH'];
 
     if(token) {
-        const user = UserModel.findById({_id: token.userId});
+        const user = UserModel.getUserBySessionToken(token);
         if(user) {
             req.user = user
             next();
         } else {
-            res.statusCode(401);
+            res.status(401);
             throw new Error("Unauthorized")
         }
     } else {
-        res.statusCode(401);
+        res.status(401);
         throw new Error("Token is not valid please login again")
     }
 })
