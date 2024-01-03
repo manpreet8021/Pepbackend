@@ -1,6 +1,8 @@
 import crypto from 'crypto'
+import dotenv from 'dotenv'
 
-const SECRET = 'ASHISH-REST-API';
+dotenv.config()
+const SECRET = process.env.SECRET;
 
 export const authentication = (salt, password) => {
     return crypto.createHmac('sha256', [salt, password].join('/')).update(SECRET).digest('hex');
