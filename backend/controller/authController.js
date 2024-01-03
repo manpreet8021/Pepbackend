@@ -1,4 +1,3 @@
-import express from 'express'
 import { createUser, getUserByEmail } from '../models/userModel.js';
 import {authentication, random} from '../helpers/index.js'
 
@@ -27,7 +26,7 @@ export const register = async (req,res)=>{
         return res.sendStatus(400)
     }
 }
-//Login 
+ 
 export const login= async (req,res)=>{
     try {
         const {email,password}= req.body;

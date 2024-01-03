@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
+    displayName: {
+        type: String,
+        required: true
+    },
     username: {
         type: String,
         required: true,
@@ -12,18 +16,19 @@ const userSchema = new mongoose.Schema({
         unique: true,
     },
     authentication:{ password: {
-        type: String,
-        required: true,
-        select:false
+            type: String,
+            required: true,
+            select:false
+        },
+        salt:{type: String,select: false},
+        sessionStorage: {type: String, select: false}
     },
-    salt:{type: String,select: false},
-    sessionStorage: {type: String, select: false}
-},
-   
     isAdmin: {
         type: Boolean,
         default: false,
     },
+},{
+    timestamps: true
 })
 
 const UserModel = mongoose.models.users || mongoose.model("users", userSchema);

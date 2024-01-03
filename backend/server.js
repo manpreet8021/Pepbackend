@@ -6,6 +6,7 @@ import cors from 'cors';
 import connectDb from './config/dbConfig.js';
 import dotenv from 'dotenv'
 import authRoutes from './routes/authRoutes.js'
+import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 
 const app = express();
 dotenv.config();
@@ -21,5 +22,8 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 
 app.use('/api/auth', authRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(process.env.PORT, ()=>console.log(`running at port: ${process.env.PORT}`))
