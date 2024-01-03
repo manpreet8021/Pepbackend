@@ -3,10 +3,10 @@ import UserModel from "../models/userModel";
 
 const adminProtect = asyncHandler(async(req, res, next) => {
     let token = '';
-    token = req.cookies.token;
+    token = req.cookies['PEPRELIER-AUTH'];
 
     if(token) {
-        const user = UserModel.findById({_id: token.userId});
+        const user = UserModel.getUserBySessionToken(token);
         if(user && user.isAdmin) {
             req.user = user
             next();
