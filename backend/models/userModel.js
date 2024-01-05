@@ -5,11 +5,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-    },
     email: {
         type: String,
         required: true,
@@ -34,10 +29,12 @@ const userSchema = new mongoose.Schema({
 const UserModel = mongoose.models.users || mongoose.model("users", userSchema);
 
 export default UserModel;
+
+
 export const getUsers = () => UserModel.find();
 export const getUserByEmail = (email) => UserModel.findOne({ email });
 export const getUserBySessionToken = (sessionToken) => UserModel.findOne({ 'authentication.sessionToken': sessionToken });
 export const getUserById = (id) => UserModel.findById(id);
 export const createUser = (values) => new UserModel(values).save().then((user) => user.toObject());
 export const deleteUserById = (id) => UserModel.findOneAndDelete({ _id: id });
-export const updateUserById = (id, value) => UserModel.findByIdAndUpdate(id, values);
+export const updateUserById = (id, value) => UserModel.findByIdAndUpdate(id, value);

@@ -23,7 +23,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-app.use('/api/auth', authRoutes);
+app.use('/api/', authRoutes);
 app.use('/admin/', adminProtect, adminRoutes);
 
 app.use(notFound);
