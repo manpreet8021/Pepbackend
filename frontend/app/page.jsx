@@ -1,12 +1,15 @@
-import Wrapper from "@/components/layout/Wrapper";
+'use client'
+
 import MainHome from "@/components/home";
+import AdminHome from "@/components/dashboard/vendor-dashboard/dashboard"
+import { useSelector } from "react-redux";
 
 export default function Home() {
+  const user = useSelector((state) => state.auth)
+
   return (
     <>
-      <Wrapper>
-        <MainHome />
-      </Wrapper>
+      { user.userInfo && user.userInfo.isAdmin ? <AdminHome /> : <MainHome /> }
     </>
   );
 }

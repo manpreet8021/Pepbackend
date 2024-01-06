@@ -5,10 +5,10 @@ const Sidebar = () => {
   const sidebarData = [
     {
       icon: "/img/dashboard/sidebar/booking.svg",
-      title: "Manage Hotel",
+      title: "Country",
       links: [
-        { title: "All Hotel", href: "#" },
-        { title: "Add Hotel", href: "#" },
+        { title: "All Country", href: "/country" },
+        { title: "Add Country", href: "/country/add" },
         { title: "Recovery", href: "#" },
       ],
     },

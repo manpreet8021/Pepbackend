@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import findPlaceSlice from "../features/hero/findPlaceSlice";
 import searchSliceReducer from './slice/searchSlice';
 import commonSliceReducer from './slice/commonSlice'
@@ -13,6 +13,6 @@ export const store = configureStore({
         common: commonSliceReducer,
         auth: authSliceReducer
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
     devTools: true
 });
