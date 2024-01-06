@@ -9,7 +9,7 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <DashboardPage />
+      <DashboardPage buttonName="Add Country" title="All Countries" />
     </>
   );
 }
