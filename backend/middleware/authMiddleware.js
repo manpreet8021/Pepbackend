@@ -1,14 +1,14 @@
 import asyncHandler from "./asyncHandler.js";
-import UserModel from "../models/userModel.js";
+import {getUserBySessionToken} from "../models/userModel.js";
 
 const adminProtect = asyncHandler(async(req, res, next) => {
     let token = '';
     token = req.cookies['PEPRELIER-AUTH'];
 
     if(token) {
-        const user = UserModel.getUserBySessionToken(token);
+        const user = await getUserBySessionToken(token);
         if(user && user.isAdmin) {
-            req.user = user
+            req.user = user;
             next();
         } else {
             res.status(401);
@@ -25,7 +25,7 @@ const protect = asyncHandler(async(req, res, next) => {
     token = req.cookies['PEPRELIER-AUTH'];
 
     if(token) {
-        const user = UserModel.getUserBySessionToken(token);
+        const user = await getUserBySessionToken(token);
         if(user) {
             req.user = user
             next();

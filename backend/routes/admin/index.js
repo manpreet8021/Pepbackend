@@ -1,9 +1,10 @@
 import express from 'express';
 import cityRoutes from './cityRoutes.js';
+import countryRoutes from './countryRoutes.js';
 
 const router = express.Router();
 
-router.route('/city', cityRoutes)
-router.route('/country', cityRoutes)
+router.use('/city', cityRoutes)
+router.use('/country', countryRoutes)
 
 export default router

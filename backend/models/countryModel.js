@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const countrySchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     active: {
         type: Boolean,
@@ -21,3 +22,9 @@ const countrySchema = new mongoose.Schema({
 const countryModel = mongoose.model('Country', countrySchema)
 
 export default countryModel
+
+export const getCountries = () => countryModel.find();
+export const getCountryById = (id) => countryModel.findById(id);
+export const deleteCountryById = (id) => countryModel.findOneAndDelete({ _id: id });
+export const updateCountryById = (id, value) => countryModel.findByIdAndUpdate(id, value);
+export const saveCountry = (values) => new countryModel(values).save();
