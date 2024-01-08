@@ -27,4 +27,4 @@ export const getCountries = () => countryModel.find();
 export const getCountryById = (id) => countryModel.findById(id);
 export const deleteCountryById = (id) => countryModel.findOneAndDelete({ _id: id });
 export const updateCountryById = (id, value) => countryModel.findByIdAndUpdate(id, value);
-export const saveCountry = (values) => new countryModel(values).save();
+export const saveCountry = (values) => {new countryModel(values).save().then((country) => country.toObject())};
