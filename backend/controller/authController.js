@@ -72,6 +72,8 @@ export const login = asyncHandler(async (req,res)=>{
 
     const salt = random()
     user.authentication.sessionStorage = authentication(salt,user._id.toString())
+    
+    await user.save()
 
     res.cookie('PEPRELIER-AUTH', user.authentication.sessionStorage, { 
         httpOnly: true, 
@@ -79,8 +81,6 @@ export const login = asyncHandler(async (req,res)=>{
         sameSite: 'strict', 
         maxAge: 30*24*60*1000 //30days
     });
-    
-    await user.save()
 
     res.status(200).json({
         name: user.displayName,
