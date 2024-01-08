@@ -7,8 +7,16 @@ const countryApiSlice = apiSlice.injectEndpoints({
                 url: 'admin/country',
                 credentials: 'include'
             })
+        }),
+        addCountry: builder.mutation ({
+            query: (data) => ({
+                url: 'admin/country',
+                method: 'POST',
+                body: data,
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useGetCountryQuery } = countryApiSlice;
+export const { useGetCountryQuery, useAddCountryMutation } = countryApiSlice;

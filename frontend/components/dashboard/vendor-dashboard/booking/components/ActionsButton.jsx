@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 
-const ActionsButton = () => {
+const ActionsButton = ({id}) => {
   const [activeFilter, setActiveFilter] = useState("all");
 
   const handleFilterClick = (filter) => {
