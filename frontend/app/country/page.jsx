@@ -10,20 +10,14 @@ export default function page() {
   const { isLoading, data, error } = useGetCountryQuery();
   
   const columns = [{
-    Header: 'Id',
-    accessor: '_id'
-   },{
     Header: 'Name',
     accessor: 'name'
-   },{
+   }, {
     Header: 'Active',
-    accessor: 'active'
-   },{
-    Header: 'Logo',
-    accessor: 'logo',
-    Cell: ({ cell: {value}}) => (
-      <img src={value} style={{ width: '30px', height: '30px' }}  />
-    )
+    accessor: 'active',
+    Cell: ({ cell: {value} }) => {
+      return value ? 'Active' : 'Inactive' 
+    }
    }, {
     Header: 'Action',
     accessor: '_id',

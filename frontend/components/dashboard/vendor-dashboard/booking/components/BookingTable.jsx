@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useTable } from "react-table";
+import { useTable, useSortBy, usePagination } from "react-table";
 import Pagination from "../../common/Pagination";
 import { useMemo } from "react";
 
@@ -30,9 +30,11 @@ const BookingTable = ({column, values}) => {
   const tableInstance = useTable({
     columns,
     data
-  })
+  },
+    useSortBy,
+    usePagination)
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, page, nextPage, previousPage, canNextPage, canPreviousPage, state, pageOptions } = tableInstance
 
   return (
     <>
@@ -59,23 +61,29 @@ const BookingTable = ({column, values}) => {
               <table className="table-3 -border-bottom col-12" {...getTableProps()}>
                 <thead className="bg-light-2">
                   {
-                    headerGroups.map((headerGroup) => (
-                      <tr {...headerGroup.getHeaderGroupProps()}>
+                    headerGroups.map(headerGroup => (
+                      <tr key={headerGroup.getHeaderGroupProps().key} {...headerGroup.getHeaderGroupProps()}>
+                        <th>S No</th>
                         {headerGroup.headers.map(column => (
-                          <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                        ))}
+                            <th key={column.getHeaderProps().key} 
+                              {...column.getHeaderProps(column.getSortByToggleProps())}
+
+                              >{column.render('Header')}</th>
+                          )
+                        )}
                       </tr>
                     ))
                   }
                 </thead>
                 <tbody {...getTableBodyProps()}>
                   {
-                    rows.map(row => {
+                    page.map((row,index) => {
                       prepareRow(row)
                       return(
-                        <tr {...row.getRowProps()}>
-                          {row.cells.map((cell) => {
-                            return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                        <tr key={row.getRowProps().key} {...row.getRowProps()}>
+                          <td>{index+1}</td>
+                          {row.cells.map(cell => {
+                            return <td key={cell.getCellProps().key} {...cell.getCellProps()}>{cell.render('Cell')}</td>
                           })}
                         </tr>
                       )
@@ -87,7 +95,7 @@ const BookingTable = ({column, values}) => {
           </div>
         </div>
       </div>
-      <Pagination />
+      <Pagination previousPage={previousPage} nextPage={nextPage} canNextPage={canNextPage} canPreviousPage={canPreviousPage} state={state} pageOptions={pageOptions}/>
     </>
   );
 };
