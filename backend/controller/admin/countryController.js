@@ -20,13 +20,13 @@ const getCountry = asyncHandler(async(req, res) => {
 })
 
 const addCountry = asyncHandler(async(req, res) => {
-    const { error } = addCountrySchema.validate(req.body, {abortEarly: false})
+    const { error } = addCountrySchema.validate({name: req.body.name, active: req.body.active}, {abortEarly: false})
 
     if(error) {
         res.status(400)
         throw new Error(error.message)
     }
-
+    console.log(req.file)
     if(!req.file) {
         res.status(400)
         throw new Error("Failed to upload image")
@@ -50,7 +50,6 @@ const addCountry = asyncHandler(async(req, res) => {
 })
 
 const updateCountry = asyncHandler(async(req, res) => {
-    console.log(req.body)
     const { error } = updateCountrySchema.validate({id: req.params.id, name: req.body.name, active: req.body.active}, {abortEarly: false})
 
     if(error) {
@@ -61,7 +60,7 @@ const updateCountry = asyncHandler(async(req, res) => {
     const existingCountry = await getCountryById(req.params.id);
 
     if(existingCountry) {
-        if(req.body.imageUpdated) {
+        if(req.body.imageUpdated != false) {
             if(!req.file) {
                 res.status(400)
                 throw new Error("Failed to upload image")
@@ -96,7 +95,7 @@ const updateCountry = asyncHandler(async(req, res) => {
 })
 
 const deleteCountry = asyncHandler(async(req, res) => {
-
+    
 })
 
 export { getCountry, addCountry, updateCountry, deleteCountry }

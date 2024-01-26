@@ -13,14 +13,13 @@ import { useState } from "react";
 export default function CountryForm({closeModal, title, data}) {
     const [addCountry] = useAddCountryMutation();
     const [updateCountry, {isLoading}] = useUpdateCountryMutation();
-    const [imageUpdated, setImageUpdated] = useState(false)
 
     const initialState = {
-        id: data?._id || null,
+        id: data?._id || '',
         name: data?.name || '',
         active: data?.active || false,
         logo: '',
-        checkImageValidation: !data?.logo
+        imageUpdated: true
     }
 
     const handleSubmit = async(values, actions) => {
@@ -29,9 +28,9 @@ export default function CountryForm({closeModal, title, data}) {
         for (let value in values) {
             formData.append(value, values[value]);
         }
-
+        
         try {
-            const result = formData.get('id') ? await updateCountry(formData) : await addCountry(formData);
+            const result = formData.get('id') != '' ? await updateCountry(formData) : await addCountry(formData);
             const fileInput = document.querySelector('input[type="file"][name="logo"]');
             if (fileInput) {
                 fileInput.value = '';
@@ -46,24 +45,25 @@ export default function CountryForm({closeModal, title, data}) {
     const validationSchema = Yup.object({
         name: Yup.string().required(),
         active: Yup.boolean().required(),
-        logo: Yup.mixed()
-            .when('checkImageValidation', {
-                is: true,
-                then: Yup.mixed()
-                .required()
+        logo: Yup.mixed().when(
+            'imageUpdated', {
+                is: (imageUpdated) => imageUpdated === true,
+                then: Yup.mixed().required()
                 .test("is-valid-type", "Image is not of valid type", value => fileValidation(value && value.name.toLowerCase(), "image"))
                 .test("is-valid-size", "Max allowed size is 100KB", value => value && value.size <= MAX_FILE_SIZE)
-            })
+            }
+        )
+            
+            
     })
 
     return(
         <>
             <ModalHeader title={`${title} Country`}/>
-            <Formik initialValues={initialState} enableReinitialize onSubmit={(values,actions) => handleSubmit(values, actions)} validationSchema={validationSchema}>
+            <Formik initialValues={initialState} enableReinitialize onSubmit={(values, actions) => handleSubmit(values, actions)} validationSchema={validationSchema}>
                 {({ handleSubmit, isSubmitting, dirty, isValid, setFieldValue }) => (
                     <Form onSubmit={handleSubmit} encType="multipart/form-data">
                         <ModalBody>
-                                {/* <div className="text-18 fw-500 mb-10">Hotel Content</div> */}
                             <div className="row x-gap-20 y-gap-20">
                                 <div className="col-12">
                                     <div className="form-input ">
@@ -80,8 +80,7 @@ export default function CountryForm({closeModal, title, data}) {
                                                         name="logo"
                                                         accept='image/*'
                                                         onChange={(e) => {
-                                                            setImageUpdated(true)
-                                                            setFieldValue('checkImageValidation', true)
+                                                            setFieldValue("imageUpdated", true)
                                                             setFieldValue('logo', e.currentTarget.files[0])}
                                                         } />
                                                 </div>
