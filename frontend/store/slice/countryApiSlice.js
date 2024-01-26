@@ -15,8 +15,16 @@ const countryApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 credentials: 'include'
             })
+        }),
+        updateCountry: builder.mutation({
+            query: (data) => ({
+                url: `admin/country/${data.id}`,
+                method: 'PUT',
+                body: data,
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useGetCountryQuery, useAddCountryMutation } = countryApiSlice;
+export const { useGetCountryQuery, useAddCountryMutation, useUpdateCountryMutation } = countryApiSlice;
