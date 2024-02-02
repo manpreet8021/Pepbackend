@@ -60,7 +60,7 @@ const updateCountry = asyncHandler(async(req, res) => {
     const existingCountry = await getCountryById(req.params.id);
 
     if(existingCountry) {
-        if(req.body.imageUpdated != false) {
+        if(req.body.imageUpdated !== 'false') {
             if(!req.file) {
                 res.status(400)
                 throw new Error("Failed to upload image")
@@ -80,9 +80,9 @@ const updateCountry = asyncHandler(async(req, res) => {
         existingCountry.active = active;
     
         const newCountry = await updateCountryById(req.params.id, existingCountry);
-    
+        
         if(newCountry) {
-            res.status(201).json();
+            res.status(201).json(newCountry);
         } else {
             res.status(400)
             throw new Error("Country validation failed")

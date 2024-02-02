@@ -8,20 +8,19 @@ import ModalBody from "../modal/ModalBody";
 import ModalHeader from "../modal/ModalHeader";
 import fileValidation, {MAX_FILE_SIZE} from "@/utils/fileValidation"
 import Image from "next/image";
-import { useState } from "react";
 
 export default function CountryForm({closeModal, title, data}) {
     const [addCountry] = useAddCountryMutation();
     const [updateCountry, {isLoading}] = useUpdateCountryMutation();
-
+    
     const initialState = {
         id: data?._id || '',
         name: data?.name || '',
         active: data?.active || false,
         logo: '',
-        imageUpdated: true
+        imageUpdated: data.logo ? false : true
     }
-
+    
     const handleSubmit = async(values, actions) => {
         const formData = new FormData()
 
@@ -45,16 +44,15 @@ export default function CountryForm({closeModal, title, data}) {
     const validationSchema = Yup.object({
         name: Yup.string().required(),
         active: Yup.boolean().required(),
+        imageUpdated: Yup.boolean().required(),
         logo: Yup.mixed().when(
             'imageUpdated', {
-                is: (imageUpdated) => imageUpdated === true,
-                then: Yup.mixed().required()
-                .test("is-valid-type", "Image is not of valid type", value => fileValidation(value && value.name.toLowerCase(), "image"))
-                .test("is-valid-size", "Max allowed size is 100KB", value => value && value.size <= MAX_FILE_SIZE)
+                is: true,
+                then: (schema) => schema
+                    .test("is-valid-type", "Image is not of valid type", value => fileValidation(value && value.name.toLowerCase(), "image"))
+                    .test("is-valid-size", "Max allowed size is 100KB", value => value && value.size <= MAX_FILE_SIZE)
             }
         )
-            
-            
     })
 
     return(
@@ -80,7 +78,7 @@ export default function CountryForm({closeModal, title, data}) {
                                                         name="logo"
                                                         accept='image/*'
                                                         onChange={(e) => {
-                                                            setFieldValue("imageUpdated", true)
+                                                            setFieldValue('imageUpdated', true)
                                                             setFieldValue('logo', e.currentTarget.files[0])}
                                                         } />
                                                 </div>
@@ -88,7 +86,7 @@ export default function CountryForm({closeModal, title, data}) {
                                             </div>
                                     ) 
                                 }
-                                { data.logo && !imageUpdated && <div className="col-12"><Image src={data.logo} width="50" height="50" alt="Country Logo"/></div>}
+                                { data.logo && <div className="col-12"><Image src={data.logo} width="50" height="50" alt="Country Logo"/></div>}
                                 <div className="col-12">
                                     <div className="d-flex items-center form-checkbox">
                                         <Field type="checkbox" name="active"/>

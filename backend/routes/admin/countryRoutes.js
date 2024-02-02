@@ -6,14 +6,7 @@ const router = express.Router()
 
 router.route('/').get(getCountry)
 router.route('/').post(upload.single('logo'), addCountry)
-router.route('/:id').put((req, res, next) => {
-    if (req.body.imageUpdated != false) {
-      console.log("here")
-      upload.single('logo')(req, res, next);
-    } else {
-      next();
-    }
-  }, updateCountry)
+router.route('/:id').put(upload.single('logo'), updateCountry)
 router.route('/:id').delete(deleteCountry)
 
 export default router
