@@ -13,7 +13,7 @@ export default function page() {
   const [action, setAction] = useState("Add");
   const [column, setColumn] = useState({});
 
-  const countryData = useSelector(state => state.country)
+  const countryState = useSelector(state => state.country)
 
   const modalRef = useRef()
 
@@ -53,7 +53,7 @@ export default function page() {
       </div>}
       <div className="row y-gap-20 justify-between items-end pb-60 lg:pb-40 md:pb-32">
         <div className="col-auto">
-          <h1 className="text-30 lh-14 fw-600">All Countries</h1>
+          <h1 className="text-30 lh-14 fw-600">All State</h1>
         </div>
 
         <div className="col-auto">
@@ -62,15 +62,15 @@ export default function page() {
             onClick={() => handleOpenModal("Add", {})}
             className="button h-50 px-24 -dark-1 bg-blue-1 text-white"
           >
-            Add Country <div className="icon-arrow-top-right ml-15"></div>
+            Add State <div className="icon-arrow-top-right ml-15"></div>
           </button>
         </div>
       </div>
       {/* End .row */}
       {
-        !isLoading && countryData.data && (
+        !isLoading && countryState.data && (
           <div className="py-30 px-30 rounded-4 bg-white shadow-3">
-            <BookingTable column={columns} values={countryData.data} />
+            <BookingTable column={columns} values={countryState.data} />
           </div>
         )
       }

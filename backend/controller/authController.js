@@ -77,9 +77,9 @@ export const login = asyncHandler(async (req,res)=>{
 
     res.cookie('PEPRELIER-AUTH', user.authentication.sessionStorage, { 
         httpOnly: true, 
-        secure: process.env.ENVIRONMENT !== 'dev', 
+        secure: true, 
         sameSite: 'strict', 
-        maxAge: 30*24*60*1000 //30days
+        maxAge: 30 * 24 * 60 * 60 * 1000
     });
 
     res.status(200).json({

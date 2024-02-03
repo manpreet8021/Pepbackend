@@ -30,3 +30,5 @@ const countryApiSlice = apiSlice.injectEndpoints({
 })
 
 export const { useGetCountryQuery, useAddCountryMutation, useUpdateCountryMutation } = countryApiSlice;
+
+export default countryApiSlice

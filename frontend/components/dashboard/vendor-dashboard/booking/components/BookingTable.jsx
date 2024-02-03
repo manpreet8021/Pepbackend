@@ -6,26 +6,9 @@ import Pagination from "../../common/Pagination";
 import { useMemo } from "react";
 
 const BookingTable = ({column, values}) => {
-  /* const [activeTab, setActiveTab] = useState(0);
 
-  const handleTabClick = (index) => {
-    setActiveTab(index);
-  };
-
-  const tabItems = [
-    "All Booking",
-    "Completed",
-    "Processing",
-    "Confirmed",
-    "Cancelled",
-    "Paid",
-    "Unpaid",
-    "Partial Payment",
-  ];*/
-
-
-  const columns = useMemo(() =>  column, [])
-  const data = useMemo(() => values, [])
+  const columns = useMemo(() =>  column, [column])
+  const data = useMemo(() => values, [values])
 
   const tableInstance = useTable({
     columns,

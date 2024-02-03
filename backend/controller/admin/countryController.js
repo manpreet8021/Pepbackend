@@ -37,8 +37,9 @@ const addCountry = asyncHandler(async(req, res) => {
     if(imageInfo) {
         const { name, active } = req.body
         const country = await saveCountry({name, active, logo: imageInfo.secure_url});
+        
         if(country) {
-            res.status(201).json();
+            res.status(201).json(country);
         } else {
             res.status(400)
             throw new Error("Country validation failed")

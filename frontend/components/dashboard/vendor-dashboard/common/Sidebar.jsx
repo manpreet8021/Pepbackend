@@ -7,18 +7,14 @@ const Sidebar = () => {
       icon: "/img/dashboard/sidebar/booking.svg",
       title: "Country",
       links: [
-        { title: "All Country", href: "/country" },
-        { title: "Add Country", href: "/country/add" },
-        { title: "Recovery", href: "#" },
+        { title: "All Country", href: "/country" }
       ],
     },
     {
       icon: "/img/dashboard/sidebar/map.svg",
-      title: "Manage Tour",
+      title: "State",
       links: [
-        { title: "All Tour", href: "#" },
-        { title: "Add Tour", href: "#" },
-        { title: "Recovery", href: "#" },
+        { title: "All State", href: "/state" }
       ],
     },
     {
