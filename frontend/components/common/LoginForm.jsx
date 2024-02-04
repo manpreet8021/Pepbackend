@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup'
-import { useLoginMutation } from "@/store/slice/userApiSlice";
+import { useLoginMutation } from "@/store/slice/api/userApiSlice";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "@/store/slice/authSlice";
 import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
@@ -25,8 +24,7 @@ const LoginForm = () => {
 
   const handleSubmit = async(values) => {
     try{
-      const res = await login(values).unwrap()
-      dispatch(setCredentials(res));
+      const res = await login(values);
       router.push('/')
     } catch (error) {
       console.log(error)

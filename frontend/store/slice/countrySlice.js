@@ -1,4 +1,4 @@
-import countryApiSlice from "./countryApiSlice";
+import countryApiSlice from "./api/countryApiSlice";
 
 const { createSlice } = require("@reduxjs/toolkit")
 

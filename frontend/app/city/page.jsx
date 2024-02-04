@@ -2,7 +2,7 @@
 import React, { useRef, useState } from "react";
 import AdminWrapper from "@/components/layout/AdminWrapper";
 import BookingTable from "@/components/dashboard/vendor-dashboard/booking/components/BookingTable";
-import { useGetCountryQuery } from "@/store/slice/countryApiSlice";
+import { useGetCountryQuery } from "@/store/slice/api/countryApiSlice";
 import ActionsButton from "@/components/common/ActionButton";
 import CustomModal from "@/components/modal/customModal";
 import CountryForm from "@/components/form/CountryForm";
@@ -53,7 +53,7 @@ export default function page() {
       </div>}
       <div className="row y-gap-20 justify-between items-end pb-60 lg:pb-40 md:pb-32">
         <div className="col-auto">
-          <h1 className="text-30 lh-14 fw-600">All State</h1>
+          <h1 className="text-30 lh-14 fw-600">All City</h1>
         </div>
 
         <div className="col-auto">
@@ -62,7 +62,7 @@ export default function page() {
             onClick={() => handleOpenModal("Add", {})}
             className="button h-50 px-24 -dark-1 bg-blue-1 text-white"
           >
-            Add State <div className="icon-arrow-top-right ml-15"></div>
+            Add City <div className="icon-arrow-top-right ml-15"></div>
           </button>
         </div>
       </div>

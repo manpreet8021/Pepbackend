@@ -1,6 +1,6 @@
 'use client'
 
-import { useAddCountryMutation, useUpdateCountryMutation } from "@/store/slice/countryApiSlice";
+import { useAddCountryMutation, useUpdateCountryMutation } from "@/store/slice/api/countryApiSlice";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup'
 import ModalFooter from "../modal/ModalFooter";

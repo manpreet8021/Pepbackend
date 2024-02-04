@@ -2,7 +2,7 @@
 import React, { useRef, useState } from "react";
 import AdminWrapper from "@/components/layout/AdminWrapper";
 import BookingTable from "@/components/dashboard/vendor-dashboard/booking/components/BookingTable";
-import { useGetCountryQuery } from "@/store/slice/countryApiSlice";
+import { useGetCountryQuery } from "@/store/slice/api/countryApiSlice";
 import ActionsButton from "@/components/common/ActionButton";
 import CustomModal from "@/components/modal/customModal";
 import CountryForm from "@/components/form/CountryForm";

@@ -1,6 +1,6 @@
 'use client'
-import { setCredentials } from "@/store/slice/authSlice";
-import { useSignupMutation } from "@/store/slice/userApiSlice";
+
+import { useSignupMutation } from "@/store/slice/api/userApiSlice";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -28,8 +28,7 @@ const SignUpForm = () => {
   })
 
   const handleSubmit = async(values) => {
-    const res = await signup({displayName: values.displayName, email: values.email, password: values.password, privacyBox: values.privacyBox}).unwrap();
-    dispatch(setCredentials(res))
+    const res = await signup({displayName: values.displayName, email: values.email, password: values.password, privacyBox: values.privacyBox})
     navigation.push('/')
   }
 

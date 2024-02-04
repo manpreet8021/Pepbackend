@@ -3,7 +3,7 @@ import findPlaceSlice from "../features/hero/findPlaceSlice";
 import searchSliceReducer from './slice/searchSlice';
 import commonSliceReducer from './slice/commonSlice'
 import authSliceReducer from "./slice/authSlice";
-import { apiSlice } from "./slice/apiSlice";
+import { apiSlice } from "./slice/api/apiSlice";
 import countrySliceReducer from "./slice/countrySlice";
 
 export const store = configureStore({
