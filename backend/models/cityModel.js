@@ -41,8 +41,8 @@ const cityModel = mongoose.model('City', citySchema)
 
 export default cityModel;
 
-export const getCities = () => cityModel.find();
+export const getCities = () => cityModel.find().populate('country', 'name');
 export const getCityById = (id) => cityModel.findById(id);
 export const deleteCityById = (id) => cityModel.findOneAndDelete({ _id: id });
-export const updateCityById = (id, value) => cityModel.findByIdAndUpdate(id, value, {new: true});
-export const saveCity = (values) => new cityModel(values).save().then((country) => country.toObject());
+export const updateCityById = (id, value) => cityModel.findByIdAndUpdate(id, value, {new: true}).populate('country', 'name');
+export const saveCity = (values) => new cityModel(values).save().then((country) => country.populate('country', 'name'));

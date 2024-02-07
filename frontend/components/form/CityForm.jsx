@@ -23,7 +23,7 @@ export default function CityForm({closeModal, title, data}) {
     const initialState = {
         id: data?._id || '',
         name: data?.name || '',
-        country: data?.country || '',
+        country: data?.country?._id || '',
         active: data?.active || false,
         images: [],
         imageUpdated: data.images ? false : true

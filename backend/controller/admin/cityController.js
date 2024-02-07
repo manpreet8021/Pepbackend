@@ -77,8 +77,9 @@ const updateCity = asyncHandler(async(req, res) => {
             const uploadedImage = await uploadMultipleImages(req.files, 'city')
             existingCity.images = [...existingCity.images, ...uploadedImage];
         }
+
         const city = await updateCityById(req.params.id, existingCity);
-        
+
         if(city) {
             res.status(201).json(city);
         } else {

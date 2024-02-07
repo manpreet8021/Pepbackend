@@ -35,7 +35,7 @@ export default function page() {
    },
    {
     Header: 'Country',
-    accessor: 'country'
+    accessor: 'country.name'
    },
    {
     Header: 'Active',
