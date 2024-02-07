@@ -1,19 +1,21 @@
 'use client'
+
 import React, { useRef, useState } from "react";
 import AdminWrapper from "@/components/layout/AdminWrapper";
 import BookingTable from "@/components/dashboard/vendor-dashboard/booking/components/BookingTable";
-import { useGetCountryQuery } from "@/store/slice/api/countryApiSlice";
+
 import ActionsButton from "@/components/common/ActionButton";
 import CustomModal from "@/components/modal/customModal";
-import CountryForm from "@/components/form/CountryForm";
+import CityForm from "@/components/form/CityForm";
 import { useSelector } from "react-redux";
+import { useGetCityQuery } from "@/store/slice/api/cityApiSlice";
 
 export default function page() {
-  const { isLoading, error } = useGetCountryQuery();
+  const { isLoading, error } = useGetCityQuery();
   const [action, setAction] = useState("Add");
   const [column, setColumn] = useState({});
 
-  const countryState = useSelector(state => state.country)
+  const cityData = useSelector(state => state.city)
 
   const modalRef = useRef()
 
@@ -30,7 +32,12 @@ export default function page() {
   const columns = [{
     Header: 'Name',
     accessor: 'name'
-   }, {
+   },
+   {
+    Header: 'Country',
+    accessor: 'country'
+   },
+   {
     Header: 'Active',
     accessor: 'active',
     Cell: ({ cell: {value} }) => {
@@ -68,15 +75,15 @@ export default function page() {
       </div>
       {/* End .row */}
       {
-        !isLoading && countryState.data && (
+        !isLoading && cityData.data && (
           <div className="py-30 px-30 rounded-4 bg-white shadow-3">
-            <BookingTable column={columns} values={countryState.data} />
+            <BookingTable column={columns} values={cityData.data} />
           </div>
         )
       }
 
       <CustomModal ref={modalRef}>
-        <CountryForm closeModal={handleCloseModal} title={action} data={column} />
+        <CityForm closeModal={handleCloseModal} title={action} data={column} />
       </CustomModal>
 
     </AdminWrapper>

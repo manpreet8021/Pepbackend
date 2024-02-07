@@ -1164,6 +1164,7 @@ $_displays: none, inline-block, block, flex;
     transition: all 0.2s $easeOutQuart;
   }
 
+  select,
   textarea,
   input {
     border: 1px solid var(--color-border);

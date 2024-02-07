@@ -5,7 +5,7 @@ const countryStorage = multer.diskStorage({
         cb(null, './temp')
     },
     filename: function(req, file, cb) {
-        cb(null, file.fieldname)
+        cb(null, file.originalname)
     }
 })
 

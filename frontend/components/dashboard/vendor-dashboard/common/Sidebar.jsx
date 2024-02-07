@@ -12,9 +12,9 @@ const Sidebar = () => {
     },
     {
       icon: "/img/dashboard/sidebar/map.svg",
-      title: "State",
+      title: "City",
       links: [
-        { title: "All State", href: "/state" }
+        { title: "All City", href: "/city" }
       ],
     },
     {
@@ -168,9 +168,9 @@ const Sidebar = () => {
                   <ul className="list-disc pt-15 pb-5 pl-40">
                     {item.links.map((link, linkIndex) => (
                       <li key={linkIndex}>
-                        <a href={link.href} className="text-15">
+                        <Link href={link.href} className="text-15">
                           {link.title}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>

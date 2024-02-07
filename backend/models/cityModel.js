@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const imageSchema = new mongoose.Schema({
-    name: {
+    id: {
         type: String,
         required: true
     },
@@ -16,7 +16,7 @@ const imageSchema = new mongoose.Schema({
 })
 
 const citySchema =  new mongoose.Schema({
-    countryId: {
+    country: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Country'
@@ -40,3 +40,9 @@ const citySchema =  new mongoose.Schema({
 const cityModel = mongoose.model('City', citySchema)
 
 export default cityModel;
+
+export const getCities = () => cityModel.find();
+export const getCityById = (id) => cityModel.findById(id);
+export const deleteCityById = (id) => cityModel.findOneAndDelete({ _id: id });
+export const updateCityById = (id, value) => cityModel.findByIdAndUpdate(id, value, {new: true});
+export const saveCity = (values) => new cityModel(values).save().then((country) => country.toObject());

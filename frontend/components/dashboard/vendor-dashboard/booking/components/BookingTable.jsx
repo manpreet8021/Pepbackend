@@ -6,7 +6,6 @@ import Pagination from "../../common/Pagination";
 import { useMemo } from "react";
 
 const BookingTable = ({column, values}) => {
-
   const columns = useMemo(() =>  column, [column])
   const data = useMemo(() => values, [values])
 

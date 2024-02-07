@@ -53,8 +53,7 @@ export default function CountryForm({closeModal, title, data}) {
             'imageUpdated', {
                 is: true,
                 then: (schema) => schema
-                    .test("is-valid-type", "Image is not of valid type", value => fileValidation(value && value.name.toLowerCase(), "image"))
-                    .test("is-valid-size", "Max allowed size is 100KB", value => value && value.size <= MAX_FILE_SIZE)
+                    .test("is-valid-type", "Image is not of valid type", value => fileValidation(value, "image"))
             }
         )
     })

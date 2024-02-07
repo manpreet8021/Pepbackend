@@ -1,16 +1,36 @@
 import { v2 as cloudinary } from 'cloudinary'
 import fs from 'fs'
 
-export const imageUpload = async(images) => {
+export const imageUpload = async(image, folderName) => {
     try {
-        const uploadedImage = await cloudinary.uploader.upload(images,{
+        const uploadedImage = await cloudinary.uploader.upload(image,{
             resource_type: "image",
-            folder: 'country'
+            folder: folderName
         })
-        fs.unlinkSync(images)
+        fs.unlinkSync(image)
         return uploadedImage
     } catch (error) {
-        fs.unlinkSync(images)
+        fs.unlinkSync(image)
         return false;
     }
+}
+
+export const uploadMultipleImages = async(images, folderName) => {
+    let uploadedImages = [];
+    console.log(images)
+
+    for (const file of images) {
+        try {
+            let imageInfo = await imageUpload(file.path, folderName);
+            let struct = {
+                id: imageInfo.asset_id,
+                location: imageInfo.secure_url
+            };
+            uploadedImages.push(struct);
+        } catch (error) {
+            return false
+        }
+    }
+
+    return uploadedImages;
 }

@@ -5,6 +5,7 @@ import commonSliceReducer from './slice/commonSlice'
 import authSliceReducer from "./slice/authSlice";
 import { apiSlice } from "./slice/api/apiSlice";
 import countrySliceReducer from "./slice/countrySlice";
+import citySliceReducer from "./slice/citySlice";
 
 export const store = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
         search: searchSliceReducer,
         common: commonSliceReducer,
         auth: authSliceReducer,
-        country: countrySliceReducer
+        country: countrySliceReducer,
+        city: citySliceReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
     devTools: true

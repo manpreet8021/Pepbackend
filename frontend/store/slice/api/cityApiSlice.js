@@ -1,26 +1,25 @@
 import { apiSlice } from "./apiSlice";
 
-const countryApiSlice = apiSlice.injectEndpoints({
+const cityApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getCountry: builder.query({
+        getCity: builder.query({
             query: () => ({
-                url: 'admin/country',
+                url: 'admin/city',
                 credentials: 'include'
-            }),
-            keepUnusedDataFor: 300
+            })
         }),
-        addCountry: builder.mutation ({
+        addCity: builder.mutation({
             query: (data) => ({
-                url: 'admin/country',
+                url: 'admin/city',
                 method: 'POST',
                 body: data,
                 credentials: 'include'
             })
         }),
-        updateCountry: builder.mutation({
+        updateCity: builder.mutation({
             query: (data) => {
                 return {
-                    url: `admin/country/${data.get('id')}`,
+                    url: `admin/city/${data.get('id')}`,
                     method: 'PUT',
                     body: data,
                     credentials: 'include'
@@ -30,6 +29,6 @@ const countryApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const { useGetCountryQuery, useAddCountryMutation, useUpdateCountryMutation } = countryApiSlice;
+export const { useGetCityQuery, useAddCityMutation, useUpdateCityMutation } = cityApiSlice;
 
-export default countryApiSlice
+export default cityApiSlice

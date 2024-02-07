@@ -26,13 +26,13 @@ const addCountry = asyncHandler(async(req, res) => {
         res.status(400)
         throw new Error(error.message)
     }
-    console.log(req.file)
+    
     if(!req.file) {
         res.status(400)
         throw new Error("Failed to upload image")
     }
     
-    const imageInfo = await imageUpload(req.file.path)
+    const imageInfo = await imageUpload(req.file.path, 'country')
     
     if(imageInfo) {
         const { name, active } = req.body
@@ -67,7 +67,7 @@ const updateCountry = asyncHandler(async(req, res) => {
                 throw new Error("Failed to upload image")
             }
             
-            const imageInfo = await imageUpload(req.file.path)
+            const imageInfo = await imageUpload(req.file.path, 'country')
             if(imageInfo) {
                 existingCountry.logo = imageInfo.secure_url
             } else {
