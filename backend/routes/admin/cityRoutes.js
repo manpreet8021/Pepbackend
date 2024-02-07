@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.route('/').get(getCity)
 router.route('/').post(upload.array('images', 5), addCity)
-router.route('/:id').put(updateCity)
+router.route('/:id').put(upload.array('images', 5), updateCity)
 router.route('/:id').delete(deleteCity)
 
 export default router

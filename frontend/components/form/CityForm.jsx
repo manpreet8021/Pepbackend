@@ -16,6 +16,9 @@ export default function CityForm({closeModal, title, data}) {
     const countries = useSelector(state => state.country)
     const [addCity] = useAddCityMutation()
     const [updateCity] = useUpdateCityMutation()
+    const imageStyle = {
+        padding: '5px'
+    }
 
     const initialState = {
         id: data?._id || '',
@@ -23,7 +26,7 @@ export default function CityForm({closeModal, title, data}) {
         country: data?.country || '',
         active: data?.active || false,
         images: [],
-        imageUpdated: data.image ? false : true
+        imageUpdated: data.images ? false : true
     }
     
     const handleSubmit = async(values, actions) => {
@@ -112,7 +115,17 @@ export default function CityForm({closeModal, title, data}) {
                                         </div>
                                     ) 
                                 }
-                                { data.logo && <div className="col-12"><Image src={data.logo} width="50" height="50" alt="City Images"/></div>}
+
+                                { data.images && data.images.length && 
+                                    <div className="col-12 d-flex">
+                                        {data.images.map(image => (
+                                            <div className="col-3" key={image.id}>
+                                                <Image src={image.location} width={150} height={100} style={imageStyle} alt="City Images"/>
+                                            </div>
+                                        ))}
+                                    </div>
+                                }
+
                                 <div className="col-12">
                                     <div className="d-flex items-center form-checkbox">
                                         <Field type="checkbox" name="active" disabled={title === "View"}/>

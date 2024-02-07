@@ -8,13 +8,10 @@ import ModalBody from "../modal/ModalBody";
 import ModalHeader from "../modal/ModalHeader";
 import fileValidation, {MAX_FILE_SIZE} from "@/utils/fileValidation"
 import Image from "next/image";
-import { useDispatch } from "react-redux";
-import { countryData } from "@/store/slice/countrySlice";
 
 export default function CountryForm({closeModal, title, data}) {
     const [addCountry] = useAddCountryMutation();
     const [updateCountry, {isLoading}] = useUpdateCountryMutation();
-    const dispatch = useDispatch();
     
     const initialState = {
         id: data?._id || '',
@@ -33,7 +30,6 @@ export default function CountryForm({closeModal, title, data}) {
         
         try {
             const result = formData.get('id') != '' ? await updateCountry(formData) : await addCountry(formData);
-            dispatch(countryData(result))
             const fileInput = document.querySelector('input[type="file"][name="logo"]');
             if (fileInput) {
                 fileInput.value = '';

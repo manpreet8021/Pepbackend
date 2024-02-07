@@ -4,12 +4,10 @@ import Link from "next/link";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup'
 import { useLoginMutation } from "@/store/slice/api/userApiSlice";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [login] = useLoginMutation();
-  const dispatch = useDispatch()
   const router = useRouter()
 
   const initalValues = {

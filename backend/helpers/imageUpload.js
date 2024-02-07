@@ -17,8 +17,7 @@ export const imageUpload = async(image, folderName) => {
 
 export const uploadMultipleImages = async(images, folderName) => {
     let uploadedImages = [];
-    console.log(images)
-
+    
     for (const file of images) {
         try {
             let imageInfo = await imageUpload(file.path, folderName);
