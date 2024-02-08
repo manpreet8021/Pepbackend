@@ -107,3 +107,10 @@ export const getUserInfo = asyncHandler(async(req, res) => {
         throw new Error("Cookie not found")
     }
 })
+
+export const logout = asyncHandler(async(req, res) => {
+    req.user.authentication.sessionStorage = null;
+    const response = await req.user.save()
+    res.clearCookie('PEPRELIER-AUTH');
+    res.status(200).json()
+})

@@ -10,17 +10,17 @@ const authSlice = createSlice({
     initialState,
     extraReducers(builder) {
         builder.addMatcher(
-            userApiSlice.endpoints.login.matchFulfilled,
+            userApiSlice.endpoints.login.matchFulfilled || userApiSlice.endpoints.signup.matchFulfilled || userApiSlice.endpoints.getInfo.matchFulfilled,
             (state, { payload }) => {
                 state.userInfo = payload
                 localStorage.setItem('userInfo', JSON.stringify(payload))
             }
         ),
         builder.addMatcher(
-            userApiSlice.endpoints.signup.matchFulfilled,
+            userApiSlice.endpoints.logout.matchFulfilled || userApiSlice.endpoints.getInfo.matchRejected,
             (state, {payload}) => {
-                state.userInfo = payload
-                localStorage.setItem('userInfo', JSON.stringify(payload))
+                state.userInfo = null
+                localStorage.removeItem('userInfo')
             }
         )
     }

@@ -10,12 +10,13 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    authentication:{ password: {
+    authentication: { 
+        password: {
             type: String,
             required: true,
             select:false
         },
-        salt:{type: String,select: false},
+        salt: {type: String, select: false},
         sessionStorage: {type: String, select: false}
     },
     isAdmin: {

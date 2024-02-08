@@ -6,10 +6,15 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import MainMenu from "../MainMenu";
 import MobileMenu from "../MobileMenu";
+import Dropdown from 'react-bootstrap/Dropdown';
+import { useLogoutMutation } from "@/store/slice/api/userApiSlice";
+import { useRouter } from "next/navigation";
 
 const HeaderDashBoard = () => {
   const [navbar, setNavbar] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter()
+  const [logout] = useLogoutMutation()
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -22,6 +27,11 @@ const HeaderDashBoard = () => {
       setNavbar(false);
     }
   };
+
+  const handleLogout = () => {
+    logout()
+    router.push('/')
+  }
 
   useEffect(() => {
     window.addEventListener("scroll", changeBackground);
@@ -70,11 +80,11 @@ const HeaderDashBoard = () => {
 
             <div className="col-auto">
               <div className="d-flex items-center">
-                <div className="header-menu">
+                {/* <div className="header-menu">
                   <div className="header-menu__content">
                     <MainMenu style="text-dark-1" />
                   </div>
-                </div>
+                </div> */}
                 {/* End header-menu */}
 
                 <div className="row items-center x-gap-5 y-gap-20 pl-20 lg:d-none">
@@ -95,16 +105,34 @@ const HeaderDashBoard = () => {
                 {/* End .row */}
 
                 <div className="pl-15">
-                  <Image
-                    width={50}
-                    height={50}
-                    src="/img/avatars/3.png"
-                    alt="image"
-                    className="size-50 rounded-22 object-cover"
-                  />
+                  <Dropdown>
+                    <Dropdown.Toggle id="dropdown-basic" style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
+                      <Image
+                        width={50}
+                        height={50}
+                        src="/img/avatars/3.png"
+                        alt="image"
+                        className="size-50 rounded-22 object-cover"
+                      />
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item>
+                        <div className="mt-20">
+                          <button
+                            type="submit"
+                            className=" button -dark-1 px-30 fw-400 text-14 bg-blue-1 h-50 text-white"
+                            onClick={handleLogout}
+                          >
+                            Logout
+                          </button>
+                        </div>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </div>
 
-                <div className="d-none xl:d-flex x-gap-20 items-center pl-20">
+                {/* <div className="d-none xl:d-flex x-gap-20 items-center pl-20">
                   <div>
                     <button
                       className="d-flex items-center icon-menu text-20"
@@ -122,9 +150,8 @@ const HeaderDashBoard = () => {
                     data-bs-scroll="true"
                   >
                     <MobileMenu />
-                    {/* End MobileMenu */}
                   </div>
-                </div>
+                </div> */}
               </div>
               {/* End -flex items-center */}
             </div>
