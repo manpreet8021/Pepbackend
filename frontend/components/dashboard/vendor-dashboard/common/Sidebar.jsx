@@ -121,8 +121,8 @@ const Sidebar = () => {
         {/* End accordion__item */}
 
         <div className="sidebar__item ">
-          <a
-            href="#"
+          <Link
+            href="/retreats"
             className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
           >
             <Image
@@ -132,8 +132,8 @@ const Sidebar = () => {
               alt="image"
               className="mr-15"
             />
-            Booking Manager
-          </a>
+            Manage Retreats
+          </Link>
         </div>
         {/* End accordion__item */}
 

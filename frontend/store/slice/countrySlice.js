@@ -31,6 +31,4 @@ const countrySlice = createSlice({
     }
 })
 
-export const { countryData } = countrySlice.actions
-
 export default countrySlice.reducer;

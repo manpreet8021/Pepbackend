@@ -12,6 +12,7 @@ const adminProtect = asyncHandler(async(req, res, next) => {
             next();
         } else {
             res.status(401);
+            res.clearCookie('PEPRELIER-AUTH');
             throw new Error("Unauthorized")
         }
     } else {
@@ -31,6 +32,7 @@ const protect = asyncHandler(async(req, res, next) => {
             next();
         } else {
             res.status(401);
+            res.clearCookie('PEPRELIER-AUTH');
             throw new Error("Unauthorized")
         }
     } else {
