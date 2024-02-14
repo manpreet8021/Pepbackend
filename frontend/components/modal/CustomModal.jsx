@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { Modal } from 'react-bootstrap'
 
-const CustomModal = forwardRef(({children} ,ref) => {
+const CustomModal = forwardRef(({children, size='md'} ,ref) => {
     const [showModal, setShowModal] = useState(false);
 
     const openModal = () => {
@@ -17,7 +17,7 @@ const CustomModal = forwardRef(({children} ,ref) => {
     }));
 
     return (
-      <Modal show={showModal} onHide={closeModal}>
+      <Modal show={showModal} onHide={closeModal} size={size}>
         {children}
       </Modal>
     )

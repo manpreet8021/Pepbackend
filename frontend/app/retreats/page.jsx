@@ -12,7 +12,7 @@ const page = () => {
 
     const modalRef = useRef()
 
-    const handleOpenModal = (act="Add", data={}) => {
+    const handleOpenModal = ({act="Add", data={}}) => {
         setAction(act)
         setColumn(data)
         modalRef.current.openModal()
@@ -39,7 +39,7 @@ const page = () => {
                 </div>
             </div>
 
-            <CustomModal ref={modalRef}>
+            <CustomModal ref={modalRef} size='xl'>
                 <RetreatForm closeModal={handleCloseModal} title={action} data={column} />
             </CustomModal>
         </AdminWrapper>
