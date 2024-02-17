@@ -38,10 +38,6 @@ const retreatSchema =  new mongoose.Schema({
         type: String,
         required: true
     },
-    price: {
-        type: Number,
-        required: true
-    },
     type: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -59,7 +55,30 @@ const retreatSchema =  new mongoose.Schema({
         required: true,
         default: true
     },
-    location: {
+    address: {
+        line1: {
+            type: String,
+            required: true
+        },
+        line2: {
+            type: String,
+        },
+        city: {
+            type: String,
+            required: true
+        },
+        state: {
+            type: String,
+            required: true
+        },
+        country: {
+            type: String,
+            required: true
+        },
+        zipcode: {
+            type: String,
+            required: true
+        },
         lat: {
             type: String,
             required: true

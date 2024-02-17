@@ -52,7 +52,7 @@ const roomSchema =  new mongoose.Schema({
     timestamps: true
 })
 
-const roomModel = mongoose.model('City', roomSchema)
+const roomModel = mongoose.model('Room', roomSchema)
 
 export default roomModel;
 

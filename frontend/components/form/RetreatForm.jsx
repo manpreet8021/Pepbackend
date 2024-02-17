@@ -20,19 +20,26 @@ export default function RetreatForm({closeModal, title, data}) {
 
     const initialState = {
         id: data?._id || '',
-        name: data?.name || '',
+        title: data?.title || '',
         overview: data?.overview || '',
+        description: data?.description || '',
+        minGuest: data?.minGuest || '',
+        maxGuest: data?.maxGuest || '',
+        youtubeUrl: data?.youtubeUrl || '',
+        type: data?.type || '',
+        line1: data?.line1 || '',
+        line2: data?.line2 || '',
+        zipcode: data?.zipcode || '',
         city: data?.city || '',
         country: data?.country || '',
-        description: data?.description || '',
-        active: data?.active || false,
         images: [],
-        imageUpdated: data.images ? false : true,
-        rooms: data.rooms || []
+        active: data?.active || false,
+        directBook: data?.directbook || false,
+        rooms: data.rooms || [],
+        imageUpdated: data.images ? false : true
     }
     
     const handleSubmit = async(values, actions) => {
-        console.log(values)
         const formData = new FormData()
 
         for (let value in values) {
@@ -42,13 +49,18 @@ export default function RetreatForm({closeModal, title, data}) {
     }
 
     const validationSchema = Yup.object({
-        name: Yup.string().required(),
+        title: Yup.string().required(),
         overview: Yup.string().required(),
         description: Yup.string().required(),
+        minGuest: Yup.number("The value should be of type number").positive().min(1).required(),
+        maxGuest: Yup.number("The value should be of type number").positive().min(Yup.ref('minGuest')).required(),
+        youtubeUrl: Yup.string(),
+        type: Yup.string().required(),
+        line1: Yup.string().required(),
+        line2: Yup.string(),
+        zipcode: Yup.string().required(),
         city: Yup.string().required(),
         country: Yup.string().required(),
-        active: Yup.boolean().required(),
-        imageUpdated: Yup.boolean().required(),
         images: Yup.mixed().when(
             'imageUpdated', {
                 is: true,
@@ -57,7 +69,10 @@ export default function RetreatForm({closeModal, title, data}) {
                     .test("max-file", "You can select only 5 files at a time", value => value && value.length && value.length <= 5)
                     
             }
-        )
+        ),
+        active: Yup.boolean().required(),
+        directBook: Yup.boolean().required(),
+        imageUpdated: Yup.boolean().required()
     })
 
     return(
@@ -68,13 +83,15 @@ export default function RetreatForm({closeModal, title, data}) {
                     <Form onSubmit={handleSubmit} encType="multipart/form-data">
                         <ModalBody>
                             <div className="row x-gap-20 y-gap-20">
+
                                 <div className="col-12">
                                     <div className="form-input ">
-                                        <Field type="text" required name="name" disabled={title === "View"} />
-                                        <label className="lh-1 text-16 text-light-1">Name</label>
+                                        <Field type="text" required name="title" disabled={title === "View"} />
+                                        <label className="lh-1 text-16 text-light-1">Title</label>
                                     </div>
-                                    <ErrorMessage name="name" component="div" className="error-message"/>
+                                    <ErrorMessage name="title" component="div" className="error-message"/>
                                 </div>
+
                                 <div className="col-12">
                                     <div className="form-input ">
                                         <Field type="text" required name="overview" disabled={title === "View"} />
@@ -82,6 +99,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                     </div>
                                     <ErrorMessage name="overview" component="div" className="error-message"/>
                                 </div>
+
                                 <div className="col-12">
                                     <div className="form-input ">
                                         <Field name="description" as="textarea" required disabled={title === "View"}/>
@@ -89,6 +107,65 @@ export default function RetreatForm({closeModal, title, data}) {
                                     </div>
                                     <ErrorMessage name="description" component="div" className="error-message"/>
                                 </div>
+
+                                <div className="col-6">
+                                    <div className="form-input ">
+                                        <Field name="minGuest" required disabled={title === "View"}/>
+                                        <label className="lh-1 text-16 text-light-1">Min Guest</label>
+                                    </div>
+                                    <ErrorMessage name="minGuest" component="div" className="error-message"/>
+                                </div>
+
+                                <div className="col-6">
+                                    <div className="form-input ">
+                                        <Field type="text" required name="maxGuest" disabled={title === "View"} />
+                                        <label className="lh-1 text-16 text-light-1">Max Guest</label>
+                                    </div>
+                                    <ErrorMessage name="maxGuest" component="div" className="error-message"/>
+                                </div>
+
+                                <div className="col-6">
+                                    <div className="form-input ">
+                                        <Field type="text" required name="youtubeUrl" disabled={title === "View"} />
+                                        <label className="lh-1 text-16 text-light-1">Youtube URL</label>
+                                    </div>
+                                    <ErrorMessage name="youtubeUrl" component="div" className="error-message"/>
+                                </div>
+
+                                <div className="col-6">
+                                    <div className="form-input ">
+                                        <Field type="text" required name="type" disabled={title === "View"} as="select">
+                                            <option></option>
+                                        </Field>
+                                        <label className="lh-1 text-16 text-light-1">Type</label>
+                                    </div>
+                                    <ErrorMessage name="type" component="div" className="error-message"/>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className="form-input">
+                                        <Field type="text" required name="line1" disabled={title === "View"} />
+                                        <label className="lh-1 text-16 text-light-1">Address Line 1</label>
+                                    </div>
+                                    <ErrorMessage name="line1" component="div" className="error-message"/>
+                                </div>
+
+                                <div className="col-6">
+                                    <div className="form-input">
+                                        <Field type="text" required name="line2" disabled={title === "View"} />
+                                        <label className="lh-1 text-16 text-light-1">Address Line 2</label>
+                                    </div>
+                                    <ErrorMessage name="line2" component="div" className="error-message"/>
+                                </div>
+
+                                <div className="col-6">
+                                    <div className="form-input">
+                                        <Field type="text" required name="zipcode" disabled={title === "View"} />
+                                        <label className="lh-1 text-16 text-light-1">Zip-Code</label>
+                                    </div>
+                                    <ErrorMessage name="zipcode" component="div" className="error-message"/>
+                                </div>
+
                                 <div className="col-6">
                                     <div className="form-input ">
                                         <Field type="text" required name="city" disabled={title === "View"} as="select">
@@ -101,6 +178,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                     </div>
                                     <ErrorMessage name="city" component="div" className="error-message"/>
                                 </div>
+
                                 <div className="col-6">
                                     <div className="form-input ">
                                         <Field type="text" required name="country" disabled={title === "View"} as="select">
@@ -113,6 +191,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                     </div>
                                     <ErrorMessage name="country" component="div" className="error-message"/>
                                 </div>
+                                
                                 {
                                     title !== "View" && ( 
                                         <>
@@ -129,7 +208,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 </div>
                                                 <ErrorMessage name="images" component="div" className="error-message"/>
                                             </div>
-                                            <div className="col-12 ">
+                                            <div className="col-12">
                                                 <button type="button" className="button h-50 px-24 -dark-1 bg-blue-1 text-white">
                                                     Add Rooms <div className="icon-plus ml-15" />
                                                 </button>
@@ -157,6 +236,16 @@ export default function RetreatForm({closeModal, title, data}) {
                                         <div className="text-15 lh-11 ml-10">Active</div>
                                     </div>
                                     <ErrorMessage name="active" component="div" className="error-message"/>
+                                </div>
+                                <div className="col-12">
+                                    <div className="d-flex items-center form-checkbox">
+                                        <Field type="checkbox" name="directBook" disabled={title === "View"}/>
+                                        <div className="form-checkbox__mark">
+                                            <div className="form-checkbox__icon icon-check" />
+                                        </div>
+                                        <div className="text-15 lh-11 ml-10">Direct Book</div>
+                                    </div>
+                                    <ErrorMessage name="directBook" component="div" className="error-message"/>
                                 </div>
                             </div>
                         </ModalBody>
