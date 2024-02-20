@@ -25,7 +25,7 @@ const getLookUpValues = asyncHandler(async(req, res) => {
 })
 
 const getLookUpValueByType = asyncHandler(async(req, res) => {
-    const { type } = req.body
+    const type = req.params.type
     if(type) {
         const response = await getLookUpByParams({parent: type})
         if(response) {

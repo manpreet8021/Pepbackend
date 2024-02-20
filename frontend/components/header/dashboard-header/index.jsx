@@ -4,8 +4,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import MainMenu from "../MainMenu";
-import MobileMenu from "../MobileMenu";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useLogoutMutation } from "@/store/slice/api/userApiSlice";
 import { useRouter } from "next/navigation";

@@ -1,21 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import findPlaceSlice from "../features/hero/findPlaceSlice";
-import searchSliceReducer from './slice/searchSlice';
-import commonSliceReducer from './slice/commonSlice'
 import authSliceReducer from "./slice/authSlice";
 import { apiSlice } from "./slice/api/apiSlice";
 import countrySliceReducer from "./slice/countrySlice";
 import citySliceReducer from "./slice/citySlice";
+import lookupSliceReducer from "./slice/lookupSlice";
+import findPlaceSlice from "../features/hero/findPlaceSlice";
+import searchSliceReducer from './slice/searchSlice';
 
 export const store = configureStore({
     reducer: {
         [apiSlice.reducerPath]: apiSlice.reducer, 
+        auth: authSliceReducer,
         hero: findPlaceSlice,
         search: searchSliceReducer,
-        common: commonSliceReducer,
-        auth: authSliceReducer,
         country: countrySliceReducer,
-        city: citySliceReducer
+        city: citySliceReducer,
+        lookup: lookupSliceReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
     devTools: true

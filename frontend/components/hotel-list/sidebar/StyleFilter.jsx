@@ -3,7 +3,7 @@ import { categoryAdd, categoryRemove } from "@/store/slice/searchSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const StyleFilter = () => {
-  const common = useSelector((state)=>state.common);
+  const lookup = useSelector((state)=>state.lookup);
   const search = useSelector((state)=>state.search);
   const dispatch = useDispatch()
 
@@ -18,7 +18,7 @@ const StyleFilter = () => {
 
   return (
     <>
-      {common.category.map((checkbox, index) => (
+      {lookup.category.map((checkbox, index) => (
         <div className="row y-gap-10 items-center justify-between" key={index}>
           <div className="col-auto">
             <div className="form-checkbox d-flex items-center">

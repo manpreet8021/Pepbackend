@@ -1,6 +1,9 @@
-import {createSlice} from '@reduxjs/toolkit'
+import lookupApiSlice from "./api/lookupApiSlice"
+
+const { createSlice } = require("@reduxjs/toolkit")
 
 const initialState = {
+    retreatType: null,
     locations: [
         {id:1, name: 'London', address: 'Greater London, UnitedKingdom'},
         {id:2, name: 'New York', address: 'New York state, United States'},
@@ -25,15 +28,17 @@ const initialState = {
     ]
 }
 
-const commonSlice = createSlice({
-    name: 'search',
+const lookupSlice = createSlice({
+    name: 'lookup',
     initialState,
-    reducers: {
-        commonReducer: (state, action) => {
-            const filter = action.payload
-            state.filters = [...state.filters, filter];
-        }
+    extraReducers(builder) {
+        builder.addMatcher(
+            lookupApiSlice.endpoints.getRetreatType.matchFulfilled,
+            (state, { payload }) => {
+                state.retreatType = payload
+            }
+        )
     }
 })
 
-export default commonSlice.reducer;
+export default lookupSlice.reducer;

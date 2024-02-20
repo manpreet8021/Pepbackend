@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const PirceSlider = () => {
   const search = useSelector((state) => state.search)
-  const common = useSelector((state) => state.common)
+  const lookup = useSelector((state) => state.lookup)
 
   const dispatch = useDispatch()
 
@@ -29,8 +29,8 @@ const PirceSlider = () => {
       <div className="px-5">
         <InputRange
           formatLabel={(value) => ``}
-          minValue={common.price.min}
-          maxValue={common.price.max}
+          minValue={lookup.price.min}
+          maxValue={lookup.price.max}
           value={search.price}
           onChange={(value) => handleOnChange(value)}
         />

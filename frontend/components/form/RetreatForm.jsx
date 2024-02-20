@@ -10,13 +10,16 @@ import Image from "next/image";
 import { useGetCountryQuery } from "@/store/slice/api/countryApiSlice";
 import { useGetCityQuery } from "@/store/slice/api/cityApiSlice";
 import { useSelector } from "react-redux";
+import { useGetRetreatTypeQuery } from "@/store/slice/api/lookupApiSlice";
 
 export default function RetreatForm({closeModal, title, data}) {
     const countryQuery = useGetCountryQuery()
     const cityQuery = useGetCityQuery()
+    const retreatQuery = useGetRetreatTypeQuery()
 
     const cities = useSelector(state => state.city)
     const countries = useSelector(state => state.country)
+    const lookup = useSelector(state => state.lookup)
 
     const initialState = {
         id: data?._id || '',
@@ -136,6 +139,9 @@ export default function RetreatForm({closeModal, title, data}) {
                                     <div className="form-input ">
                                         <Field type="text" required name="type" disabled={title === "View"} as="select">
                                             <option></option>
+                                            {lookup.retreatType && lookup.retreatType.map(type => (
+                                                <option key={type._id} value={type._id}>{type.name}</option>
+                                            ))}
                                         </Field>
                                         <label className="lh-1 text-16 text-light-1">Type</label>
                                     </div>

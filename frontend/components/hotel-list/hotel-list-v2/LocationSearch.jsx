@@ -6,7 +6,7 @@ import { locationUpdate } from '@/store/slice/searchSlice'
 const SearchBar = () => {
   const dispatch = useDispatch();
 
-  const locationSearchContent = useSelector((state) => state.common.locations)
+  const locationSearchContent = useSelector((state) => state.lookup.locations)
   const search = useSelector((state) => state.search)
   
   return (

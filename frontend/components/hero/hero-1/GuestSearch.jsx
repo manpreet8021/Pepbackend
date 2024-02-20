@@ -61,7 +61,7 @@ const Counter = ({ name, defaultValue, onCounterChange }) => {
 const GuestSearch = () => {
   const dispatch = useDispatch();
 
-  const common = useSelector((state) => state.common)
+  const lookup = useSelector((state) => state.lookup)
   const search = useSelector((state) => state.search)
   
   const handleCounterChange = (name, value) => {
@@ -86,7 +86,7 @@ const GuestSearch = () => {
 
       <div className="shadow-2 dropdown-menu min-width-400">
         <div className="bg-white px-30 py-30 rounded-4 counter-box">
-          {common.guest.map((counter) => (
+          {lookup.guest.map((counter) => (
             <Counter
               key={counter.name}
               name={counter.name}

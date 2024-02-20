@@ -7,7 +7,7 @@ const initialState = {
 }
 
 const citySlice = createSlice({
-    name: 'country',
+    name: 'city',
     initialState,
     extraReducers(builder) {
         builder.addMatcher(
@@ -30,7 +30,5 @@ const citySlice = createSlice({
         )
     }
 })
-
-export const { countryData } = citySlice.actions
 
 export default citySlice.reducer;
