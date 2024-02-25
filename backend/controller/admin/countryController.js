@@ -9,7 +9,7 @@ const addCountrySchema = Joi.object({
 })
 
 const updateCountrySchema = Joi.object({
-    id: Joi.string().required(),
+    id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     name: Joi.string().required(),
     active: Joi.boolean().required()
 })

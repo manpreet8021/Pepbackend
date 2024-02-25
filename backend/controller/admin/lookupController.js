@@ -10,7 +10,7 @@ const addlookUpDataSchema = Joi.object({
 
 const addlookUpValueSchema = Joi.object({
     name: Joi.string().required(),
-    parent: Joi.string().required(),
+    parent: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     active: Joi.boolean().required()
 })
 

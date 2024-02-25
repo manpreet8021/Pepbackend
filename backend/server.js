@@ -29,8 +29,8 @@ app.use(cors({
 
 //Need to know the reason why we are using this 
 //app.use(compression());
+app.use(express.json())
 app.use(cookieParser());
-app.use(bodyParser.json());
 
 app.use('/api/', authRoutes);
 app.use('/admin/', adminProtect, adminRoutes);

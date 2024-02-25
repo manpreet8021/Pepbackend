@@ -4,14 +4,14 @@ import { getCities, saveCity, getCityById, updateCityById } from "../../models/c
 import { uploadMultipleImages } from "../../helpers/imageUpload.js";
 
 const addCitySchema = Joi.object({
-    country: Joi.string().required(),
+    country: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     name: Joi.string().required(),
     active: Joi.boolean().required()
 })
 
 const updateCitySchema = Joi.object({
-    id: Joi.string().required(),
-    country: Joi.string().required(),
+    id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
+    country: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     name: Joi.string().required(),
     active: Joi.boolean().required()
 })

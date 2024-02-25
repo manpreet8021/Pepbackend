@@ -6,6 +6,7 @@ import citySliceReducer from "./slice/citySlice";
 import lookupSliceReducer from "./slice/lookupSlice";
 import findPlaceSlice from "../features/hero/findPlaceSlice";
 import searchSliceReducer from './slice/searchSlice';
+import retreatSliceReducer from "./slice/retreatSlice";
 
 export const store = configureStore({
     reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
         search: searchSliceReducer,
         country: countrySliceReducer,
         city: citySliceReducer,
-        lookup: lookupSliceReducer
+        lookup: lookupSliceReducer,
+        retreat: retreatSliceReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
     devTools: true
