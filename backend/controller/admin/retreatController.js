@@ -1,12 +1,18 @@
 import Joi from "joi";
 import asyncHandler from "../../middleware/asyncHandler.js"
-import { getRetreaties } from "../../models/retreatModel.js";
+import { getRetreaties, saveRetreat } from "../../models/retreatModel.js";
+import { saveSchedule } from "../../models/scheduleModel.js";
+import { saveRoom } from "../../models/roomModel.js";
+import { uploadMultipleImages } from "../../helpers/imageUpload.js";
+import mongoose from "mongoose";
 
 const roomValidationSchema = Joi.object({
-    roomName: Joi.string().required(),
-    roomDescription: Joi.string().required(),
-    roomPrice: Joi.number().positive().min(1).required(),
-    roomGuestCount: Joi.number().positive().required()
+    name: Joi.string().required(),
+    description: Joi.string().required(),
+    price: Joi.number().positive().min(1).required(),
+    allowedGuest: Joi.number().positive().required(),
+    advance: Joi.number().positive().max(100).required(),
+    active: Joi.boolean().required()
 })
 
 const durationValidationSchema = Joi.array().items(
@@ -48,7 +54,53 @@ const addRetreat = asyncHandler(async(req, res) => {
         throw new Error(error.message)
     }
 
-    res.status(201).json()
+    if(!req.files || !req.files.images) {
+        res.status(400);
+        throw new Error("Failed to upload image")
+    }
+
+    const uploadedImage = await uploadMultipleImages(req.files.images, 'retreat')
+
+    const session = await mongoose.startSession();
+
+    session.startTransaction()
+
+    try{
+        if(uploadedImage.length) {
+            const retreat = await saveRetreat({ title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, owner: req.user._id },session)
+            if(retreat) {
+                for(let i=0; i<duration.length; i++) {
+                    await saveSchedule({startDate: duration[i][0], endDate: duration[i][1], retreat: retreat._id},session)
+                }
+                if(rooms && rooms.length){
+                    for(let i=0; i<rooms.length; i++){
+                        let uploadedRoomImage = await uploadMultipleImages(req.files[`rooms[${i}][images]`], 'rooms')
+                        if(uploadedRoomImage.length) {
+                            await saveRoom({name: rooms[i].name, description: rooms[i].description, price: rooms[i].price, allowedGuest: rooms[i].allowedGuest, active: rooms[i].active, advance: rooms[i].advance, retreat: retreat._id },session)
+                        }
+                    }
+                }
+                await session.commitTransaction();
+                session.endSession();
+                res.status(201).json(retreat)
+            } else {
+                await session.abortTransaction();
+                session.endSession();
+                res.status(400)
+                throw new Error("Failed to add a retreat")
+            }
+        } else {
+            await session.abortTransaction();
+            session.endSession();
+            res.status(400)
+            throw new Error("Failed uploading the image")
+        }
+    } catch (e) {
+        await session.abortTransaction();
+        session.endSession();
+        res.status(400)
+        throw new Error("Failed to add a retreat")
+    }
 })
 
 const updateRetreat = asyncHandler(async(req, res) => {

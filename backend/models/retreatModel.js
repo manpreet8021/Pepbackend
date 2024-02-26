@@ -16,16 +16,6 @@ const imageSchema = new mongoose.Schema({
 })
 
 const retreatSchema =  new mongoose.Schema({
-    country: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Country'
-    },
-    city: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'City'
-    },
     title: {
         type: String,
         required: true
@@ -64,43 +54,32 @@ const retreatSchema =  new mongoose.Schema({
             type: String,
         },
         city: {
-            type: String,
-            required: true
-        },
-        state: {
-            type: String,
-            required: true
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'countries'
         },
         country: {
-            type: String,
-            required: true
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'cities'
         },
         zipcode: {
             type: String,
             required: true
         },
         lat: {
-            type: String,
-            required: true
+            type: String
         },
         lon: {
-            type: String,
-            required: true
+            type: String
         },
         description: {
-            type: String,
-            required: true
+            type: String
         }
     },
-    duration: {
-        startDate: {
-            type: Date,
-            required: true
-        },
-        endDate: {
-            type: Date,
-            required: true
-        }
+    retreatDuration: {
+        type: Number,
+        required: true
     },
     Guest: {
         max: {
@@ -116,6 +95,11 @@ const retreatSchema =  new mongoose.Schema({
         type: Boolean,
         required: true,
         default: true
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Users'
     }
 },{
     timestamps: true
@@ -129,4 +113,4 @@ export const getRetreaties = () => retreatModel.find();
 export const getRetreatById = (id) => retreatModel.findById(id);
 export const deleteRetreatById = (id) => retreatModel.findOneAndDelete({ _id: id });
 export const updateRetreatById = (id, value) => retreatModel.findByIdAndUpdate(id, value, {new: true});
-export const saveRetreat = (values) => new retreatModel(values).save().then((retreat) => retreat.toObject());
+export const saveRetreat = (values,session) => new retreatModel(values).save({session}).then((retreat) => retreat.toObject());

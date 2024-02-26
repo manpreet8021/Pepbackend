@@ -60,4 +60,4 @@ export const getRooms = () => roomModel.find();
 export const getRoomById = (id) => roomModel.findById(id);
 export const deleteRoomById = (id) => roomModel.findOneAndDelete({ _id: id });
 export const updateRoomById = (id, value) => roomModel.findByIdAndUpdate(id, value, {new: true});
-export const saveRoom = (values) => new roomModel(values).save().then((room) => room.toObject());
+export const saveRoom = (values, session) => new roomModel(values).save({session}).then((room) => room.toObject());

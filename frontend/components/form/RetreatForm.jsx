@@ -90,11 +90,13 @@ export default function RetreatForm({closeModal, title, data}) {
     }
 
     const roomSchema = Yup.object().shape({
-        roomName: Yup.string().required(),
-        roomDescription: Yup.string().required(),
-        roomPrice: Yup.number().required(),
-        roomGuestCount: Yup.number().required(),
-        roomImages: Yup.mixed().when(
+        name: Yup.string().required(),
+        description: Yup.string().required(),
+        price: Yup.number().positive().required(),
+        allowedGuest: Yup.number().positive().required(),
+        advance: Yup.number().positive().max(100).required(),
+        active: Yup.boolean().required(),
+        images: Yup.mixed().when(
             'roomImageUpdated', {
                 is: true,
                 then: (schema) => schema.required()
@@ -356,7 +358,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                     <button type="button" 
                                                         className="button h-50 px-24 -dark-1 bg-blue-1 text-white" 
                                                         disabled={values.rooms.length>=3}
-                                                        onClick={() => {values.rooms.length <3 && arrayHelper.push({roomName: '', roomDescription: '', roomPrice: '', roomImages: [], roomGuestCount: ''})}}>
+                                                        onClick={() => {values.rooms.length <3 && arrayHelper.push({name: '', description: '', price: '', images: [], allowedGuest: '', advance: '', active: true})}}>
                                                             Add Room <div className="icon-plus ml-15" />
                                                     </button>
                                                     {values.rooms.map((room, index) => (
