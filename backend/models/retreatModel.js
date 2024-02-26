@@ -34,7 +34,8 @@ const retreatSchema =  new mongoose.Schema({
         ref: 'Category'
     },
     images: {
-        type: [imageSchema]
+        type: [imageSchema],
+        required: true
     },
     youtubeUrl: {
         type: String,

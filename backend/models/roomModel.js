@@ -26,7 +26,8 @@ const roomSchema =  new mongoose.Schema({
         required: true
     },
     images: {
-        type: [imageSchema]
+        type: [imageSchema],
+        required: true
     },
     active: {
         type: Boolean,

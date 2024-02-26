@@ -67,7 +67,7 @@ const addRetreat = asyncHandler(async(req, res) => {
 
     try{
         if(uploadedImage.length) {
-            const retreat = await saveRetreat({ title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, owner: req.user._id },session)
+            const retreat = await saveRetreat({ title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, owner: req.user._id, images: uploadedImage },session)
             if(retreat) {
                 for(let i=0; i<duration.length; i++) {
                     await saveSchedule({startDate: duration[i][0], endDate: duration[i][1], retreat: retreat._id},session)
@@ -76,7 +76,7 @@ const addRetreat = asyncHandler(async(req, res) => {
                     for(let i=0; i<rooms.length; i++){
                         let uploadedRoomImage = await uploadMultipleImages(req.files[`rooms[${i}][images]`], 'rooms')
                         if(uploadedRoomImage.length) {
-                            await saveRoom({name: rooms[i].name, description: rooms[i].description, price: rooms[i].price, allowedGuest: rooms[i].allowedGuest, active: rooms[i].active, advance: rooms[i].advance, retreat: retreat._id },session)
+                            await saveRoom({name: rooms[i].name, description: rooms[i].description, price: rooms[i].price, allowedGuest: rooms[i].allowedGuest, active: rooms[i].active, advance: rooms[i].advance, retreat: retreat._id, images: uploadedRoomImage },session)
                         }
                     }
                 }

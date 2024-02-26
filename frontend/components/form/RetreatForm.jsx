@@ -84,6 +84,14 @@ export default function RetreatForm({closeModal, title, data}) {
 
         try{
             await addRetreat(formData)
+            const fileInput = document.querySelectorAll('input[type="file"]');
+            
+            fileInput.forEach(input => {
+                fileInput.value = '';
+            });
+            
+            actions.resetForm();
+            closeModal()
         } catch (e) {
             console.log(e)
         }
