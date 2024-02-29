@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import "photoswipe/dist/photoswipe.css";
 import cruiseData from "@/data/cruise";
-import Header11 from "@/components/header/header-11";
+import Header11 from "@/components/header";
 import Overview from "@/components/cruise-single/Overview";
 import TopBreadCrumb from "@/components/cruise-single/TopBreadCrumb";
 import SidebarRight from "@/components/cruise-single/SidebarRight";

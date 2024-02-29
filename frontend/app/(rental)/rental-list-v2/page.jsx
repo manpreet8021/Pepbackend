@@ -1,5 +1,5 @@
 import CallToActions from "@/components/common/CallToActions";
-import Header11 from "@/components/header/header-11";
+import Header11 from "@/components/header";
 import DefaultFooter from "@/components/footer/default";
 import TopHeaderFilter from "@/components/rental-list/rental-list-v2/TopHeaderFilter";
 import RentalProperties from "@/components/rental-list/rental-list-v2/RentalProperties";

@@ -1,5 +1,5 @@
 import CallToActions from "@/components/common/CallToActions";
-import Header11 from "@/components/header/header-11";
+import Header11 from "@/components/header";
 import DefaultFooter from "@/components/footer/default";
 import MainFilterSearchBox from "@/components/flight-list/flight-list-v1/MainFilterSearchBox";
 import TopHeaderFilter from "@/components/flight-list/flight-list-v1/TopHeaderFilter";

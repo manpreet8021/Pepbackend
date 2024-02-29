@@ -7,7 +7,8 @@
   "scripts": {
     "start": "nodemon backend/server.js",
     "front": "npm run dev --prefix frontend",
-    "dev": "concurrently \"npm run start\" \"npm run front\" "
+    "dev": "concurrently \"npm run start\" \"npm run front\" ",
+    "server": "node backend/server.js"
   },
   "author": "Manpreet Singh",
   "license": "ISC",
@@ -25,6 +26,7 @@
     "express": "^4.18.2",
     "joi": "^17.11.0",
     "mongoose": "^8.0.3",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "next": "^14.1.0"
   }
 }

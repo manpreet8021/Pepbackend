@@ -6,10 +6,9 @@ import cloudinary from 'cloudinary';
 import cors from 'cors';
 import connectDb from './config/dbConfig.js';
 import dotenv from 'dotenv'
-import authRoutes from './routes/authRoutes.js'
-import adminRoutes from './routes/admin/index.js'
-import { adminProtect } from './middleware/authMiddleware.js';
+import apiRoutes from './routes/index.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
+import next from 'next'
 
 const app = express();
 dotenv.config();
@@ -27,15 +26,29 @@ app.use(cors({
   credentials: true,
 }));
 
-//Need to know the reason why we are using this 
-//app.use(compression());
 app.use(express.json())
 app.use(cookieParser());
 
-app.use('/api/', authRoutes);
-app.use('/admin/', adminProtect, adminRoutes);
+if(process.env.ENVIRONMENT === 'production') {
+  const nextConfig = { dev: process.env.ENVIRONMENT !== 'production', dir: 'frontend' };
+  const server = next(nextConfig);
+  const handle = server.getRequestHandler();
 
-app.use(notFound);
-app.use(errorHandler);
+  server.prepare().then(() => {
+    app.use('/api/', apiRoutes);
+
+    app.all('*', (req, res) => {
+      return handle(req, res)
+    })
+
+    app.use(notFound);
+    app.use(errorHandler);
+  })
+} else {
+  app.use('/api/', apiRoutes);
+  app.get('/', (req, res) => res.json("Api runing"))
+  app.use(notFound);
+  app.use(errorHandler);
+}
 
 app.listen(process.env.PORT, ()=>console.log(`running at port: ${process.env.PORT}`))

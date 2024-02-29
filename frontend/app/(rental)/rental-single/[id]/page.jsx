@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import "photoswipe/dist/photoswipe.css";
 import rentalsData from "@/data/rentals";
-import Header11 from "@/components/header/header-11";
+import Header11 from "@/components/header";
 import Overview from "@/components/rental-single/Overview";
 import PropertyHighlights from "@/components/rental-single/PropertyHighlights";
 import TopBreadCrumb from "@/components/rental-single/TopBreadCrumb";

@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import "photoswipe/dist/photoswipe.css";
 import toursData from "@/data/tours";
-import Header11 from "@/components/header/header-11";
+import Header11 from "@/components/header";
 import TopBreadCrumb from "@/components/tour-single/TopBreadCrumb";
 import ReviewProgress2 from "@/components/tour-single/guest-reviews/ReviewProgress2";
 import DetailsReview2 from "@/components/tour-single/guest-reviews/DetailsReview2";

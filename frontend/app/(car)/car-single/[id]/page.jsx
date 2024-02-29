@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import "photoswipe/dist/photoswipe.css";
 import carsData from "@/data/cars";
-import Header11 from "@/components/header/header-11";
+import Header11 from "@/components/header";
 import Overview from "@/components/car-single/Overview";
 import PropertyHighlights from "@/components/car-single/PropertyHighlights";
 import TopBreadCrumb from "@/components/car-single/TopBreadCrumb";

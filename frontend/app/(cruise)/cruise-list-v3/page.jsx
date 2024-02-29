@@ -1,4 +1,4 @@
-import Header11 from "@/components/header/header-11";
+import Header11 from "@/components/header";
 import MainFilterSearchBox from "@/components/cruise-list/cruise-list-v3/MainFilterSearchBox";
 import TopHeaderFilter from "@/components/cruise-list/cruise-list-v3/TopHeaderFilter";
 import CruisePropertes from "@/components/cruise-list/cruise-list-v3/CruisePropertes";
