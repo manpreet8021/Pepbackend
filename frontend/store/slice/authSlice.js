@@ -3,7 +3,7 @@ import userApiSlice from "./api/userApiSlice";
 const { createSlice } = require("@reduxjs/toolkit")
 
 const initialState = {
-    userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
+    userInfo: null
 }
 
 const authSlice = createSlice({
@@ -12,22 +12,37 @@ const authSlice = createSlice({
     reducers: {
         logout: (state, action) => {
             state.userInfo = null
-            localStorage.removeItem('userInfo')
         }
     },
     extraReducers(builder) {
         builder.addMatcher(
-            userApiSlice.endpoints.login.matchFulfilled || userApiSlice.endpoints.signup.matchFulfilled || userApiSlice.endpoints.getInfo.matchFulfilled,
+            userApiSlice.endpoints.login.matchFulfilled,
             (state, { payload }) => {
                 state.userInfo = payload
-                localStorage.setItem('userInfo', JSON.stringify(payload))
             }
         ),
         builder.addMatcher(
-            userApiSlice.endpoints.logout.matchFulfilled || userApiSlice.endpoints.getInfo.matchRejected,
+            userApiSlice.endpoints.signup.matchFulfilled,
+            (state, {payload}) => {
+                state.userInfo = payload
+            }
+        )
+        builder.addMatcher(
+            userApiSlice.endpoints.getInfo.matchFulfilled,
+            (state, {payload}) => {
+                state.userInfo = payload
+            }
+        ),
+        builder.addMatcher(
+            userApiSlice.endpoints.logout.matchFulfilled,
             (state, {payload}) => {
                 state.userInfo = null
-                localStorage.removeItem('userInfo')
+            }
+        ),
+        builder.addMatcher(
+            userApiSlice.endpoints.getInfo.matchRejected,
+            (state, {payload}) => {
+                state.userInfo = null
             }
         )
     }

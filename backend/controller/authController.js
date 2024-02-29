@@ -92,7 +92,7 @@ export const getUserInfo = asyncHandler(async(req, res) => {
     const cookie = req.cookies['PEPRELIER-AUTH']
 
     if(cookie) {
-        const user = getUserBySessionToken(cookie)
+        const user = await getUserBySessionToken(cookie)
         if(user) {
             res.status(200).json({
                 name: user.displayName,

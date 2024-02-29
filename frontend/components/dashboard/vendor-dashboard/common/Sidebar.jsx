@@ -7,14 +7,14 @@ const Sidebar = () => {
       icon: "/img/dashboard/sidebar/booking.svg",
       title: "Country",
       links: [
-        { title: "All Country", href: "/country" }
+        { title: "All Country", href: "/admin/country" }
       ],
     },
     {
       icon: "/img/dashboard/sidebar/map.svg",
       title: "City",
       links: [
-        { title: "All City", href: "/city" }
+        { title: "All City", href: "/admin/city" }
       ],
     },
     {
@@ -122,7 +122,7 @@ const Sidebar = () => {
 
         <div className="sidebar__item ">
           <Link
-            href="/retreats"
+            href="/admin/retreats"
             className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
           >
             <Image

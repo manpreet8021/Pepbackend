@@ -18,7 +18,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 credentials: 'include'
             })
         }),
-        getInfo: builder.query({
+        getInfo: builder.mutation({
             query: () => ({
                 url: 'api/auth',
                 credentials: 'include'
@@ -35,6 +35,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const { useLoginMutation, useSignupMutation, useGetInfoQuery, useLogoutMutation } = userApiSlice
+export const { useLoginMutation, useSignupMutation, useGetInfoMutation, useLogoutMutation } = userApiSlice
 
 export default userApiSlice
