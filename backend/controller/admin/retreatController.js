@@ -42,7 +42,6 @@ const addRetreatSchema = Joi.object({
 
 const getRetreat = asyncHandler(async(req, res) => {
     const retreats = await getRetreaties();
-    
     res.status(200).json(retreats);
 })
 

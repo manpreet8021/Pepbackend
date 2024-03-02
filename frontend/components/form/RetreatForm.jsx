@@ -342,6 +342,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                             range
                                                             rangeHover
                                                             minDate={minDate}
+                                                            value={data.schedules}
                                                             format="YYYY/MM/DD"
                                                             multiple
                                                             disabled={title === "View"}
