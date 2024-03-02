@@ -5,7 +5,7 @@ import AdminWrapper from "@/components/layout/AdminWrapper";
 import BookingTable from "@/components/dashboard/vendor-dashboard/booking/components/BookingTable";
 
 import ActionsButton from "@/components/common/ActionButton";
-import CustomModal from "@/components/modal/customModal";
+import CustomModal from "@/components/modal/CustomModal";
 import CityForm from "@/components/form/CityForm";
 import { useSelector } from "react-redux";
 import { useGetCityQuery } from "@/store/slice/api/cityApiSlice";

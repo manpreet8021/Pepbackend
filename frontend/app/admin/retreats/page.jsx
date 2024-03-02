@@ -2,7 +2,7 @@
 
 import AdminWrapper from "@/components/layout/AdminWrapper";
 import BookingTable from "@/components/dashboard/vendor-dashboard/booking/components/BookingTable";
-import CustomModal from "@/components/modal/customModal";
+import CustomModal from "@/components/modal/CustomModal";
 import { useRef, useState } from "react";
 import RetreatForm from "@/components/form/RetreatForm";
 

@@ -4,7 +4,7 @@ import AdminWrapper from "@/components/layout/AdminWrapper";
 import BookingTable from "@/components/dashboard/vendor-dashboard/booking/components/BookingTable";
 import { useGetCountryQuery } from "@/store/slice/api/countryApiSlice";
 import ActionsButton from "@/components/common/ActionButton";
-import CustomModal from "@/components/modal/customModal";
+import CustomModal from "@/components/modal/CustomModal";
 import CountryForm from "@/components/form/CountryForm";
 import { useSelector } from "react-redux";
 
