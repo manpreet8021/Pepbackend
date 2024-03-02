@@ -1,7 +1,5 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import compression from 'compression';
 import cloudinary from 'cloudinary';
 import cors from 'cors';
 import connectDb from './config/dbConfig.js';
@@ -9,6 +7,7 @@ import dotenv from 'dotenv'
 import apiRoutes from './routes/index.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import next from 'next'
+import fs from 'fs'
 
 const app = express();
 dotenv.config();
@@ -19,6 +18,18 @@ cloudinary.v2.config({
   api_key: process.env.CLOUDNAIRY_API_KEY,
   api_secret: process.env.CLOUDNAIRY_SECRET_KEY,
   secure: true
+})
+
+fs.access('./temp', fs.constants.F_OK, (err) => {
+  if (err) {
+    fs.mkdir('./temp', { recursive: true }, (err) => {
+      if (err) {
+        console.error('Error creating directory:', err);
+      } else {
+        console.log('Directory created successfully');
+      }
+    });
+  }
 })
 
 app.use(cors({
