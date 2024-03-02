@@ -31,7 +31,7 @@ const retreatSchema =  new mongoose.Schema({
     type: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'Category'
+        ref: 'LookUpValue'
     },
     images: {
         type: [imageSchema],
@@ -110,7 +110,67 @@ const retreatModel = mongoose.model('Retreat', retreatSchema)
 
 export default retreatModel;
 
-export const getRetreaties = () => retreatModel.find();
+export const getRetreaties = () => retreatModel.populate(retreatModel.aggregate([
+    {
+        $lookup: {
+            from: 'rooms',
+            localField: '_id',
+            foreignField: 'retreat',
+            as: 'rooms'
+        }
+    },
+    {
+        $lookup: {
+            from: 'schedules',
+            localField: '_id',
+            foreignField: 'retreat',
+            as: 'schedules'
+        }
+    },
+    {
+        $lookup: {
+            from: 'lookupvalues',
+            localField: 'type',
+            foreignField: '_id',
+            as: 'type'
+        }
+    },
+    {
+        $project: {
+            _id: 1,
+            title: 1,
+            overview: 1,
+            description: 1,
+            retreatDuration: 1,
+            type: {
+                $let: {
+                    vars: { typeElem: { $arrayElemAt: ['$type', 0] } },
+                    in: {
+                        _id: '$$typeElem._id',
+                        name: '$$typeElem.name'
+                    }
+                }
+            },
+            images: 1,
+            youtubeUrl: 1,
+            address: 1,
+            active: 1,
+            Guest: 1,
+            directBook: 1,
+            rooms: 1,
+            schedules:{
+                $map: {
+                    input: '$schedules',
+                    as: 'schedule',
+                    in: [
+                        '$$schedule.startDate',
+                        '$$schedule.endDate'
+                    ]
+                }
+            }
+        }
+    }
+]),'type', 'name');
 export const getRetreatById = (id) => retreatModel.findById(id);
 export const deleteRetreatById = (id) => retreatModel.findOneAndDelete({ _id: id });
 export const updateRetreatById = (id, value) => retreatModel.findByIdAndUpdate(id, value, {new: true});

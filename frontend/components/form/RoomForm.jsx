@@ -1,4 +1,5 @@
 import { ErrorMessage, Field } from "formik";
+import Image from 'next/image'
 
 export default function RoomForm({title, number, room, setFieldValue}) {
     return (
@@ -57,6 +58,17 @@ export default function RoomForm({title, number, room, setFieldValue}) {
                     </>
                 ) 
             }
+
+            { room.images && room.images.length && 
+                <div className="col-12 d-flex">
+                    {room.images.map(image => (
+                        <div className="col-3" key={image.id}>
+                            <Image src={image.location} width={150} height={100} className="5px" alt="Retreat Images"/>
+                        </div>
+                    ))}
+                </div>
+            }
+
             <div className="col-12">
                 <div className="d-flex items-center form-checkbox">
                     <Field type="checkbox" name={`rooms[${number}].active`} disabled={title === "View"}/>

@@ -16,9 +16,6 @@ export default function CityForm({closeModal, title, data}) {
     const countries = useSelector(state => state.country)
     const [addCity] = useAddCityMutation()
     const [updateCity] = useUpdateCityMutation()
-    const imageStyle = {
-        padding: '5px'
-    }
 
     const initialState = {
         id: data?._id || '',
@@ -120,7 +117,7 @@ export default function CityForm({closeModal, title, data}) {
                                     <div className="col-12 d-flex">
                                         {data.images.map(image => (
                                             <div className="col-3" key={image.id}>
-                                                <Image src={image.location} width={150} height={100} style={imageStyle} alt="City Images"/>
+                                                <Image src={image.location} width={150} height={100} className="5px" alt="City Images"/>
                                             </div>
                                         ))}
                                     </div>

@@ -25,8 +25,6 @@ fs.access('./temp', fs.constants.F_OK, (err) => {
     fs.mkdir('./temp', { recursive: true }, (err) => {
       if (err) {
         console.error('Error creating directory:', err);
-      } else {
-        console.log('Directory created successfully');
       }
     });
   }

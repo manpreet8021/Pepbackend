@@ -28,7 +28,6 @@ const HeaderDashBoard = () => {
 
   const handleLogout = () => {
     logout()
-    router.push('/')
   }
 
   useEffect(() => {

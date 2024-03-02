@@ -18,6 +18,7 @@ import { useAddRetreatMutation } from "@/store/slice/api/retreatApiSlice";
 
 export default function RetreatForm({closeModal, title, data}) {
     const minDate = new Date()
+
     const countryQuery = useGetCountryQuery()
     const cityQuery = useGetCityQuery()
     const retreatQuery = useGetRetreatTypeQuery()
@@ -32,17 +33,17 @@ export default function RetreatForm({closeModal, title, data}) {
         title: data?.title || '',
         overview: data?.overview || '',
         description: data?.description || '',
-        minGuest: data?.minGuest || '',
-        maxGuest: data?.maxGuest || '',
+        minGuest: data?.Guest?.min || '',
+        maxGuest: data?.Guest?.max || '',
         youtubeUrl: data?.youtubeUrl || '',
-        type: data?.type || '',
-        duration: data?.duration || '',
+        type: data?.type?._id || '',
+        duration: data?.schedules || [],
         retreatDuration: data?.retreatDuration || '',
-        line1: data?.line1 || '',
-        line2: data?.line2 || '',
-        zipcode: data?.zipcode || '',
-        city: data?.city || '',
-        country: data?.country || '',
+        line1: data?.address?.line1 || '',
+        line2: data?.address?.line2 || '',
+        zipcode: data?.address?.zipcode || '',
+        city: data?.address?.city || '',
+        country: data?.address?.country || '',
         images: [],
         active: data?.active || false,
         directBook: data?.directbook || false,
@@ -93,7 +94,7 @@ export default function RetreatForm({closeModal, title, data}) {
             actions.resetForm();
             closeModal()
         } catch (e) {
-            console.log(e)
+            
         }
     }
 
@@ -134,7 +135,7 @@ export default function RetreatForm({closeModal, title, data}) {
             'imageUpdated', {
                 is: true,
                 then: (schema) => schema.required()
-                    .test("is-valid-type", "Image is not of valid type", value => fileValidation(value, "image"))
+                    .test("is-valid-type", "Each image should be less than 5mb", value => fileValidation(value, "image"))
                     .test("max-file", "You can select only 5 files at a time", value => value && value.length && value.length <= 5)
                     
             }
@@ -151,7 +152,7 @@ export default function RetreatForm({closeModal, title, data}) {
         <>
             <ModalHeader title={`${title} Retreat`}/>
             <Formik initialValues={initialState} enableReinitialize onSubmit={(values, actions) => handleSubmit(values, actions)} validationSchema={validationSchema}>
-                {({ handleSubmit, isSubmitting, dirty, isValid, setFieldValue, values }) => (
+                {({ handleSubmit, isSubmitting, dirty, isValid, setFieldValue, values, setFieldTouched }) => (
                     <Form onSubmit={handleSubmit} encType="multipart/form-data">
                         <ModalBody>
                             <Accordion defaultActiveKey="0">
@@ -280,9 +281,11 @@ export default function RetreatForm({closeModal, title, data}) {
                                                                     accept='image/*'
                                                                     multiple
                                                                     onChange={(e) => {
+                                                                        setFieldTouched('images', true)
                                                                         setFieldValue('imageUpdated', true)
-                                                                        setFieldValue('images',  Array.from(e.currentTarget.files))}
-                                                                    } />
+                                                                        setFieldValue('images',  Array.from(e.currentTarget.files))
+                                                                    }
+                                                                } />
                                                             </div>
                                                             <ErrorMessage name="images" component="div" className="error-message"/>
                                                         </div>
@@ -294,7 +297,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 <div className="col-12 d-flex">
                                                     {data.images.map(image => (
                                                         <div className="col-3" key={image.id}>
-                                                            <Image src={image.location} width={150} height={100} style={imageStyle} alt="Retreat Images"/>
+                                                            <Image src={image.location} width={150} height={100} className="5px" alt="Retreat Images"/>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -341,6 +344,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                             minDate={minDate}
                                                             format="YYYY/MM/DD"
                                                             multiple
+                                                            disabled={title === "View"}
                                                         />
                                                         <label className="lh-1 text-16 text-light-1">Schedule</label>
                                                     </div>
@@ -363,15 +367,20 @@ export default function RetreatForm({closeModal, title, data}) {
                                             name="rooms"
                                             render={(arrayHelper) => (
                                                 <>
-                                                    <button type="button" 
-                                                        className="button h-50 px-24 -dark-1 bg-blue-1 text-white" 
-                                                        disabled={values.rooms.length>=3}
-                                                        onClick={() => {values.rooms.length <3 && arrayHelper.push({name: '', description: '', price: '', images: [], allowedGuest: '', advance: '', active: true})}}>
-                                                            Add Room <div className="icon-plus ml-15" />
-                                                    </button>
+                                                    {
+                                                        title !== "View" ? 
+                                                            <button type="button" 
+                                                                className="button h-50 px-24 -dark-1 bg-blue-1 text-white" 
+                                                                disabled={values.rooms.length>=3}
+                                                                onClick={() => {values.rooms.length <3 && arrayHelper.push({name: '', description: '', price: '', images: [], allowedGuest: '', advance: '', active: true})}}>
+                                                                    Add Room <div className="icon-plus ml-15" />
+                                                            </button>
+                                                        : null
+                                                    }
+                                                    
                                                     {values.rooms.map((room, index) => (
                                                         <Card border="light" className="my-1" key={index}>
-                                                            <Card.Header className="d-flex justify-between">Room {index+1}<CloseButton onClick={() => arrayHelper.remove(index)}/></Card.Header>
+                                                            <Card.Header className="d-flex justify-between">Room {index+1}<CloseButton disabled={title === "View"} onClick={() => arrayHelper.remove(index)}/></Card.Header>
                                                             <Card.Body>
                                                                 <RoomForm key={index} number={index} title={title} room={room} setFieldValue={setFieldValue}/>
                                                             </Card.Body>

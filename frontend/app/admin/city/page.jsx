@@ -19,7 +19,7 @@ export default function page() {
 
   const modalRef = useRef()
 
-  const handleOpenModal = (act="Add", data={}) => {
+  const handleOpenModal = ({act="Add", data={}}) => {
     setAction(act)
     setColumn(data)
     modalRef.current.openModal()
@@ -48,7 +48,7 @@ export default function page() {
     accessor: (row) => row,
     id: 'action',
     Cell: ({ cell: {value} }) => (
-      <ActionsButton id={value} openModal={handleOpenModal}/>
+      <ActionsButton value={value} openModal={handleOpenModal}/>
     )
    }
   ]
