@@ -89,22 +89,11 @@ export const login = asyncHandler(async (req,res)=>{
 })
 
 export const getUserInfo = asyncHandler(async(req, res) => {
-    const cookie = req.cookies['PEPRELIER-AUTH']
-
-    if(cookie) {
-        const user = await getUserBySessionToken(cookie)
-        if(user) {
-            res.status(200).json({
-                name: user.displayName,
-                isAdmin: user.isAdmin
-            })
-        } else {
-            res.status(400)
-            throw new Error("User not found")
-        }
+    if(req.user) {
+        res.status(200).json({name: req.user.displayName, isAdmin: req.user.isAdmin})
     } else {
         res.status(400)
-        throw new Error("Cookie not found")
+        throw new Error("User not found")
     }
 })
 
