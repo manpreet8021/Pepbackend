@@ -10,8 +10,16 @@ const retreatApiSlice = apiSlice.injectEndpoints({
         }),
         addRetreat: builder.mutation({
             query: (data) => ({
-                url: 'admin/retreat/',
+                url: 'admin/retreat',
                 method: 'POST',
+                body: data,
+                credentials: 'include'
+            })
+        }),
+        updateRetreat: builder.mutation({
+            query: (data) => ({
+                url: `admin/retreat/${data.get('id')}`,
+                method: 'PUT',
                 body: data,
                 credentials: 'include'
             })
@@ -19,6 +27,6 @@ const retreatApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const { useGetAllRetreatQuery, useAddRetreatMutation } = retreatApiSlice
+export const { useGetAllRetreatQuery, useAddRetreatMutation, useUpdateRetreatMutation } = retreatApiSlice
 
 export default retreatApiSlice;

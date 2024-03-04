@@ -14,7 +14,7 @@ import { useGetRetreatTypeQuery } from "@/store/slice/api/lookupApiSlice";
 import DatePicker from "react-multi-date-picker";
 import { Accordion, Card, CloseButton } from "react-bootstrap";
 import RoomForm from "./RoomForm";
-import { useAddRetreatMutation } from "@/store/slice/api/retreatApiSlice";
+import { useAddRetreatMutation, useUpdateRetreatMutation } from "@/store/slice/api/retreatApiSlice";
 
 export default function RetreatForm({closeModal, title, data}) {
     const minDate = new Date()
@@ -23,6 +23,7 @@ export default function RetreatForm({closeModal, title, data}) {
     const cityQuery = useGetCityQuery()
     const retreatQuery = useGetRetreatTypeQuery()
     const [addRetreat] = useAddRetreatMutation()
+    const [updateRetreat] = useUpdateRetreatMutation()
 
     const cities = useSelector(state => state.city)
     const countries = useSelector(state => state.country)
@@ -84,7 +85,7 @@ export default function RetreatForm({closeModal, title, data}) {
         }
 
         try{
-            await addRetreat(formData)
+            const result = formData.get('id') != '' ? await updateRetreat(formData) :await addRetreat(formData)
             const fileInput = document.querySelectorAll('input[type="file"]');
             
             fileInput.forEach(input => {
@@ -296,8 +297,8 @@ export default function RetreatForm({closeModal, title, data}) {
                                             { data.images && data.images.length && 
                                                 <div className="col-12 d-flex">
                                                     {data.images.map(image => (
-                                                        <div className="col-3" key={image.id}>
-                                                            <Image src={image.location} width={150} height={100} className="5px" alt="Retreat Images"/>
+                                                        <div className="col-2" key={image.id}>
+                                                            <Image src={image.location} width={150} height={100} alt="Retreat Images"/>
                                                         </div>
                                                     ))}
                                                 </div>

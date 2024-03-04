@@ -157,7 +157,22 @@ export const getRetreaties = () => retreatModel.populate(retreatModel.aggregate(
             active: 1,
             Guest: 1,
             directBook: 1,
-            rooms: 1,
+            rooms: {
+                $map: {
+                    input: '$rooms',
+                    as: 'room',
+                    in: {
+                        _id: '$$room._id',
+                        name: '$$room.name',
+                        images: '$$room.images',
+                        active: '$$room.active',
+                        price: '$$room.price',
+                        allowedGuest: '$$room.allowedGuest',
+                        advance: '$$room.advance',
+                        description: '$$room.description'
+                    }
+                }
+            },
             schedules:{
                 $map: {
                     input: '$schedules',
