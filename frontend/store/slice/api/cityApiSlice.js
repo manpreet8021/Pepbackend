@@ -25,10 +25,16 @@ const cityApiSlice = apiSlice.injectEndpoints({
                     credentials: 'include'
                 }
             }
+        }),
+        getTopCities: builder.query({
+            query: () => ({
+                url: 'recommended/city',
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useGetCityQuery, useAddCityMutation, useUpdateCityMutation } = cityApiSlice;
+export const { useGetCityQuery, useAddCityMutation, useUpdateCityMutation, useGetTopCitiesQuery } = cityApiSlice;
 
 export default cityApiSlice
