@@ -5,8 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar } from "swiper";
-import { destinations2 } from "../../data/desinations";
-import { Navigation, Pagination } from "swiper";
+import { Navigation } from "swiper";
 import { useSelector } from "react-redux";
 import { useGetTopCitiesQuery } from "@/store/slice/api/cityApiSlice";
 
@@ -55,7 +54,7 @@ const PopularDestinations = () => {
                 <Image
                   width={300}
                   height={400}
-                  src={item.image}
+                  src={item.images?.location}
                   alt="image"
                   className="js-lazy"
                 />

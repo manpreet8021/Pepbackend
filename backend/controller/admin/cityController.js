@@ -6,14 +6,16 @@ import { imageUpload } from "../../helpers/imageUpload.js";
 const addCitySchema = Joi.object({
     country: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     name: Joi.string().required(),
-    active: Joi.boolean().required()
+    active: Joi.boolean().required(),
+    recommended: Joi.boolean().required()
 })
 
 const updateCitySchema = Joi.object({
     id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     country: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     name: Joi.string().required(),
-    active: Joi.boolean().required()
+    active: Joi.boolean().required(),
+    recommended: Joi.boolean().required()
 })
 
 const getCity = asyncHandler(async(req, res) => {
@@ -22,7 +24,7 @@ const getCity = asyncHandler(async(req, res) => {
 })
 
 const addCity = asyncHandler(async(req, res) => {
-    const { error } = addCitySchema.validate({name: req.body.name, active: req.body.active, country: req.body.country}, {abortEarly: false})
+    const { error } = addCitySchema.validate({name: req.body.name, active: req.body.active, country: req.body.country, recommended: req.body.recommended}, {abortEarly: false})
 
     if(error) {
         res.status(400)
@@ -38,7 +40,7 @@ const addCity = asyncHandler(async(req, res) => {
 
     if(uploadedImage) {
         const { name, active, country } = req.body
-        const city = await saveCity({name, active, images: uploadedImage, country});
+        const city = await saveCity({name, active, images: uploadedImage, country, recommended});
         
         if(city) {
             res.status(201).json(city);
@@ -53,7 +55,7 @@ const addCity = asyncHandler(async(req, res) => {
 })
 
 const updateCity = asyncHandler(async(req, res) => {
-    const { error } = updateCitySchema.validate({id: req.params.id, name: req.body.name, active: req.body.active, country: req.body.country}, {abortEarly: false})
+    const { error } = updateCitySchema.validate({id: req.params.id, name: req.body.name, active: req.body.active, country: req.body.country, recommended: req.body.recommended}, {abortEarly: false})
 
     if(error) {
         res.status(400)
@@ -62,11 +64,12 @@ const updateCity = asyncHandler(async(req, res) => {
 
     const existingCity = await getCityById(req.params.id)
 
-    const { name, active, country } = req.body
+    const { name, active, country, recommended } = req.body
 
     existingCity.name = name;
     existingCity.active = active;
     existingCity.country = country;
+    existingCity.recommended = recommended;
     
     if(existingCity) {
         if(req.body.imageUpdated !== 'false') {

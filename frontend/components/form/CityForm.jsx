@@ -22,6 +22,7 @@ export default function CityForm({closeModal, title, data}) {
         name: data?.name || '',
         country: data?.country?._id || '',
         active: data?.active || false,
+        recommended: data?.recommended || false,
         images: '',
         imageUpdated: data.images ? false : true
     }
@@ -49,6 +50,7 @@ export default function CityForm({closeModal, title, data}) {
     const validationSchema = Yup.object({
         name: Yup.string().required(),
         active: Yup.boolean().required(),
+        recommended: Yup.boolean().required(),
         imageUpdated: Yup.boolean().required(),
         country: Yup.string().required(),
         images: Yup.mixed().when(
@@ -122,6 +124,16 @@ export default function CityForm({closeModal, title, data}) {
                                         <div className="text-15 lh-11 ml-10">Active</div>
                                     </div>
                                     <ErrorMessage name="active" component="div" className="error-message"/>
+                                </div>
+                                <div className="col-12">
+                                    <div className="d-flex items-center form-checkbox">
+                                        <Field type="checkbox" name="recommended" disabled={title === "View"}/>
+                                        <div className="form-checkbox__mark">
+                                            <div className="form-checkbox__icon icon-check" />
+                                        </div>
+                                        <div className="text-15 lh-11 ml-10">Recommended</div>
+                                    </div>
+                                    <ErrorMessage name="recommended" component="div" className="error-message"/>
                                 </div>
                             </div>
                         </ModalBody>
