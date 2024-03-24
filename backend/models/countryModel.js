@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import imageSchema from "./imageSchema.js";
 
 const countrySchema = new mongoose.Schema({
     name: {
@@ -12,7 +13,7 @@ const countrySchema = new mongoose.Schema({
         default: true
     },
     logo: {
-        type: String,
+        type: imageSchema,
         required: true
     }
 },{

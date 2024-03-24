@@ -17,7 +17,7 @@ const Pagination = ({previousPage, nextPage, canNextPage, canPreviousPage, state
         <div className="col-md-auto md:order-3">
           <div className="row x-gap-20 y-gap-20 items-center md:d-none">
             <div className="col-auto">
-              Page {pageIndex+1} of {pageOptions.length}
+              Page {pageOptions.length ? pageIndex+1 : 0} of {pageOptions.length}
             </div>
           </div>
         </div>

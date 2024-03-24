@@ -8,7 +8,10 @@ export const imageUpload = async(image, folderName) => {
             folder: folderName
         })
         fs.unlinkSync(image)
-        return uploadedImage
+        return {
+            id: uploadedImage.asset_id,
+            location: uploadedImage.secure_url
+        }
     } catch (error) {
         fs.unlinkSync(image)
         return false;
@@ -32,4 +35,9 @@ export const uploadMultipleImages = async(images, folderName) => {
     }
 
     return uploadedImages;
+}
+
+export const deleteImageFromCloudinary = async(image_id) => {
+    const result = await cloudinary.uploader.destroy(image_id)
+    return result
 }

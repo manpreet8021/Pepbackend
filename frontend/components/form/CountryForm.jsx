@@ -85,7 +85,7 @@ export default function CountryForm({closeModal, title, data}) {
                                             </div>
                                     ) 
                                 }
-                                { data.logo && <div className="col-12"><Image src={data.logo} width="50" height="50" alt="Country Logo"/></div>}
+                                { data.logo && <div className="col-12"><Image src={data.logo.location} width="50" height="50" alt="Country Logo"/></div>}
                                 <div className="col-12">
                                     <div className="d-flex items-center form-checkbox">
                                         <Field type="checkbox" name="active" disabled={title === "View"}/>

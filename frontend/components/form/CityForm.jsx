@@ -22,7 +22,7 @@ export default function CityForm({closeModal, title, data}) {
         name: data?.name || '',
         country: data?.country?._id || '',
         active: data?.active || false,
-        images: [],
+        images: '',
         imageUpdated: data.images ? false : true
     }
     
@@ -30,13 +30,7 @@ export default function CityForm({closeModal, title, data}) {
         const formData = new FormData()
         
         for (let value in values) {
-            if (Array.isArray(values[value]) && values[value][0] instanceof File) {
-                for (let i = 0; i < values[value].length; i++) {
-                    formData.append(`images`, values[value][i]);
-                }
-            } else {
-                formData.append(value, values[value]);
-            }
+            formData.append(value, values[value]);
         }
 
         try {
@@ -62,7 +56,6 @@ export default function CityForm({closeModal, title, data}) {
                 is: true,
                 then: (schema) => schema.required()
                     .test("is-valid-type", "Image is not of valid type", value => fileValidation(value, "image"))
-                    .test("max-file", "You can select only 5 files at a time", value => value && value.length && value.length <= 5)
                     
             }
         )
@@ -102,10 +95,9 @@ export default function CityForm({closeModal, title, data}) {
                                                 <input type="file"
                                                     name="images"
                                                     accept='image/*'
-                                                    multiple
                                                     onChange={(e) => {
                                                         setFieldValue('imageUpdated', true)
-                                                        setFieldValue('images',  Array.from(e.currentTarget.files))}
+                                                        setFieldValue('images',  e.currentTarget.files[0])}
                                                     } />
                                             </div>
                                             <ErrorMessage name="images" component="div" className="error-message"/>
@@ -113,13 +105,11 @@ export default function CityForm({closeModal, title, data}) {
                                     ) 
                                 }
 
-                                { data.images && data.images.length && 
+                                { data.images &&  
                                     <div className="col-12 d-flex">
-                                        {data.images.map(image => (
-                                            <div className="col-3" key={image.id}>
-                                                <Image src={image.location} width={150} height={100} className="5px" alt="City Images"/>
-                                            </div>
-                                        ))}
+                                        <div className="col-3">
+                                            <Image src={data.images.location} width={150} height={100} className="5px" alt="City Images"/>
+                                        </div>
                                     </div>
                                 }
 

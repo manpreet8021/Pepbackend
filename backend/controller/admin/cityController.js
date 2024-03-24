@@ -1,7 +1,7 @@
 import Joi from "joi"
 import asyncHandler from "../../middleware/asyncHandler.js"
 import { getCities, saveCity, getCityById, updateCityById } from "../../models/cityModel.js"
-import { uploadMultipleImages } from "../../helpers/imageUpload.js";
+import { imageUpload } from "../../helpers/imageUpload.js";
 
 const addCitySchema = Joi.object({
     country: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
@@ -29,14 +29,14 @@ const addCity = asyncHandler(async(req, res) => {
         throw new Error(error.message)
     }
     
-    if(!req.files) {
+    if(!req.file) {
         res.status(400)
         throw new Error("Failed to upload image")
     }
 
-    const uploadedImage = await uploadMultipleImages(req.files, 'city')
+    const uploadedImage = await imageUpload(req.file.path, 'city')
 
-    if(uploadedImage.length) {
+    if(uploadedImage) {
         const { name, active, country } = req.body
         const city = await saveCity({name, active, images: uploadedImage, country});
         
@@ -70,12 +70,12 @@ const updateCity = asyncHandler(async(req, res) => {
     
     if(existingCity) {
         if(req.body.imageUpdated !== 'false') {
-            if(!req.files) {
+            if(!req.file) {
                 res.status(400)
                 throw new Error("Failed to upload image")
             }
-            const uploadedImage = await uploadMultipleImages(req.files, 'city')
-            existingCity.images = [...existingCity.images, ...uploadedImage];
+            const uploadedImage = await imageUpload(req.file.path, 'city')
+            existingCity.images = uploadedImage;
         }
 
         const city = await updateCityById(req.params.id, existingCity);

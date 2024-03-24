@@ -190,3 +190,4 @@ export const getRetreatById = (id) => retreatModel.findById(id);
 export const deleteRetreatById = (id) => retreatModel.findOneAndDelete({ _id: id });
 export const updateRetreatById = (id, value) => retreatModel.findByIdAndUpdate(id, value, {new: true});
 export const saveRetreat = (values,session) => new retreatModel(values).save({session}).then((retreat) => retreat.toObject());
+export const deleteRetreatImageById = (id, image_id) => retreatModel.findOneAndUpdate({_id: id}, {$pull: {images: {id: image_id}}}, {new: true})

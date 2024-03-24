@@ -36,7 +36,7 @@ const addCountry = asyncHandler(async(req, res) => {
     
     if(imageInfo) {
         const { name, active } = req.body
-        const country = await saveCountry({name, active, logo: imageInfo.secure_url});
+        const country = await saveCountry({name, active, logo: imageInfo});
         
         if(country) {
             res.status(201).json(country);
@@ -69,7 +69,7 @@ const updateCountry = asyncHandler(async(req, res) => {
             
             const imageInfo = await imageUpload(req.file.path, 'country')
             if(imageInfo) {
-                existingCountry.logo = imageInfo.secure_url
+                existingCountry.logo = imageInfo
             } else {
                 res.status(400)
                 throw new Error("Failed uploading the image")

@@ -1,19 +1,5 @@
 import mongoose from "mongoose";
-
-const imageSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
-    location: {
-        type: String,
-        required: true
-    },
-    isMain: {
-        type: Boolean,
-        default: false
-    }
-})
+import imageSchema from "./imageSchema.js";
 
 const citySchema =  new mongoose.Schema({
     country: {
@@ -26,7 +12,7 @@ const citySchema =  new mongoose.Schema({
         required: true
     },
     images: {
-        type: [imageSchema],
+        type: imageSchema,
         required: true
     },
     active: {
