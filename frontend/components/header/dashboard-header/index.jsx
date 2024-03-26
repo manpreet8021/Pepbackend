@@ -114,17 +114,7 @@ const HeaderDashBoard = () => {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      <Dropdown.Item>
-                        <div className="mt-20">
-                          <button
-                            type="submit"
-                            className=" button -dark-1 px-30 fw-400 text-14 bg-blue-1 h-50 text-white"
-                            onClick={handleLogout}
-                          >
-                            Logout
-                          </button>
-                        </div>
-                      </Dropdown.Item>
+                      <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
