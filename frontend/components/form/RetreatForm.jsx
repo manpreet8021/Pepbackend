@@ -12,6 +12,7 @@ import { useGetCityQuery } from "@/store/slice/api/cityApiSlice";
 import { useSelector } from "react-redux";
 import { useGetRetreatTypeQuery } from "@/store/slice/api/lookupApiSlice";
 import DatePicker from "react-multi-date-picker";
+import MultiSelectField from "./MultiSelectField";
 import { Accordion, Card, CloseButton } from "react-bootstrap";
 import RoomForm from "./RoomForm";
 import { useAddRetreatMutation, useUpdateRetreatMutation } from "@/store/slice/api/retreatApiSlice";
@@ -38,19 +39,23 @@ export default function RetreatForm({closeModal, title, data}) {
         maxGuest: data?.Guest?.max || '',
         youtubeUrl: data?.youtubeUrl || '',
         type: data?.type?._id || '',
-        duration: data?.schedules || [],
-        retreatDuration: data?.retreatDuration || '',
         line1: data?.address?.line1 || '',
         line2: data?.address?.line2 || '',
         zipcode: data?.address?.zipcode || '',
         city: data?.address?.city || '',
         country: data?.address?.country || '',
-        images: [],
         active: data?.active || false,
         directBook: data?.directbook || false,
+        duration: data?.schedules || [],
+        retreatDuration: data?.retreatDuration || '',
+        retreatType: data?.retreatType || [],
+        retreatHighlight: data?.retreatHighlight || [],
+        thumbnail: data?.thumbnail || '',
+        images: [],
         rooms: data?.rooms || [],
         roomImageUpdated: data.roomImages ? false : true,
-        imageUpdated: data.images ? false : true
+        imageUpdated: data.images ? false : true,
+        thumbnailUpdated: data.thumbnail ? false : true
     }
     
     const handleSubmit = async(values, actions) => {
@@ -213,7 +218,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 <div className="form-input ">
                                                     <Field type="text" required name="type" disabled={title === "View"} as="select">
                                                         <option></option>
-                                                        {lookup.retreatType && lookup.retreatType.map(type => (
+                                                        {lookup.retreat?.type && lookup.retreat?.type.map(type => (
                                                             <option key={type._id} value={type._id}>{type.name}</option>
                                                         ))}
                                                     </Field>
@@ -271,39 +276,6 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 </div>
                                                 <ErrorMessage name="country" component="div" className="error-message"/>
                                             </div>
-
-                                            {
-                                                title !== "View" && ( 
-                                                    <>
-                                                        <div className="col-12">
-                                                            <div className="form-input ">
-                                                                <input type="file"
-                                                                    name="images"
-                                                                    accept='image/*'
-                                                                    multiple
-                                                                    onChange={(e) => {
-                                                                        setFieldTouched('images', true)
-                                                                        setFieldValue('imageUpdated', true)
-                                                                        setFieldValue('images',  Array.from(e.currentTarget.files))
-                                                                    }
-                                                                } />
-                                                            </div>
-                                                            <ErrorMessage name="images" component="div" className="error-message"/>
-                                                        </div>
-                                                    </>
-                                                ) 
-                                            }
-
-                                            { data.images && data.images.length && 
-                                                <div className="col-12 d-flex">
-                                                    {data.images.map(image => (
-                                                        <div className="col-2" key={image.id}>
-                                                            <Image src={image.location} width={150} height={100} alt="Retreat Images"/>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            }
-
                                             <div className="col-12">
                                                 <div className="d-flex items-center form-checkbox">
                                                     <Field type="checkbox" name="active" disabled={title === "View"}/>
@@ -328,7 +300,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                     </Accordion.Body>
                                 </Accordion.Item>
                                 <Accordion.Item eventKey="1">
-                                    <Accordion.Header>Schedule</Accordion.Header>
+                                    <Accordion.Header>Retreat Detail</Accordion.Header>
                                     <Accordion.Body>
                                         <div className="row x-gap-20 y-gap-20">
                                             <div className="col-6">
@@ -359,6 +331,74 @@ export default function RetreatForm({closeModal, title, data}) {
                                                     <label className="lh-1 text-16 text-light-1">Duration(in days)</label>
                                                 </div>
                                             </div>
+
+                                            <div className="col-6">
+                                                <Field name="retreatType" disabled={title === "View"} component={MultiSelectField} data={lookup.retreat?.retreatType} placeholder='Retreat Type'/>
+                                                <ErrorMessage name="retreatType" component="div" className="error-message"/>
+                                            </div>
+
+                                            <div className="col-6">
+                                                <Field name="retreatHighlight" disabled={title === "View"} component={MultiSelectField} data={lookup.retreat?.retreatHighlight} placeholder='Retreat Highlight'/>
+                                                <ErrorMessage name="retreatHighlight" component="div" className="error-message"/>
+                                            </div>
+
+                                            {
+                                                title !== "View" && ( 
+                                                    <>
+                                                        <div className="col-6">
+                                                            <label className="lh-1 text-16 text-light-1">Thumbnail</label>
+                                                            <div className="form-input">
+                                                                <input type="file"
+                                                                    name="thumbnail"
+                                                                    accept='image/*'
+                                                                    onChange={(e) => {
+                                                                        setFieldTouched('thumbnail', true)
+                                                                        setFieldValue('thumbnailUpdated', true)
+                                                                        setFieldValue('thumbnail',  e.currentTarget.files[0])
+                                                                    }
+                                                                } />
+                                                            </div>
+                                                            <ErrorMessage name="thumbnail" component="div" className="error-message"/>
+                                                        </div>
+
+                                                        <div className="col-6">
+                                                            <label className="lh-1 text-16 text-light-1">Retreat Image</label>
+                                                            <div className="form-input">
+                                                                <input type="file"
+                                                                    name="images"
+                                                                    accept='image/*'
+                                                                    multiple
+                                                                    onChange={(e) => {
+                                                                        setFieldTouched('images', true)
+                                                                        setFieldValue('imageUpdated', true)
+                                                                        setFieldValue('images',  Array.from(e.currentTarget.files))
+                                                                    }
+                                                                } />
+                                                            </div>
+                                                            <ErrorMessage name="images" component="div" className="error-message"/>
+                                                        </div>
+                                                    </>
+                                                ) 
+                                            }
+
+                                            {
+                                                data.thumbnail && 
+                                                <div className="col-6 d-flex">
+                                                    <div className="col-2">
+                                                        <Image src={data.thumbnail} width={150} height={100} alt="Retreat Images"/>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            { data.images && data.images.length && 
+                                                <div className="col-6 d-flex">
+                                                    {data.images.map(image => (
+                                                        <div className="col-2" key={image.id}>
+                                                            <Image src={image.location} width={150} height={100} alt="Retreat Images"/>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            }
                                         </div>
                                     </Accordion.Body>
                                 </Accordion.Item>

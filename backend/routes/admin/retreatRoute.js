@@ -7,6 +7,7 @@ const router = express.Router()
 
 router.route('/').get(getRetreat)
 router.route('/').post(upload.fields([
+        {name: 'thumbnail', maxCount: 1},
         {name: 'images', maxCount: 5},
         {name: 'rooms[0][images]', maxCount: 5},
         {name: 'rooms[1][images]', maxCount: 5},
@@ -14,6 +15,7 @@ router.route('/').post(upload.fields([
     ]), addRetreat
 )
 router.route('/:id').put(upload.fields([
+        {name: 'thumbnail', maxCount: 1},
         {name: 'images', maxCount: 5},
         {name: 'rooms[0][images]', maxCount: 5},
         {name: 'rooms[1][images]', maxCount: 5},

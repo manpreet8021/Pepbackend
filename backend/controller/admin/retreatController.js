@@ -37,7 +37,9 @@ const addRetreatSchema = Joi.object({
     directBook: Joi.boolean().required(),
     duration: Joi.array().items(durationValidationSchema).required().min(1),
     retreatDuration: Joi.number().positive().required(),
-    rooms: Joi.array().items(roomValidationSchema)
+    rooms: Joi.array().items(roomValidationSchema),
+    retreatType: Joi.array().items(Joi.string()).required().min(1),
+    retreatHighlight: Joi.array().items(Joi.string()).required().min(1)
 })
 
 const getRetreat = asyncHandler(async(req, res) => {
@@ -46,7 +48,7 @@ const getRetreat = asyncHandler(async(req, res) => {
 })
 
 const addRetreat = asyncHandler(async(req, res) => {
-    const { title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms } = req.body;
+    const { title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType } = req.body;
     const {error} = addRetreatSchema.validate({title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms}, {abortEarly: false})
     
     if(error) {
@@ -54,20 +56,21 @@ const addRetreat = asyncHandler(async(req, res) => {
         throw new Error(error.message)
     }
 
-    if(!req.files || !req.files.images) {
+    if(!req.files || !req.files.images || !req.files.thumbnail) {
         res.status(400);
         throw new Error("Failed to upload image")
     }
 
     const uploadedImage = await uploadMultipleImages(req.files.images, 'retreat')
+    const uploadedThumbnail = await uploadMultipleImages(req.files.thumbnail, 'retreat')
 
     const session = await mongoose.startSession();
 
     session.startTransaction()
 
     try{
-        if(uploadedImage.length) {
-            const retreat = await saveRetreat({ title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, owner: req.user._id, images: uploadedImage },session)
+        if(uploadedImage.length && uploadedThumbnail) {
+            const retreat = await saveRetreat({ title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, owner: req.user._id, images: uploadedImage, thumbnail: uploadedThumbnail, retreatType, retreatHighlight }, session)
             if(retreat) {
                 for(let i=0; i<duration.length; i++) {
                     await saveSchedule({startDate: duration[i][0], endDate: duration[i][1], retreat: retreat._id},session)
@@ -84,22 +87,16 @@ const addRetreat = asyncHandler(async(req, res) => {
                 session.endSession();
                 res.status(201).json(retreat)
             } else {
-                await session.abortTransaction();
-                session.endSession();
-                res.status(400)
                 throw new Error("Failed to add a retreat")
             }
         } else {
-            await session.abortTransaction();
-            session.endSession();
-            res.status(400)
             throw new Error("Failed uploading the image")
         }
     } catch (e) {
         await session.abortTransaction();
         session.endSession();
         res.status(400)
-        throw new Error("Failed to add a retreat")
+        throw new Error(e.message)
     }
 })
 

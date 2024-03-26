@@ -1,19 +1,5 @@
 import mongoose from "mongoose";
-
-const imageSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
-    location: {
-        type: String,
-        required: true
-    },
-    isMain: {
-        type: Boolean,
-        default: false
-    }
-})
+import imageSchema from "./imageSchema.js";
 
 const retreatSchema =  new mongoose.Schema({
     title: {
@@ -32,6 +18,10 @@ const retreatSchema =  new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'LookUpValue'
+    },
+    thumbnail: {
+        type: imageSchema,
+        required: true
     },
     images: {
         type: [imageSchema],
@@ -101,6 +91,16 @@ const retreatSchema =  new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Users'
+    },
+    retreatHighlight: {
+        type: [mongoose.Schema.Types.ObjectId],
+        required: true,
+        ref: 'LookUpValue'
+    },
+    retreatType: {
+        type: [mongoose.Schema.Types.ObjectId],
+        required: true,
+        ref: 'LookUpValue'
     }
 },{
     timestamps: true

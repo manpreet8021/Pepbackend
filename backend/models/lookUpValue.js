@@ -29,3 +29,44 @@ export const deleteLookUpValueById = (id) => lookUpValueModel.findOneAndDelete({
 export const updateLookUpValueById = (id, value) => lookUpValueModel.findByIdAndUpdate(id, value, {new: true});
 export const saveLookUpValue = (values) => new lookUpValueModel(values).save().then((lookup) => lookup.toObject());
 export const getLookUpByParams = (params) => lookUpValueModel.find(params).populate();
+export const getRetreatLookUpValues = () => lookUpValueModel.aggregate(
+    [
+        {
+            $match: {
+                parent: {$in : [
+                    new mongoose.Types.ObjectId('65d10cb4675106006ec49700'), 
+                    new mongoose.Types.ObjectId('66000e041a6d8d03f622a85e'),
+                    new mongoose.Types.ObjectId('660122f34d4e4c8595c9068e')
+                ]},
+                active: true
+            }
+        },
+        {
+            $lookup: {
+                from: 'lookupdatas',
+                localField: 'parent',
+                foreignField: '_id',
+                as: 'parent'
+            }
+        },
+        {
+            $unwind: "$parent"
+        },
+        {
+            $group: {
+                _id: "$parent._id",
+                name: { $first: "$parent.name" },
+                data: {
+                    $push: { _id: "$_id", name: "$name" }
+                }
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                name: 1,
+                data: 1
+            }
+        }
+    ]
+)

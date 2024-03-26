@@ -3,7 +3,7 @@ import lookupApiSlice from "./api/lookupApiSlice"
 const { createSlice } = require("@reduxjs/toolkit")
 
 const initialState = {
-    retreatType: null,
+    retreat: null,
     locations: [
         {id:1, name: 'London', address: 'Greater London, UnitedKingdom'},
         {id:2, name: 'New York', address: 'New York state, United States'},
@@ -35,7 +35,7 @@ const lookupSlice = createSlice({
         builder.addMatcher(
             lookupApiSlice.endpoints.getRetreatType.matchFulfilled,
             (state, { payload }) => {
-                state.retreatType = payload
+                state.retreat = payload
             }
         )
     }
