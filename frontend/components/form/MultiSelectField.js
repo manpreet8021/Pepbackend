@@ -1,18 +1,17 @@
 import Select from "react-select";
 
-const MultiSelectField = ({ field, form, data, ...props }) => (
+const MultiSelectField = ({ field, form, data, disabled, ...props }) => (
     <>
         <Select
             className="basic-multi-select"
             classNamePrefix="select"
             options={data}
             isMulti
-            getOptionLabel={(option) => option.name}
-            getOptionValue={(option) => option._id}
-            onChange={(option) => form.setFieldValue(field.name, option)}
+            onChange={(option) => {form.setFieldValue(field.name, option)}}
             onBlur={field.onBlur}
-            value={field.value}
+            value={field.value && data ? data.filter(option => field.value.includes(option.value)) : []}
             {...props}
+            isDisabled={disabled}
         />
     </>
 );

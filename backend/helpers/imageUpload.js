@@ -24,12 +24,9 @@ export const uploadMultipleImages = async(images, folderName) => {
     for (const file of images) {
         try {
             let imageInfo = await imageUpload(file.path, folderName);
-            let struct = {
-                id: imageInfo.asset_id,
-                location: imageInfo.secure_url
-            };
-            uploadedImages.push(struct);
+            uploadedImages.push(imageInfo);
         } catch (error) {
+            console.log(error)
             return false
         }
     }

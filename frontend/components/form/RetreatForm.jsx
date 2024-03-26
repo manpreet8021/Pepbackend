@@ -91,6 +91,7 @@ export default function RetreatForm({closeModal, title, data}) {
 
         try{
             const result = formData.get('id') != '' ? await updateRetreat(formData) :await addRetreat(formData)
+            if(result.error) throw new Error("Error while saving a retreat")
             const fileInput = document.querySelectorAll('input[type="file"]');
             
             fileInput.forEach(input => {
@@ -149,7 +150,9 @@ export default function RetreatForm({closeModal, title, data}) {
         active: Yup.boolean().required(),
         directBook: Yup.boolean().required(),
         rooms: Yup.array().of(roomSchema),
-        imageUpdated: Yup.boolean().required()
+        imageUpdated: Yup.boolean().required(),
+        retreatType: Yup.array().required().min(1),
+        retreatHighlight: Yup.array().required().min(1),
     })
 
     
@@ -385,7 +388,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 data.thumbnail && 
                                                 <div className="col-6 d-flex">
                                                     <div className="col-2">
-                                                        <Image src={data.thumbnail} width={150} height={100} alt="Retreat Images"/>
+                                                        <Image src={data.thumbnail.location} width={150} height={100} alt="Retreat Images"/>
                                                     </div>
                                                 </div>
                                             }

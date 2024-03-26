@@ -57,7 +57,7 @@ export const getRetreatLookUpValues = () => lookUpValueModel.aggregate(
                 _id: "$parent._id",
                 name: { $first: "$parent.name" },
                 data: {
-                    $push: { _id: "$_id", name: "$name" }
+                    $push: { value: "$_id", label: "$name" }
                 }
             }
         },

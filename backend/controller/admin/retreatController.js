@@ -20,6 +20,11 @@ const durationValidationSchema = Joi.array().items(
     Joi.string().required()
 )
 
+const MultiSelectValidationSchema = Joi.object({
+    _id: Joi.string().required(),
+    name: Joi.string().required()
+})
+
 const addRetreatSchema = Joi.object({
     title: Joi.string().required(),
     overview: Joi.string().required(),
@@ -38,8 +43,8 @@ const addRetreatSchema = Joi.object({
     duration: Joi.array().items(durationValidationSchema).required().min(1),
     retreatDuration: Joi.number().positive().required(),
     rooms: Joi.array().items(roomValidationSchema),
-    retreatType: Joi.array().items(Joi.string()).required().min(1),
-    retreatHighlight: Joi.array().items(Joi.string()).required().min(1)
+    retreatType: Joi.array().items(MultiSelectValidationSchema).required().min(1),
+    retreatHighlight: Joi.array().items(MultiSelectValidationSchema).required().min(1)
 })
 
 const getRetreat = asyncHandler(async(req, res) => {
@@ -49,7 +54,7 @@ const getRetreat = asyncHandler(async(req, res) => {
 
 const addRetreat = asyncHandler(async(req, res) => {
     const { title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType } = req.body;
-    const {error} = addRetreatSchema.validate({title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms}, {abortEarly: false})
+    const {error} = addRetreatSchema.validate({title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType}, {abortEarly: false})
     
     if(error) {
         res.status(400)
@@ -61,6 +66,17 @@ const addRetreat = asyncHandler(async(req, res) => {
         throw new Error("Failed to upload image")
     }
 
+    let retreatTypeIds = []
+    let retreatHighlightIds = []
+
+    retreatType.map(e => {
+        retreatTypeIds.push(e._id)
+    })
+
+    retreatHighlight.map(e => {
+        retreatHighlightIds.push(e._id)
+    })
+
     const uploadedImage = await uploadMultipleImages(req.files.images, 'retreat')
     const uploadedThumbnail = await uploadMultipleImages(req.files.thumbnail, 'retreat')
 
@@ -70,7 +86,7 @@ const addRetreat = asyncHandler(async(req, res) => {
 
     try{
         if(uploadedImage.length && uploadedThumbnail) {
-            const retreat = await saveRetreat({ title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, owner: req.user._id, images: uploadedImage, thumbnail: uploadedThumbnail, retreatType, retreatHighlight }, session)
+            const retreat = await saveRetreat({ title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, owner: req.user._id, images: uploadedImage, thumbnail: uploadedThumbnail[0], retreatType: retreatTypeIds, retreatHighlight: retreatHighlightIds }, session)
             if(retreat) {
                 for(let i=0; i<duration.length; i++) {
                     await saveSchedule({startDate: duration[i][0], endDate: duration[i][1], retreat: retreat._id},session)

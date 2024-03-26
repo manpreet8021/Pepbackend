@@ -182,7 +182,10 @@ export const getRetreaties = () => retreatModel.populate(retreatModel.aggregate(
                         '$$schedule.endDate'
                     ]
                 }
-            }
+            },
+            retreatHighlight: 1,
+            retreatType: 1,
+            thumbnail: 1
         }
     }
 ]),'type', 'name');
