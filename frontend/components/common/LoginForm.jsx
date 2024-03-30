@@ -25,7 +25,7 @@ const LoginForm = () => {
       const res = await login(values);
       router.push('/')
     } catch (error) {
-      console.log(error)
+      
     }
   }
 

@@ -5,6 +5,10 @@ const imageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    public_id: {
+        type: String,
+        required: true
+    },
     location: {
         type: String,
         required: true
@@ -12,6 +16,10 @@ const imageSchema = new mongoose.Schema({
     isMain: {
         type: Boolean,
         default: false
+    },
+    data: {
+        type: Object,
+        required: true
     }
 })
 

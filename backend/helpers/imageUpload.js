@@ -7,10 +7,13 @@ export const imageUpload = async(image, folderName) => {
             resource_type: "image",
             folder: folderName
         })
+        console.log(uploadedImage)
         fs.unlinkSync(image)
         return {
             id: uploadedImage.asset_id,
-            location: uploadedImage.secure_url
+            location: uploadedImage.secure_url,
+            data: uploadedImage,
+            public_id: uploadedImage.public_id
         }
     } catch (error) {
         fs.unlinkSync(image)
@@ -26,7 +29,6 @@ export const uploadMultipleImages = async(images, folderName) => {
             let imageInfo = await imageUpload(file.path, folderName);
             uploadedImages.push(imageInfo);
         } catch (error) {
-            console.log(error)
             return false
         }
     }

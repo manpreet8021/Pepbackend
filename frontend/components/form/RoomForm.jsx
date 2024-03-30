@@ -1,7 +1,7 @@
 import { ErrorMessage, Field } from "formik";
 import Image from 'next/image'
 
-export default function RoomForm({title, number, room, setFieldValue, setFieldTouched}) {
+export default function RoomForm({title, number, room, setFieldValue, setFieldTouched, handleImageDelete}) {
     return (
         <div className="row x-gap-20 y-gap-20">
             <Field type="hidden" required name={`rooms[${number}].roomUpdated`} />
@@ -64,8 +64,16 @@ export default function RoomForm({title, number, room, setFieldValue, setFieldTo
             { room.images && room.images.length && 
                 <div className="col-12 d-flex">
                     {room.images.map(image => (
-                        <div className="col-3" key={image.id}>
-                            <Image src={image.location} width={150} height={100} className="5px" alt="Retreat Images"/>
+                        <div className="col-auto" key={image.id} id={image.id}>
+                            <Image src={image.location} width={150} height={100} alt="Retreat Images" className="custom-image"/>
+                            {
+                                title !== 'View' && 
+                                <div className="col-auto center">
+                                    <button type="button" className="bg-light-2 rounded-4 size-35" onClick={() => handleImageDelete(room._id, image.id, 'room')}>
+                                        <i className="icon-trash-2 text-16 text-light-1" />
+                                    </button>
+                                </div>
+                            }
                         </div>
                     ))}
                 </div>

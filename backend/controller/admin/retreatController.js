@@ -3,7 +3,7 @@ import asyncHandler from "../../middleware/asyncHandler.js"
 import { getRetreatById, getRetreaties, saveRetreat, updateRetreatById } from "../../models/retreatModel.js";
 import { saveSchedule } from "../../models/scheduleModel.js";
 import { getRoomById, saveRoom, updateRoomById } from "../../models/roomModel.js";
-import { uploadMultipleImages } from "../../helpers/imageUpload.js";
+import { deleteImageFromCloudinary, uploadMultipleImages } from "../../helpers/imageUpload.js";
 import mongoose from "mongoose";
 
 const roomValidationSchema = Joi.object({
@@ -22,6 +22,11 @@ const durationValidationSchema = Joi.array().items(
     Joi.string().required(),
     Joi.string().required()
 )
+
+const deleteImageSchema = Joi.object({
+    id: Joi.string().required(),
+    image_id: Joi.string().required()
+})
 
 const MultiSelectValidationSchema = Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required()
 
@@ -204,4 +209,90 @@ const deleteRetreat = asyncHandler(async(req, res) => {
     res.status(201).json()
 })
 
-export { getRetreat, addRetreat, updateRetreat, deleteRetreat }
+const deleteRetreatImage = asyncHandler(async(req, res) => {
+    const {id, image_id} = req.params
+    const {error} = deleteImageSchema.validate({id, image_id})
+
+    if(error) {
+        res.status(404)
+        throw new Error("Validation failed")
+    }
+
+    const retreat = await getRetreatById(id)
+
+    if(retreat) {
+        if(retreat.images.length > 1) {
+            let public_id = ''
+            retreat.images.map(image => {
+                if(image.id === image_id) {
+                    public_id = image.public_id
+                }
+            })
+            if(public_id){
+                const cloudinaryResult = await deleteImageFromCloudinary(public_id)
+
+                if(cloudinaryResult) {
+                    retreat.images = retreat.images.filter(x => x.id !== image_id)
+                    const updatedRetreat = await updateRetreatById(retreat._id, retreat)
+                    res.status(201).json()
+                } else {
+                    throw new Error("Failed deleting image from cloudnairy")
+                }
+            } else {
+                res.status(404)
+                throw new Error("Image not found")
+            }
+        } else {
+            res.status(400)
+            throw new Error("Cannot delete the last image")
+        }
+    } else {
+        res.status(404)
+        throw new Error("Retreat not found")
+    }
+})
+
+const deleteRoomImage = asyncHandler(async(req, res) => {
+    const {id, image_id} = req.params
+    const {error} = deleteImageSchema.validate({id, image_id})
+
+    if(error) {
+        res.status(404)
+        throw new Error("Validation failed")
+    }
+
+    const room = await getRoomById(id)
+
+    if(room) {
+        if(room.images.length > 1) {
+            let public_id = ''
+            room.images.map(image => {
+                if(image.id === image_id) {
+                    public_id = image.public_id
+                }
+            })
+            if(public_id) {
+                const cloudinaryResult = await deleteImageFromCloudinary(image_id)
+
+                if(cloudinaryResult) {
+                    room.images = room.images.filter(x => x.id !== image_id)
+                    const updatedRoom = await updateRoomById(room._id, room)
+                    res.status(201).json()
+                } else {
+                    throw new Error("Failed deleting image from cloudnairy")
+                }
+            } else {
+                res.status(404)
+                throw new Error("Image not found")
+            }
+        } else {
+            res.status(400)
+            throw new Error("Cannot delete the last image")
+        }
+    } else {
+        res.status(404)
+        throw new Error("Room not found")
+    }
+})
+
+export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage }

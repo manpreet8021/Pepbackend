@@ -37,7 +37,7 @@ export default function CountryForm({closeModal, title, data}) {
             actions.resetForm();
             closeModal()
         } catch (error) {
-            console.log(error.message)
+            
         }
     }
 

@@ -15,7 +15,7 @@ import DatePicker from "react-multi-date-picker";
 import MultiSelectField from "./MultiSelectField";
 import { Accordion, Card, CloseButton } from "react-bootstrap";
 import RoomForm from "./RoomForm";
-import { useAddRetreatMutation, useUpdateRetreatMutation } from "@/store/slice/api/retreatApiSlice";
+import { useAddRetreatMutation, useDeleteRetreatImageMutation, useDeleteRoomImageMutation, useUpdateRetreatMutation } from "@/store/slice/api/retreatApiSlice";
 
 export default function RetreatForm({closeModal, title, data}) {
     const minDate = new Date()
@@ -24,6 +24,8 @@ export default function RetreatForm({closeModal, title, data}) {
     const retreatQuery = useGetRetreatTypeQuery()
     const [addRetreat] = useAddRetreatMutation()
     const [updateRetreat] = useUpdateRetreatMutation()
+    const [deleteRetreatImage] = useDeleteRetreatImageMutation()
+    const [deleteRoomImage] = useDeleteRoomImageMutation()
 
     const cities = useSelector(state => state.city)
     const countries = useSelector(state => state.country)
@@ -153,7 +155,21 @@ export default function RetreatForm({closeModal, title, data}) {
         retreatHighlight: Yup.array().required().min(1),
     })
 
-    
+    const handleImageDelete = async (id, image_id, type) => {
+        try {
+            let result = null
+            if(type === 'retreat') {
+                result = await deleteRetreatImage({id, image_id})
+            } else if(type === 'room') {
+                result = await deleteRoomImage({id, image_id})
+            }
+            if(result.error) throw new Error(result)
+            
+            document.getElementById(image_id).remove();                
+        } catch (e) {
+            console.log(e)
+        }
+    }     
 
     return(
         <>
@@ -167,7 +183,6 @@ export default function RetreatForm({closeModal, title, data}) {
                                     <Accordion.Header>Basic deatils</Accordion.Header>
                                     <Accordion.Body>
                                         <div className="row x-gap-20 y-gap-20">
-                                            {console.log(errors)}
                                             <div className="col-12">
                                                 <div className="form-input ">
                                                     <Field type="text" required name="title" disabled={title === "View"} />
@@ -215,7 +230,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 </div>
                                                 <ErrorMessage name="youtubeUrl" component="div" className="error-message"/>
                                             </div>
-                                            {console.log(values.directBook)}
+                                            
                                             <div className="col-6">
                                                 <div className="form-input ">
                                                     <Field type="text" required name="type" disabled={title === "View"} as="select">
@@ -339,8 +354,8 @@ export default function RetreatForm({closeModal, title, data}) {
                                             {
                                                 data.thumbnail && 
                                                 <div className="col-6 d-flex">
-                                                    <div className="col-2">
-                                                        <Image src={data.thumbnail.location} width={150} height={100} alt="Retreat Images"/>
+                                                    <div className="col-3">
+                                                        <Image src={data.thumbnail.location} width={150} height={100} alt="Retreat Images" className="custom-image"/>
                                                     </div>
                                                 </div>
                                             }
@@ -348,8 +363,16 @@ export default function RetreatForm({closeModal, title, data}) {
                                             { data.images && data.images.length && 
                                                 <div className="col-6 d-flex">
                                                     {data.images.map(image => (
-                                                        <div className="col-2" key={image.id}>
-                                                            <Image src={image.location} width={150} height={100} alt="Retreat Images"/>
+                                                        <div className="col-3" key={image.id} id={image.id}>
+                                                            <Image src={image.location} width={150} height={100} alt="Retreat Images" className="custom-image"/>
+                                                            {
+                                                                title !== 'View' && 
+                                                                <div className="col-auto center">
+                                                                    <button type="button" className="bg-light-2 rounded-4 size-35" onClick={() => handleImageDelete(values.id, image.id, 'retreat')}>
+                                                                        <i className="icon-trash-2 text-16 text-light-1" />
+                                                                    </button>
+                                                                </div>
+                                                            }
                                                         </div>
                                                     ))}
                                                 </div>
@@ -380,7 +403,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                         <Card border="light" className="my-1" key={index}>
                                                             <Card.Header className="d-flex justify-between">Room {index+1}{!room._id && <CloseButton onClick={() => arrayHelper.remove(index)}/>}</Card.Header>
                                                             <Card.Body>
-                                                                <RoomForm key={index} number={index} title={title} room={room} setFieldValue={setFieldValue} setFieldTouched={setFieldTouched}/>
+                                                                <RoomForm key={index} number={index} title={title} room={room} setFieldValue={setFieldValue} setFieldTouched={setFieldTouched} handleImageDelete={handleImageDelete} />
                                                             </Card.Body>
                                                         </Card>
                                                     ))}

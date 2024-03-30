@@ -43,7 +43,6 @@ export default function CityForm({closeModal, title, data}) {
             actions.resetForm();
             closeModal()
         } catch (error) {
-            console.log(error.message)
         }
     }
 

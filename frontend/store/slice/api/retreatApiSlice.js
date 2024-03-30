@@ -23,10 +23,24 @@ const retreatApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 credentials: 'include'
             })
+        }),
+        deleteRetreatImage: builder.mutation({
+            query: ({id, image_id}) => ({
+                url: `admin/retreat/image/${id}/${image_id}`,
+                method: 'DELETE',
+                credentials: 'include'
+            })
+        }),
+        deleteRoomImage: builder.mutation({
+            query: ({id, image_id}) => ({
+                url: `admin/retreat/room/${id}/${image_id}`,
+                method: 'DELETE',
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useGetAllRetreatQuery, useAddRetreatMutation, useUpdateRetreatMutation } = retreatApiSlice
+export const { useGetAllRetreatQuery, useAddRetreatMutation, useUpdateRetreatMutation, useDeleteRetreatImageMutation, useDeleteRoomImageMutation } = retreatApiSlice
 
 export default retreatApiSlice;
