@@ -1,11 +1,12 @@
 import { ErrorMessage, Field } from "formik";
 import Image from 'next/image'
 
-export default function RoomForm({title, number, room, setFieldValue}) {
+export default function RoomForm({title, number, room, setFieldValue, setFieldTouched}) {
     return (
         <div className="row x-gap-20 y-gap-20">
+            <Field type="hidden" required name={`rooms[${number}].roomUpdated`} />
             <div className="col-12">
-                <div className="form-input ">
+                <div className="form-input">
                     <Field type="text" required name={`rooms[${number}].name`} disabled={title === "View"} />
                     <label className="lh-1 text-16 text-light-1">Room Name</label>
                 </div>
@@ -49,7 +50,8 @@ export default function RoomForm({title, number, room, setFieldValue}) {
                                     accept='image/*'
                                     multiple
                                     onChange={(e) => {
-                                        setFieldValue('roomImageUpdated', true)
+                                        setFieldTouched(`rooms[${number}].images`, true)
+                                        setFieldValue(`rooms[${number}].roomImageUpdated`, true)
                                         setFieldValue(`rooms[${number}].images`, Array.from(e.currentTarget.files))}
                                     } />
                             </div>

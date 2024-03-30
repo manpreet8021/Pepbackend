@@ -19,7 +19,6 @@ import { useAddRetreatMutation, useUpdateRetreatMutation } from "@/store/slice/a
 
 export default function RetreatForm({closeModal, title, data}) {
     const minDate = new Date()
-
     const countryQuery = useGetCountryQuery()
     const cityQuery = useGetCityQuery()
     const retreatQuery = useGetRetreatTypeQuery()
@@ -38,14 +37,14 @@ export default function RetreatForm({closeModal, title, data}) {
         minGuest: data?.Guest?.min || '',
         maxGuest: data?.Guest?.max || '',
         youtubeUrl: data?.youtubeUrl || '',
-        type: data?.type?._id || '',
+        type: data?.type?.id || '',
         line1: data?.address?.line1 || '',
         line2: data?.address?.line2 || '',
         zipcode: data?.address?.zipcode || '',
         city: data?.address?.city || '',
         country: data?.address?.country || '',
         active: data?.active || false,
-        directBook: data?.directbook || false,
+        directBook: data?.directBook || false,
         duration: data?.schedules || [],
         retreatDuration: data?.retreatDuration || '',
         retreatType: data?.retreatType || [],
@@ -53,7 +52,6 @@ export default function RetreatForm({closeModal, title, data}) {
         thumbnail: data?.thumbnail || '',
         images: [],
         rooms: data?.rooms || [],
-        roomImageUpdated: data.roomImages ? false : true,
         imageUpdated: data.images ? false : true,
         thumbnailUpdated: data.thumbnail ? false : true
     }
@@ -80,7 +78,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                 }
                             }
                         } else {
-                            formData.append(`${key}[${index}]`, item);
+                            formData.append(`${value}[${index}]`, item);
                         }
                     });
                 }
@@ -161,7 +159,7 @@ export default function RetreatForm({closeModal, title, data}) {
         <>
             <ModalHeader title={`${title} Retreat`}/>
             <Formik initialValues={initialState} enableReinitialize onSubmit={(values, actions) => handleSubmit(values, actions)} validationSchema={validationSchema}>
-                {({ handleSubmit, isSubmitting, dirty, isValid, setFieldValue, values, setFieldTouched }) => (
+                {({ handleSubmit, isSubmitting, dirty, isValid, setFieldValue, values, setFieldTouched, errors }) => (
                     <Form onSubmit={handleSubmit} encType="multipart/form-data">
                         <ModalBody>
                             <Accordion defaultActiveKey="0">
@@ -169,6 +167,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                     <Accordion.Header>Basic deatils</Accordion.Header>
                                     <Accordion.Body>
                                         <div className="row x-gap-20 y-gap-20">
+                                            {console.log(errors)}
                                             <div className="col-12">
                                                 <div className="form-input ">
                                                     <Field type="text" required name="title" disabled={title === "View"} />
@@ -216,13 +215,13 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 </div>
                                                 <ErrorMessage name="youtubeUrl" component="div" className="error-message"/>
                                             </div>
-
+                                            {console.log(values.directBook)}
                                             <div className="col-6">
                                                 <div className="form-input ">
                                                     <Field type="text" required name="type" disabled={title === "View"} as="select">
                                                         <option></option>
                                                         {lookup.retreat?.type && lookup.retreat?.type.map(type => (
-                                                            <option key={type._id} value={type._id}>{type.name}</option>
+                                                            <option key={type.value} value={type.value}>{type.label}</option>
                                                         ))}
                                                     </Field>
                                                     <label className="lh-1 text-16 text-light-1">Type</label>
@@ -230,55 +229,6 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 <ErrorMessage name="type" component="div" className="error-message"/>
                                             </div>
 
-                                            <div className="col-12">
-                                                <div className="form-input">
-                                                    <Field type="text" required name="line1" disabled={title === "View"} />
-                                                    <label className="lh-1 text-16 text-light-1">Address Line 1</label>
-                                                </div>
-                                                <ErrorMessage name="line1" component="div" className="error-message"/>
-                                            </div>
-
-                                            <div className="col-6">
-                                                <div className="form-input">
-                                                    <Field type="text" name="line2" disabled={title === "View"} />
-                                                    <label className="lh-1 text-16 text-light-1">Address Line 2</label>
-                                                </div>
-                                                <ErrorMessage name="line2" component="div" className="error-message"/>
-                                            </div>
-
-                                            <div className="col-6">
-                                                <div className="form-input">
-                                                    <Field type="text" required name="zipcode" disabled={title === "View"} />
-                                                    <label className="lh-1 text-16 text-light-1">Zip-Code</label>
-                                                </div>
-                                                <ErrorMessage name="zipcode" component="div" className="error-message"/>
-                                            </div>
-
-                                            <div className="col-6">
-                                                <div className="form-input ">
-                                                    <Field type="text" required name="city" disabled={title === "View"} as="select">
-                                                        <option></option>
-                                                        {cities.data && cities.data.map(city => (
-                                                            <option key={city._id} value={`${city._id}`}>{city.name}</option>
-                                                        ))}
-                                                    </Field>
-                                                    <label className="lh-1 text-16 text-light-1">City</label>
-                                                </div>
-                                                <ErrorMessage name="city" component="div" className="error-message"/>
-                                            </div>
-
-                                            <div className="col-6">
-                                                <div className="form-input ">
-                                                    <Field type="text" required name="country" disabled={title === "View"} as="select">
-                                                        <option></option>
-                                                        {countries.data && countries.data.map(country => (
-                                                            <option key={country._id} value={`${country._id}`}>{country.name}</option>
-                                                        ))}
-                                                    </Field>
-                                                    <label className="lh-1 text-16 text-light-1">Country</label>
-                                                </div>
-                                                <ErrorMessage name="country" component="div" className="error-message"/>
-                                            </div>
                                             <div className="col-12">
                                                 <div className="d-flex items-center form-checkbox">
                                                     <Field type="checkbox" name="active" disabled={title === "View"}/>
@@ -289,6 +239,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 </div>
                                                 <ErrorMessage name="active" component="div" className="error-message"/>
                                             </div>
+
                                             <div className="col-12">
                                                 <div className="d-flex items-center form-checkbox">
                                                     <Field type="checkbox" name="directBook" disabled={title === "View"}/>
@@ -302,6 +253,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                         </div>
                                     </Accordion.Body>
                                 </Accordion.Item>
+
                                 <Accordion.Item eventKey="1">
                                     <Accordion.Header>Retreat Detail</Accordion.Header>
                                     <Accordion.Body>
@@ -405,6 +357,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                         </div>
                                     </Accordion.Body>
                                 </Accordion.Item>
+
                                 <Accordion.Item eventKey="2">
                                     <Accordion.Header>Rooms</Accordion.Header>
                                     <Accordion.Body>
@@ -417,7 +370,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                             <button type="button" 
                                                                 className="button h-50 px-24 -dark-1 bg-blue-1 text-white" 
                                                                 disabled={values.rooms.length>=3}
-                                                                onClick={() => {values.rooms.length <3 && arrayHelper.push({name: '', description: '', price: '', images: [], allowedGuest: '', advance: '', active: true})}}>
+                                                                onClick={() => {values.rooms.length < 5 && arrayHelper.push({name: '', description: '', price: '', images: [], allowedGuest: '', advance: '', active: true, roomImageUpdated: true})}}>
                                                                     Add Room <div className="icon-plus ml-15" />
                                                             </button>
                                                         : null
@@ -425,9 +378,9 @@ export default function RetreatForm({closeModal, title, data}) {
                                                     
                                                     {values.rooms.map((room, index) => (
                                                         <Card border="light" className="my-1" key={index}>
-                                                            <Card.Header className="d-flex justify-between">Room {index+1}<CloseButton disabled={title === "View"} onClick={() => arrayHelper.remove(index)}/></Card.Header>
+                                                            <Card.Header className="d-flex justify-between">Room {index+1}{!room._id && <CloseButton onClick={() => arrayHelper.remove(index)}/>}</Card.Header>
                                                             <Card.Body>
-                                                                <RoomForm key={index} number={index} title={title} room={room} setFieldValue={setFieldValue}/>
+                                                                <RoomForm key={index} number={index} title={title} room={room} setFieldValue={setFieldValue} setFieldTouched={setFieldTouched}/>
                                                             </Card.Body>
                                                         </Card>
                                                     ))}
@@ -436,6 +389,64 @@ export default function RetreatForm({closeModal, title, data}) {
                                         />
                                     </Accordion.Body>
                                 </Accordion.Item>
+                                
+                                <Accordion.Item eventKey="3">
+                                    <Accordion.Header>Retreat Location</Accordion.Header>
+                                    <Accordion.Body>
+                                        <div className="row x-gap-20 y-gap-20">
+                                            <div className="col-12">
+                                                <div className="form-input">
+                                                    <Field type="text" required name="line1" disabled={title === "View"} />
+                                                    <label className="lh-1 text-16 text-light-1">Address Line 1</label>
+                                                </div>
+                                                <ErrorMessage name="line1" component="div" className="error-message"/>
+                                            </div>
+
+                                            <div className="col-6">
+                                                <div className="form-input">
+                                                    <Field type="text" name="line2" disabled={title === "View"} />
+                                                    <label className="lh-1 text-16 text-light-1">Address Line 2</label>
+                                                </div>
+                                                <ErrorMessage name="line2" component="div" className="error-message"/>
+                                            </div>
+
+                                            <div className="col-6">
+                                                <div className="form-input">
+                                                    <Field type="text" required name="zipcode" disabled={title === "View"} />
+                                                    <label className="lh-1 text-16 text-light-1">Zip-Code</label>
+                                                </div>
+                                                <ErrorMessage name="zipcode" component="div" className="error-message"/>
+                                            </div>
+
+                                            <div className="col-6">
+                                                <div className="form-input ">
+                                                    <Field type="text" required name="city" disabled={title === "View"} as="select">
+                                                        <option></option>
+                                                        {cities.data && cities.data.map(city => (
+                                                            <option key={city._id} value={`${city._id}`}>{city.name}</option>
+                                                        ))}
+                                                    </Field>
+                                                    <label className="lh-1 text-16 text-light-1">City</label>
+                                                </div>
+                                                <ErrorMessage name="city" component="div" className="error-message"/>
+                                            </div>
+
+                                            <div className="col-6">
+                                                <div className="form-input ">
+                                                    <Field type="text" required name="country" disabled={title === "View"} as="select">
+                                                        <option></option>
+                                                        {countries.data && countries.data.map(country => (
+                                                            <option key={country._id} value={`${country._id}`}>{country.name}</option>
+                                                        ))}
+                                                    </Field>
+                                                    <label className="lh-1 text-16 text-light-1">Country</label>
+                                                </div>
+                                                <ErrorMessage name="country" component="div" className="error-message"/>
+                                            </div>
+                                        </div>
+                                    </Accordion.Body>
+                                </Accordion.Item>
+
                             </Accordion>
                         </ModalBody>
                         {

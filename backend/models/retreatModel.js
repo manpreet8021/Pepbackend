@@ -110,7 +110,10 @@ const retreatModel = mongoose.model('Retreat', retreatSchema)
 
 export default retreatModel;
 
-export const getRetreaties = () => retreatModel.populate(retreatModel.aggregate([
+export const getRetreaties = (value) => retreatModel.populate(retreatModel.aggregate([
+    {
+        $match: value
+    },
     {
         $lookup: {
             from: 'rooms',
@@ -146,7 +149,7 @@ export const getRetreaties = () => retreatModel.populate(retreatModel.aggregate(
                 $let: {
                     vars: { typeElem: { $arrayElemAt: ['$type', 0] } },
                     in: {
-                        _id: '$$typeElem._id',
+                        id: '$$typeElem._id',
                         name: '$$typeElem.name'
                     }
                 }
