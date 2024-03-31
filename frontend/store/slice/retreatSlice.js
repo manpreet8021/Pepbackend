@@ -18,7 +18,7 @@ const retreatSlice = createSlice({
         builder.addMatcher(
             retreatApiSlice.endpoints.addRetreat.matchFulfilled,
             (state, {payload}) => {
-                state.data = [...state.data, payload]
+                state.data = [...state.data, payload[0]]
             }
         ),
         builder.addMatcher(

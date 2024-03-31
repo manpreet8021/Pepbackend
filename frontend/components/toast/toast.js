@@ -14,7 +14,7 @@ export default function CustomToast() {
 
     return (
         <ToastContainer>
-            <Toast show={toastState.show} onClose={onClose} className="position-fixed top-0 end-0 m-3" delay={5000} autohide bg={toastState.type}>
+            <Toast show={toastState.show} onClose={onClose} className="position-fixed bottom-0 end-0 m-3" delay={5000} autohide bg={toastState.type}>
                 <Toast.Header>
                     <strong className="me-auto">{toastState.header}</strong>
                 </Toast.Header>

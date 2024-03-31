@@ -1,8 +1,8 @@
 import Joi from "joi";
 import asyncHandler from "../../middleware/asyncHandler.js"
-import { getRetreatById, getRetreaties, saveRetreat, updateRetreatById } from "../../models/retreatModel.js";
+import { getRetreatByParams, getRetreaties, saveRetreat, updateRetreatById } from "../../models/retreatModel.js";
 import { saveSchedule } from "../../models/scheduleModel.js";
-import { getRoomById, saveRoom, updateRoomById } from "../../models/roomModel.js";
+import { getRoomById, getRoomByParams, saveRoom, updateRoomById } from "../../models/roomModel.js";
 import { deleteImageFromCloudinary, uploadMultipleImages } from "../../helpers/imageUpload.js";
 import mongoose from "mongoose";
 
@@ -53,7 +53,12 @@ const addRetreatSchema = Joi.object({
 })
 
 const getRetreat = asyncHandler(async(req, res) => {
-    const retreats = await getRetreaties({});
+    let query = {}
+    if(!req.user.isAdmin) {
+        query.owner = req.user._id
+    }
+
+    const retreats = await getRetreaties(query)
     res.status(200).json(retreats);
 })
 
@@ -95,7 +100,8 @@ const addRetreat = asyncHandler(async(req, res) => {
                 }
                 await session.commitTransaction();
                 session.endSession();
-                res.status(201).json(retreat)
+                const newRetreat = await getRetreaties({_id: retreat._id})
+                res.status(201).json(newRetreat)
             } else {
                 throw new Error("Failed to add a retreat")
             }
@@ -111,7 +117,13 @@ const addRetreat = asyncHandler(async(req, res) => {
 })
 
 const updateRetreat = asyncHandler(async(req, res) => {
-    const existingRetreat = await getRetreatById(req.params.id)
+    let query = {_id: req.params.id}
+    if(!req.user.isAdmin) {
+        query.owner = req.user._id
+    }
+
+    const existingRetreat = await getRetreatByParams(query)
+
     if(existingRetreat) {
         const { title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType } = req.body;
         const {error} = addRetreatSchema.validate({title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType}, {abortEarly: false})
@@ -155,6 +167,7 @@ const updateRetreat = asyncHandler(async(req, res) => {
 
         try{
             const retreat = await updateRetreatById(existingRetreat._id, { title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, images: updatedImages, thumbnail: updatedThumbnail, retreatType, retreatHighlight }, session)
+            console.log(retreat)
             if(retreat) {
                 if(rooms && rooms.length){
                     for(let i=0; i< rooms.length; i++) {
@@ -218,7 +231,12 @@ const deleteRetreatImage = asyncHandler(async(req, res) => {
         throw new Error("Validation failed")
     }
 
-    const retreat = await getRetreatById(id)
+    let query = {_id: req.params.id}
+    if(!req.user.isAdmin) {
+        query.owner = req.user._id
+    }
+
+    const retreat = await getRetreatByParams(query)
 
     if(retreat) {
         if(retreat.images.length > 1) {
@@ -260,6 +278,13 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
         res.status(404)
         throw new Error("Validation failed")
     }
+
+    let query = {_id: req.params.id}
+    if(!req.user.isAdmin) {
+        query['retreat.owner'] = req.user._id
+    }
+
+    const retreat = await getRoomByParams(query)
 
     const room = await getRoomById(id)
 

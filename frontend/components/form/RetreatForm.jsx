@@ -9,15 +9,17 @@ import fileValidation from "@/utils/fileValidation"
 import Image from "next/image";
 import { useGetCountryQuery } from "@/store/slice/api/countryApiSlice";
 import { useGetCityQuery } from "@/store/slice/api/cityApiSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetRetreatTypeQuery } from "@/store/slice/api/lookupApiSlice";
 import DatePicker from "react-multi-date-picker";
 import MultiSelectField from "./MultiSelectField";
 import { Accordion, Card, CloseButton } from "react-bootstrap";
 import RoomForm from "./RoomForm";
 import { useAddRetreatMutation, useDeleteRetreatImageMutation, useDeleteRoomImageMutation, useUpdateRetreatMutation } from "@/store/slice/api/retreatApiSlice";
+import { showToast } from "@/store/slice/toastSlice";
 
 export default function RetreatForm({closeModal, title, data}) {
+    const dispatch = useDispatch()
     const minDate = new Date()
     const countryQuery = useGetCountryQuery()
     const cityQuery = useGetCityQuery()
@@ -91,7 +93,8 @@ export default function RetreatForm({closeModal, title, data}) {
 
         try{
             const result = formData.get('id') != '' ? await updateRetreat(formData) :await addRetreat(formData)
-            if(result.error) throw new Error("Error while saving a retreat")
+            if(result.error) throw new Error(JSON.stringify(result.error))
+
             const fileInput = document.querySelectorAll('input[type="file"]');
             
             fileInput.forEach(input => {
@@ -100,8 +103,13 @@ export default function RetreatForm({closeModal, title, data}) {
             
             actions.resetForm();
             closeModal()
-        } catch (e) {
+        } catch (error) {
+            let errorText = 'Something went wrong'
+
+            const e = JSON.parse(error.message)
             
+            if(e.status !== 500) errorText = e.data.message 
+            dispatch(showToast({ header: 'Error', body: errorText, type: 'danger'}))
         }
     }
 
@@ -166,8 +174,13 @@ export default function RetreatForm({closeModal, title, data}) {
             if(result.error) throw new Error(result.error)
             
             document.getElementById(image_id).remove();                
-        } catch (e) {
+        } catch (error) {
+            let errorText = 'Something went wrong'
+
+            const e = JSON.parse(error.message)
             
+            if(e.status !== 500) errorText = e.data.message 
+            dispatch(showToast({ header: 'Error', body: errorText, type: 'danger'}))
         }
     }     
 
