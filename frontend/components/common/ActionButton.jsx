@@ -12,11 +12,11 @@ const ActionButton = ({value, openModal}) => {
                 <i className="icon-edit text-16 text-light-1" />
                 </button>
             </div>
-            <div className="col-auto">
+            {/* <div className="col-auto">
                 <button className="flex-center bg-light-2 rounded-4 size-35">
                 <i className="icon-trash-2 text-16 text-light-1" />
                 </button>
-            </div>
+            </div> */}
         </div>
     )
 }

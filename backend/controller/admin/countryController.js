@@ -1,4 +1,4 @@
-import { imageUpload } from "../../helpers/imageUpload.js";
+import { deleteImageFromCloudinary, imageUpload } from "../../helpers/imageUpload.js";
 import asyncHandler from "../../middleware/asyncHandler.js"
 import { getCountries, saveCountry, updateCountryById, getCountryById } from "../../models/countryModel.js"
 import Joi from "joi";
@@ -69,6 +69,7 @@ const updateCountry = asyncHandler(async(req, res) => {
             
             const imageInfo = await imageUpload(req.file.path, 'country')
             if(imageInfo) {
+                await deleteImageFromCloudinary(existingCountry.logo.public_id)
                 existingCountry.logo = imageInfo
             } else {
                 res.status(400)

@@ -7,7 +7,6 @@ export const imageUpload = async(image, folderName) => {
             resource_type: "image",
             folder: folderName
         })
-        console.log(uploadedImage)
         fs.unlinkSync(image)
         return {
             id: uploadedImage.asset_id,

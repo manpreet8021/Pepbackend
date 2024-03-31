@@ -1,7 +1,7 @@
 import Joi from "joi"
 import asyncHandler from "../../middleware/asyncHandler.js"
 import { getCities, saveCity, getCityById, updateCityById } from "../../models/cityModel.js"
-import { imageUpload } from "../../helpers/imageUpload.js";
+import { imageUpload, deleteImageFromCloudinary } from "../../helpers/imageUpload.js";
 
 const addCitySchema = Joi.object({
     country: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
@@ -39,7 +39,7 @@ const addCity = asyncHandler(async(req, res) => {
     const uploadedImage = await imageUpload(req.file.path, 'city')
 
     if(uploadedImage) {
-        const { name, active, country } = req.body
+        const { name, active, country, recommended } = req.body
         const city = await saveCity({name, active, images: uploadedImage, country, recommended});
         
         if(city) {
@@ -78,6 +78,7 @@ const updateCity = asyncHandler(async(req, res) => {
                 throw new Error("Failed to upload image")
             }
             const uploadedImage = await imageUpload(req.file.path, 'city')
+            await deleteImageFromCloudinary(existingCity.images.public_id)
             existingCity.images = uploadedImage;
         }
 

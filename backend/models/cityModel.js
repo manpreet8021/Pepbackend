@@ -29,12 +29,14 @@ const citySchema =  new mongoose.Schema({
     timestamps: true
 })
 
+citySchema.index({ country: 1, name: 1 }, {unique: true})
+
 const cityModel = mongoose.model('City', citySchema)
 
 export default cityModel;
 
 export const getCities = () => cityModel.find().populate('country', 'name');
-export const getRecommontedCity = () => cityModel.find({recommended: true}).limit(10).select('_id name images')
+export const getRecommontedCity = () => cityModel.find({recommended: true, active: true}).limit(10).select('_id name images')
 export const getCityById = (id) => cityModel.findById(id);
 export const deleteCityById = (id) => cityModel.findOneAndDelete({ _id: id });
 export const updateCityById = (id, value) => cityModel.findByIdAndUpdate(id, value, {new: true}).populate('country', 'name');

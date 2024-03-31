@@ -3,6 +3,7 @@ import Footer from '@/components/dashboard/vendor-dashboard/common/Footer'
 import Sidebar from '@/components/dashboard/vendor-dashboard/common/Sidebar'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
+import CustomToast from '../toast/toast'
 
 const AdminWrapper = ({children}) => {
     const state = useSelector((state) => state.auth.userInfo)
@@ -31,6 +32,7 @@ const AdminWrapper = ({children}) => {
                         </div>
                     </div>
                 </div>
+                <CustomToast />
             </>
         )
     }

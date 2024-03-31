@@ -8,10 +8,12 @@ import ModalHeader from "../modal/ModalHeader";
 import fileValidation, { MAX_FILE_SIZE } from "@/utils/fileValidation"
 import Image from "next/image";
 import { useAddCityMutation, useUpdateCityMutation } from "@/store/slice/api/cityApiSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetCountryQuery } from "@/store/slice/api/countryApiSlice";
+import { showToast } from "@/store/slice/toastSlice";
 
 export default function CityForm({closeModal, title, data}) {
+    const dispatch = useDispatch()
     const {isLoading} = useGetCountryQuery();
     const countries = useSelector(state => state.country)
     const [addCity] = useAddCityMutation()
@@ -36,6 +38,9 @@ export default function CityForm({closeModal, title, data}) {
 
         try {
             const result = formData.get('id') != '' ? await updateCity(formData) : await addCity(formData);
+            if(result.error) {
+                throw new Error(JSON.stringify(result.error))
+            }
             const fileInput = document.querySelector('input[type="file"][name="images"]');
             if (fileInput) {
                 fileInput.value = '';
@@ -43,6 +48,12 @@ export default function CityForm({closeModal, title, data}) {
             actions.resetForm();
             closeModal()
         } catch (error) {
+            let errorText = 'Something went wrong'
+
+            const e = JSON.parse(error.message)
+            
+            if(e.status !== 500) errorText = e.data.message 
+            dispatch(showToast({ header: 'Error', body: errorText, type: 'danger'}))
         }
     }
 

@@ -8,10 +8,13 @@ import ModalBody from "../modal/ModalBody";
 import ModalHeader from "../modal/ModalHeader";
 import fileValidation, {MAX_FILE_SIZE} from "@/utils/fileValidation"
 import Image from "next/image";
+import { showToast } from "@/store/slice/toastSlice";
+import { useDispatch } from "react-redux";
 
 export default function CountryForm({closeModal, title, data}) {
     const [addCountry] = useAddCountryMutation();
     const [updateCountry, {isLoading}] = useUpdateCountryMutation();
+    const dispatch = useDispatch()
     
     const initialState = {
         id: data?._id || '',
@@ -30,6 +33,11 @@ export default function CountryForm({closeModal, title, data}) {
         
         try {
             const result = formData.get('id') != '' ? await updateCountry(formData) : await addCountry(formData);
+            
+            if(result.error) {
+                throw new Error(JSON.stringify(result.error))
+            }
+            
             const fileInput = document.querySelector('input[type="file"][name="logo"]');
             if (fileInput) {
                 fileInput.value = '';
@@ -37,7 +45,12 @@ export default function CountryForm({closeModal, title, data}) {
             actions.resetForm();
             closeModal()
         } catch (error) {
+            let errorText = 'Something went wrong'
+
+            const e = JSON.parse(error.message)
             
+            if(e.status !== 500) errorText = e.data.message 
+            dispatch(showToast({ header: 'Error', body: errorText, type: 'danger'}))
         }
     }
 

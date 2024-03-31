@@ -59,7 +59,7 @@ const page = () => {
         <AdminWrapper>
             <div className="row y-gap-20 justify-between items-end pb-60 lg:pb-40 md:pb-32">
                 <div className="col-auto">
-                <h1 className="text-30 lh-14 fw-600">All Retreats</h1>
+                    <h1 className="text-30 lh-14 fw-600">All Retreats</h1>
                 </div>
 
                 <div className="col-auto">

@@ -163,11 +163,11 @@ export default function RetreatForm({closeModal, title, data}) {
             } else if(type === 'room') {
                 result = await deleteRoomImage({id, image_id})
             }
-            if(result.error) throw new Error(result)
+            if(result.error) throw new Error(result.error)
             
             document.getElementById(image_id).remove();                
         } catch (e) {
-            console.log(e)
+            
         }
     }     
 
