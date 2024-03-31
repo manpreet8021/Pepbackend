@@ -24,5 +24,5 @@ export const store = configureStore({
         toast: toastSliceReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
-    devTools: true
+    devTools: false
 });
