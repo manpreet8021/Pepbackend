@@ -5,10 +5,13 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup'
 import { useLoginMutation } from "@/store/slice/api/userApiSlice";
 import { useRouter } from "next/navigation";
+import { showToast } from "@/store/slice/toastSlice";
+import { useDispatch } from "react-redux";
 
 const LoginForm = () => {
   const [login] = useLoginMutation();
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const initalValues = {
     email: '',
@@ -23,9 +26,13 @@ const LoginForm = () => {
   const handleSubmit = async(values) => {
     try{
       const res = await login(values);
+      if(res.error) throw new Error(JSON.stringify(res.error))
       router.push('/')
     } catch (error) {
-      
+      let errorText = 'Something went wrong'
+      const e = JSON.parse(error.message)
+      if(e.status !== 500) errorText = e.data.message 
+      dispatch(showToast({ header: 'Error', body: errorText, type: 'danger'}))
     }
   }
 

@@ -8,6 +8,9 @@ import CurrenctyMegaMenu from "./CurrenctyMegaMenu";
 import LanguageMegaMenu from "./LanguageMegaMenu";
 import MobileMenu from "./MobileMenu";
 import { usePathname } from 'next/navigation'
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/store/slice/authSlice";
+import CustomToast from "../toast/toast";
 
 export const metadata = {
   title: "Home-1 || GoTrip - Travel & Tour React NextJS Template",
@@ -18,6 +21,9 @@ const Header1 = () => {
   const [navbar, setNavbar] = useState(false);
   const path = usePathname()
   const [dark, setDark] = useState('bg-dark-1')
+
+  const userState = useSelector(state => state.auth)
+  const dispatch = useDispatch()
 
   const darkColorValue = () => {
     if(path !== '/') {
@@ -70,35 +76,43 @@ const Header1 = () => {
 
             <div className="col-auto">
               <div className="d-flex items-center">
-                <div className="row x-gap-20 items-center xxl:d-none">
+                {/* <div className="row x-gap-20 items-center xxl:d-none">
                   <CurrenctyMegaMenu textClass="text-white" />
-                  {/* End Megamenu for Currencty */}
-
-                  {/* Start vertical devider*/}
                   <div className="col-auto">
                     <div className="w-1 h-20 bg-white-20" />
                   </div>
-                  {/* End vertical devider*/}
-
                   <LanguageMegaMenu textClass="text-white" />
-                  {/* End Megamenu for Language */}
-                </div>
-                {/* End language and currency selector */}
+                </div> */}
 
                 {/* Start btn-group */}
                 <div className="d-flex items-center ml-20 is-menu-opened-hide md:d-none">
-                  <Link
-                    href="/login"
-                    className="button px-30 fw-400 text-14 -white bg-white h-50 text-dark-1"
-                  >
-                    Become An Expert
-                  </Link>
-                  <Link
-                    href="/login"
-                    className="button px-30 fw-400 text-14 border-white -outline-white h-50 text-white ml-20"
-                  >
-                    Sign In / Register
-                  </Link>
+                  {
+                    userState.userInfo ?
+                    <>
+                      <Link
+                        href="/"
+                        className="button px-30 fw-400 text-14 -white bg-white h-50 text-dark-1"
+                      >
+                        Become An Expert
+                      </Link>
+                      <button
+                        onClick={() => {
+                          dispatch(logout())
+                        }}
+                        className="button px-30 fw-400 text-14 border-white -outline-white h-50 text-white ml-20"
+                      >
+                        Logout
+                      </button>
+                    </>
+                    :
+                    <Link
+                      href="/login"
+                      className="button px-30 fw-400 text-14 border-white -outline-white h-50 text-white ml-20"
+                    >
+                      Sign In / Register
+                    </Link>
+                  }
+                  
                 </div>
                 {/* End btn-group */}
 
@@ -139,6 +153,7 @@ const Header1 = () => {
         </div>
         {/* End header_container */}
       </header>
+      <CustomToast />
     </>
   );
 };

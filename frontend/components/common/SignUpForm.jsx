@@ -1,14 +1,17 @@
 'use client'
 
 import { useSignupMutation } from "@/store/slice/api/userApiSlice";
+import { showToast } from "@/store/slice/toastSlice";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import * as Yup from 'yup'
 
 const SignUpForm = () => {
   const [signup] = useSignupMutation()
   const navigation = useRouter()
+  const dispatch = useDispatch()
 
   const initalValues = {
     displayName: '',
@@ -26,8 +29,16 @@ const SignUpForm = () => {
   })
 
   const handleSubmit = async(values) => {
-    const res = await signup({displayName: values.displayName, email: values.email, password: values.password, privacyBox: values.privacyBox})
-    navigation.push('/')
+    try {
+      const res = await signup({displayName: values.displayName, email: values.email, password: values.password, privacyBox: values.privacyBox})
+      if(res.error) throw new Error(JSON.stringify(res.error))
+      navigation.push('/')
+    } catch (error) {
+      let errorText = 'Something went wrong'
+      const e = JSON.parse(error.message)
+      if(e.status !== 500) errorText = e.data.message 
+        dispatch(showToast({ header: 'Error', body: errorText, type: 'danger'}))
+      }
   }
 
   return (
