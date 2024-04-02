@@ -35,9 +35,10 @@ const cityModel = mongoose.model('City', citySchema)
 
 export default cityModel;
 
-export const getCities = () => cityModel.find().populate('country', 'name');
-export const getRecommontedCity = () => cityModel.find({recommended: true, active: true}).limit(10).select('_id name images')
-export const getCityById = (id) => cityModel.findById(id);
+export const getCities = () => cityModel.find({active: true}).populate('country', 'name').select('_id name country recommended active images.id images.location');
+export const getAllCities = () => cityModel.find({active: true}).populate('country', 'name').select('_id name country recommended active images.id images.location');
+export const getRecommontedCity = () => cityModel.find({recommended: true, active: true}).limit(10).select('_id name images.location')
+export const getCityById = (id) => cityModel.findById(id).populate('country', 'name').select('_id name country recommended active images.id images.location');
 export const deleteCityById = (id) => cityModel.findOneAndDelete({ _id: id });
-export const updateCityById = (id, value) => cityModel.findByIdAndUpdate(id, value, {new: true}).populate('country', 'name');
-export const saveCity = (values) => new cityModel(values).save().then((country) => country.populate('country', 'name'));
+export const updateCityById = (id, value) => cityModel.findByIdAndUpdate(id, value, {new: true}).populate('country', 'name').select('_id name country recommended active images.id images.location');
+export const saveCity = (values) => new cityModel(values).save().then((city) => getCityById(city._id).lean());
