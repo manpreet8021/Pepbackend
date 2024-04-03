@@ -1,7 +1,9 @@
+import { useLogoutMutation } from "@/store/slice/api/userApiSlice";
 import Image from "next/image";
 import Link from "next/link";
 
 const Sidebar = () => {
+  const [logout] = useLogoutMutation()
   const sidebarData = [
     {
       icon: "/img/dashboard/sidebar/booking.svg",
@@ -137,7 +139,39 @@ const Sidebar = () => {
         </div>
         {/* End accordion__item */}
 
-        {sidebarData.map((item, index) => (
+        <div className="sidebar__item ">
+          <Link
+            href="/admin/country"
+            className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
+          >
+            <Image
+              width={20}
+              height={20}
+              src="/img/dashboard/sidebar/map.svg"
+              alt="image"
+              className="mr-15"
+            />
+            Country
+          </Link>
+        </div>
+
+        <div className="sidebar__item ">
+          <Link
+            href="/admin/city"
+            className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
+          >
+            <Image
+              width={20}
+              height={20}
+              src="/img/dashboard/sidebar/map.svg"
+              alt="image"
+              className="mr-15"
+            />
+            City
+          </Link>
+        </div>
+
+        {/* {sidebarData.map((item, index) => (
           <div className="sidebar__item" key={index}>
             <div className="accordion -db-sidebar js-accordion">
               <div className="accordion__item">
@@ -178,11 +212,12 @@ const Sidebar = () => {
               </div>
             </div>
           </div>
-        ))}
+        ))} */}
 
         <div className="sidebar__item ">
-          <a
+          <Link
             href="#"
+            onClick={() => logout()}
             className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
           >
             <Image
@@ -193,7 +228,7 @@ const Sidebar = () => {
               className="mr-15"
             />
             Logout
-          </a>
+          </Link>
         </div>
         {/* End accordion__item */}
       </div>

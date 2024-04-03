@@ -1,18 +1,12 @@
 
 'use client'
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Dropdown from 'react-bootstrap/Dropdown';
-import { useLogoutMutation } from "@/store/slice/api/userApiSlice";
-import { useRouter } from "next/navigation";
 
 const HeaderDashBoard = () => {
   const [navbar, setNavbar] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter()
-  const [logout] = useLogoutMutation()
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -25,10 +19,6 @@ const HeaderDashBoard = () => {
       setNavbar(false);
     }
   };
-
-  const handleLogout = () => {
-    logout()
-  }
 
   useEffect(() => {
     window.addEventListener("scroll", changeBackground);
@@ -101,6 +91,7 @@ const HeaderDashBoard = () => {
                 </div>
                 {/* End .row */}
 
+                {/* Image div
                 <div className="pl-15">
                   <Dropdown>
                     <Dropdown.Toggle id="dropdown-basic" style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
@@ -117,7 +108,7 @@ const HeaderDashBoard = () => {
                       <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-                </div>
+                </div> */}
 
                 {/* <div className="d-none xl:d-flex x-gap-20 items-center pl-20">
                   <div>

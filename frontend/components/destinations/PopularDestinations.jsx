@@ -10,8 +10,7 @@ import { useSelector } from "react-redux";
 import { useGetTopCitiesQuery } from "@/store/slice/api/cityApiSlice";
 
 const PopularDestinations = () => {
-  const common = useSelector(state => state.common)
-  const {isLoading} = useGetTopCitiesQuery()
+  const {data: city} = useGetTopCitiesQuery()
 
   return (
     <>
@@ -44,7 +43,7 @@ const PopularDestinations = () => {
           },
         }}
       >
-        {common.city && common.city.map((item) => (
+        {city && city.map((item) => (
           <SwiperSlide key={item._id}>
             <div
               className="citiesCard -type-1 d-block rounded-4"

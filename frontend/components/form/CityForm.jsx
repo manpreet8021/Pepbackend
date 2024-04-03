@@ -5,17 +5,16 @@ import * as Yup from 'yup'
 import ModalFooter from "../modal/ModalFooter";
 import ModalBody from "../modal/ModalBody";
 import ModalHeader from "../modal/ModalHeader";
-import fileValidation, { MAX_FILE_SIZE } from "@/utils/fileValidation"
+import fileValidation from "@/utils/fileValidation"
 import Image from "next/image";
 import { useAddCityMutation, useUpdateCityMutation } from "@/store/slice/api/cityApiSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useGetCountryQuery } from "@/store/slice/api/countryApiSlice";
+import { useDispatch } from "react-redux";
+import { useGetActiveCountryQuery } from "@/store/slice/api/countryApiSlice";
 import { showToast } from "@/store/slice/toastSlice";
 
 export default function CityForm({closeModal, title, data}) {
     const dispatch = useDispatch()
-    const {isLoading} = useGetCountryQuery();
-    const countries = useSelector(state => state.country)
+    const {data: countries} = useGetActiveCountryQuery()
     const [addCity] = useAddCityMutation()
     const [updateCity] = useUpdateCityMutation()
 
@@ -92,7 +91,7 @@ export default function CityForm({closeModal, title, data}) {
                                     <div className="form-input ">
                                         <Field as="select" required name="country" disabled={title === "View"}>
                                             <option></option>
-                                            {countries.data && countries.data.map(country => (
+                                            {countries && countries.map(country => (
                                                 <option key={country._id} value={`${country._id}`}>{country.name}</option>
                                             ))}
                                         </Field>

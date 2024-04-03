@@ -35,7 +35,7 @@ const cityModel = mongoose.model('City', citySchema)
 
 export default cityModel;
 
-export const getCities = () => cityModel.find({active: true}).populate('country', 'name').select('_id name country recommended active images.id images.location');
+export const getCitiesByParams = (value) => cityModel.find(value).populate('country', 'name').select('_id name');
 export const getAllCities = () => cityModel.find({active: true}).populate('country', 'name').select('_id name country recommended active images.id images.location');
 export const getRecommontedCity = () => cityModel.find({recommended: true, active: true}).limit(10).select('_id name images.location')
 export const getCityById = (id) => cityModel.findById(id).populate('country', 'name').select('_id name country recommended active images.id images.location');

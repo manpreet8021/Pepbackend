@@ -7,9 +7,9 @@ import ModalBody from "../modal/ModalBody";
 import ModalHeader from "../modal/ModalHeader";
 import fileValidation from "@/utils/fileValidation"
 import Image from "next/image";
-import { useGetCountryQuery } from "@/store/slice/api/countryApiSlice";
-import { useGetCityQuery } from "@/store/slice/api/cityApiSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useGetActiveCountryQuery } from "@/store/slice/api/countryApiSlice";
+import { useGetActiveCityQuery } from "@/store/slice/api/cityApiSlice";
+import { useDispatch } from "react-redux";
 import { useGetRetreatTypeQuery } from "@/store/slice/api/lookupApiSlice";
 import DatePicker from "react-multi-date-picker";
 import MultiSelectField from "./MultiSelectField";
@@ -21,17 +21,13 @@ import { showToast } from "@/store/slice/toastSlice";
 export default function RetreatForm({closeModal, title, data}) {
     const dispatch = useDispatch()
     const minDate = new Date()
-    const countryQuery = useGetCountryQuery()
-    const cityQuery = useGetCityQuery()
-    const retreatQuery = useGetRetreatTypeQuery()
+    const {data: countries} = useGetActiveCountryQuery()
+    const {data: cities} = useGetActiveCityQuery()
+    const {data: lookup} = useGetRetreatTypeQuery()
     const [addRetreat] = useAddRetreatMutation()
     const [updateRetreat] = useUpdateRetreatMutation()
     const [deleteRetreatImage] = useDeleteRetreatImageMutation()
     const [deleteRoomImage] = useDeleteRoomImageMutation()
-
-    const cities = useSelector(state => state.city)
-    const countries = useSelector(state => state.country)
-    const lookup = useSelector(state => state.lookup)
 
     const initialState = {
         id: data?._id || '',
@@ -248,7 +244,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 <div className="form-input ">
                                                     <Field type="text" required name="type" disabled={title === "View"} as="select">
                                                         <option></option>
-                                                        {lookup.retreat?.type && lookup.retreat?.type.map(type => (
+                                                        {lookup?.type && lookup?.type.map(type => (
                                                             <option key={type.value} value={type.value}>{type.label}</option>
                                                         ))}
                                                     </Field>
@@ -316,12 +312,12 @@ export default function RetreatForm({closeModal, title, data}) {
                                             </div>
 
                                             <div className="col-6">
-                                                <Field name="retreatType" disabled={title === "View"} component={MultiSelectField} data={lookup.retreat?.retreatType} placeholder='Retreat Type'/>
+                                                <Field name="retreatType" disabled={title === "View"} component={MultiSelectField} data={lookup?.retreatType} placeholder='Retreat Type'/>
                                                 <ErrorMessage name="retreatType" component="div" className="error-message"/>
                                             </div>
 
                                             <div className="col-6">
-                                                <Field name="retreatHighlight" disabled={title === "View"} component={MultiSelectField} data={lookup.retreat?.retreatHighlight} placeholder='Retreat Highlight'/>
+                                                <Field name="retreatHighlight" disabled={title === "View"} component={MultiSelectField} data={lookup?.retreatHighlight} placeholder='Retreat Highlight'/>
                                                 <ErrorMessage name="retreatHighlight" component="div" className="error-message"/>
                                             </div>
 
@@ -366,7 +362,7 @@ export default function RetreatForm({closeModal, title, data}) {
 
                                             {
                                                 data.thumbnail && 
-                                                <div className="col-6 d-flex">
+                                                <div className="col-6 d-flex overflow-auto">
                                                     <div className="col-3">
                                                         <Image src={data.thumbnail.location} width={150} height={100} alt="Retreat Images" className="custom-image"/>
                                                     </div>
@@ -374,7 +370,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                             }
 
                                             { data.images && data.images.length && 
-                                                <div className="col-6 d-flex">
+                                                <div className="col-6 d-flex overflow-auto">
                                                     {data.images.map(image => (
                                                         <div className="col-3" key={image.id} id={image.id}>
                                                             <Image src={image.location} width={150} height={100} alt="Retreat Images" className="custom-image"/>
@@ -458,7 +454,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 <div className="form-input ">
                                                     <Field type="text" required name="city" disabled={title === "View"} as="select">
                                                         <option></option>
-                                                        {cities.data && cities.data.map(city => (
+                                                        {cities && cities.map(city => (
                                                             <option key={city._id} value={`${city._id}`}>{city.name}</option>
                                                         ))}
                                                     </Field>
@@ -471,7 +467,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                 <div className="form-input ">
                                                     <Field type="text" required name="country" disabled={title === "View"} as="select">
                                                         <option></option>
-                                                        {countries.data && countries.data.map(country => (
+                                                        {countries && countries.map(country => (
                                                             <option key={country._id} value={`${country._id}`}>{country.name}</option>
                                                         ))}
                                                     </Field>

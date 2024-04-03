@@ -26,10 +26,16 @@ const countryApiSlice = apiSlice.injectEndpoints({
                     credentials: 'include'
                 }
             }
+        }),
+        getActiveCountry: builder.query({
+            query: () => ({
+                url: '/common/country',
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useGetCountryQuery, useAddCountryMutation, useUpdateCountryMutation } = countryApiSlice;
+export const { useGetCountryQuery, useAddCountryMutation, useUpdateCountryMutation, useGetActiveCountryQuery } = countryApiSlice;
 
 export default countryApiSlice

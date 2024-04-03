@@ -1,6 +1,6 @@
 import { deleteImageFromCloudinary, imageUpload } from "../../helpers/imageUpload.js";
 import asyncHandler from "../../middleware/asyncHandler.js"
-import { getCountries, saveCountry, updateCountryById, getCountryById } from "../../models/countryModel.js"
+import { getAllCountries, saveCountry, updateCountryById, getCountryById, getCountriesByParams } from "../../models/countryModel.js"
 import Joi from "joi";
 
 const addCountrySchema = Joi.object({
@@ -15,7 +15,12 @@ const updateCountrySchema = Joi.object({
 })
 
 const getCountry = asyncHandler(async(req, res) => {
-    const countries = await getCountries();
+    const countries = await getAllCountries();
+    res.status(200).json(countries)
+})
+
+const getCountryByParams = asyncHandler(async(req, res) => {
+    const countries = await getCountriesByParams({active: true});
     res.status(200).json(countries)
 })
 
@@ -100,4 +105,4 @@ const deleteCountry = asyncHandler(async(req, res) => {
     
 })
 
-export { getCountry, addCountry, updateCountry, deleteCountry }
+export { getCountry, addCountry, updateCountry, deleteCountry, getCountryByParams }

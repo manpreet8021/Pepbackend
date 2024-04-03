@@ -1,6 +1,6 @@
 import Joi from "joi"
 import asyncHandler from "../../middleware/asyncHandler.js"
-import { getCities, saveCity, getCityById, updateCityById, getAllCities } from "../../models/cityModel.js"
+import { saveCity, getCityById, updateCityById, getAllCities, getCitiesByParams } from "../../models/cityModel.js"
 import { imageUpload, deleteImageFromCloudinary } from "../../helpers/imageUpload.js";
 
 const addCitySchema = Joi.object({
@@ -18,12 +18,12 @@ const updateCitySchema = Joi.object({
     recommended: Joi.boolean().required()
 })
 
-const getCity = asyncHandler(async(req, res) => {
-    const cities = await getCities();
+const getCityByParams = asyncHandler(async(req, res) => {
+    const cities = await getCitiesByParams({active: true});
     res.status(200).json(cities)
 })
 
-const getAllCity = asyncHandler(async(req, res) => {
+const getCity = asyncHandler(async(req, res) => {
     const cities = await getAllCities();
     res.status(200).json(cities)
 })
@@ -105,4 +105,4 @@ const deleteCity = asyncHandler(async(req, res) => {
 
 })
 
-export { getCity, addCity, updateCity, deleteCity, getAllCity }
+export { getCity, addCity, updateCity, deleteCity, getCityByParams }

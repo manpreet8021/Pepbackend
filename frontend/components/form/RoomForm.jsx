@@ -62,7 +62,7 @@ export default function RoomForm({title, number, room, setFieldValue, setFieldTo
             }
 
             { room.images && room.images.length && 
-                <div className="col-12 d-flex">
+                <div className="col-12 d-flex overflow-auto">
                     {room.images.map(image => (
                         <div className="col-auto" key={image.id} id={image.id}>
                             <Image src={image.location} width={150} height={100} alt="Retreat Images" className="custom-image"/>
