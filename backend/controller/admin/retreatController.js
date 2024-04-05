@@ -320,4 +320,8 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
     }
 })
 
+const getRetreatByParamater = asyncHandler(async(req, res) => {
+    
+})
+
 export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage }

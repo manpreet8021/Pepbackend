@@ -28,7 +28,7 @@ export const getLookUpValueById = (id) => lookUpValueModel.findById(id);
 export const deleteLookUpValueById = (id) => lookUpValueModel.findOneAndDelete({ _id: id });
 export const updateLookUpValueById = (id, value) => lookUpValueModel.findByIdAndUpdate(id, value, {new: true});
 export const saveLookUpValue = (values) => new lookUpValueModel(values).save().then((lookup) => lookup.toObject());
-export const getLookUpByParams = (params) => lookUpValueModel.find(params).populate();
+export const getLookUpByParams = (params) => lookUpValueModel.find(params).populate().select('_id name parent');
 export const getRetreatLookUpValues = () => lookUpValueModel.aggregate(
     [
         {

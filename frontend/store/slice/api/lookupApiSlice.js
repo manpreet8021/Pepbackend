@@ -8,9 +8,15 @@ const lookupApiSlice = apiSlice.injectEndpoints({
                 credentials: 'include'
             })
         }),
+        getLookUpByType: builder.query({
+            query: (type) => ({
+                url: `common/lookup/${type}`,
+                credentials: 'include'
+            })
+        })
     })
 })
 
-export const { useGetRetreatTypeQuery } = lookupApiSlice;
+export const { useGetRetreatTypeQuery, useGetLookUpByTypeQuery } = lookupApiSlice;
 
 export default lookupApiSlice

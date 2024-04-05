@@ -1,7 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
-    location: null,
+    location: {
+        id: null,
+        name: null
+    },
     date: [
         new Date().toISOString(),
         new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000).toISOString()  // Adding 2 days and converting to string
@@ -27,7 +30,8 @@ const searchSlice = createSlice({
     reducers: {
         locationUpdate: (state, action) => {
             const filter = action.payload
-            state.location = filter.location;
+            state.location.id = filter?.id || null;
+            state.location.name = filter?.name || null
         },
         dateUpdate: (state, action) => {
             const filter = action.payload

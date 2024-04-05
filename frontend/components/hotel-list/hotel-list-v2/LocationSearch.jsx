@@ -2,12 +2,12 @@
 
 import { useSelector, useDispatch } from "react-redux";
 import { locationUpdate } from '@/store/slice/searchSlice'
+import { useGetActiveCityQuery } from "@/store/slice/api/cityApiSlice";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
-
-  const locationSearchContent = useSelector((state) => state.lookup.locations)
   const search = useSelector((state) => state.search)
+  const {data} = useGetActiveCityQuery()
   
   return (
     <>
@@ -24,8 +24,8 @@ const SearchBar = () => {
               type="search"
               placeholder="Where are you going?"
               className="js-search js-dd-focus"
-              value={search.location ? search.location : ''}
-              onChange={(e) => dispatch(locationUpdate({location: e.target.value}))}
+              value={search.location?.name ? search.location.name : ''}
+              onChange={(e) => dispatch(locationUpdate({name: e.target.value}))}
             />
           </div>
         </div>
@@ -34,14 +34,14 @@ const SearchBar = () => {
         <div className="shadow-2 dropdown-menu min-width-400">
           <div className="bg-white px-20 py-20 sm:px-0 sm:py-15 rounded-4">
             <ul className="y-gap-5 js-results">
-              {locationSearchContent.map((item) => (
+              {data && data.map((item) => (
                 <li
                   className={`-link d-block col-12 text-left rounded-4 px-20 py-15 js-search-option mb-1 ${
-                    search.location && search.location === item.name ? "active" : ""
+                    search.location && search.location === item._id ? "active" : ""
                   }`}
-                  key={item.id}
+                  key={item._id}
                   role="button"
-                  onClick={() => handleOptionClick(item)}
+                  onClick={() => dispatch(locationUpdate({id: item._id, name: item.name}))}
                 >
                   <div className="d-flex">
                     <div className="icon-location-2 text-light-1 text-20 pt-4" />
@@ -50,7 +50,7 @@ const SearchBar = () => {
                         {item.name}
                       </div>
                       <div className="text-14 lh-12 text-light-1 mt-5">
-                        {item.address}
+                        {item.country?.name}
                       </div>
                     </div>
                   </div>

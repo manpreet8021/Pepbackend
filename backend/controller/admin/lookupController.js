@@ -2,6 +2,7 @@ import Joi from "joi";
 import asyncHandler from "../../middleware/asyncHandler.js"
 import { getLookUpData, saveLookUpData } from "../../models/lookUpData.js";
 import { getLookUpByParams, getLookUpValue, getRetreatLookUpValues, saveLookUpValue } from "../../models/lookUpValue.js";
+import mongoose from "mongoose";
 
 const addlookUpDataSchema = Joi.object({
     name: Joi.string().required(),
@@ -25,9 +26,9 @@ const getLookUpValues = asyncHandler(async(req, res) => {
 })
 
 const getLookUpValueByType = asyncHandler(async(req, res) => {
-    const type = req.params.type
-    if(type) {
-        const response = await getLookUpByParams({parent: type})
+    const id = req.params.id
+    if(id) {
+        const response = await getLookUpByParams({parent: id, active: true})
         if(response) {
             res.status(200).json(response)
         } else {

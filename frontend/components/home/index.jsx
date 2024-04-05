@@ -70,7 +70,7 @@ const Home = () => {
               <div className="sectionTitle -md">
                 <h2 className="sectionTitle__title">Recommended</h2>
                 <p className=" sectionTitle__text mt-5 sm:mt-0">
-                  Interdum et malesuada fames ac ante ipsum
+                  Verified by soulcation team
                 </p>
               </div>
             </div>

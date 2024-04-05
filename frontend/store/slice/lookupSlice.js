@@ -4,12 +4,6 @@ const { createSlice } = require("@reduxjs/toolkit")
 
 const initialState = {
     retreat: null,
-    locations: [
-        {id:1, name: 'London', address: 'Greater London, UnitedKingdom'},
-        {id:2, name: 'New York', address: 'New York state, United States'},
-        {id:3, name: 'Paris', address: 'France'},
-        {id:4, name: 'Madrid', address: 'Spain'}
-    ],
     category: [],
     guest: [
         { name: "Adults" },

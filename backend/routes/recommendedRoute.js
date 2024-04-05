@@ -1,5 +1,5 @@
 import express from 'express';
-import { getRecommendedCities } from '../controller/recommended.js';
+import { getRecommendedCities } from '../controller/admin/cityController.js';
 
 const router = express.Router()
 
