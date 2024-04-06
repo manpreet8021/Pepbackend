@@ -1,6 +1,6 @@
 import Joi from "joi";
 import asyncHandler from "../../middleware/asyncHandler.js"
-import { getRetreatByParams, getRetreaties, saveRetreat, updateRetreatById } from "../../models/retreatModel.js";
+import { getRetreatByParams, getAdminRetreaties, saveRetreat, updateRetreatById, getClientRetreaties } from "../../models/retreatModel.js";
 import { saveSchedule } from "../../models/scheduleModel.js";
 import { getRoomById, getRoomByParams, saveRoom, updateRoomById } from "../../models/roomModel.js";
 import { deleteImageFromCloudinary, uploadMultipleImages } from "../../helpers/imageUpload.js";
@@ -58,7 +58,7 @@ const getRetreat = asyncHandler(async(req, res) => {
         query.owner = req.user._id
     }
 
-    const retreats = await getRetreaties(query)
+    const retreats = await getAdminRetreaties(query)
     res.status(200).json(retreats);
 })
 
@@ -100,7 +100,7 @@ const addRetreat = asyncHandler(async(req, res) => {
                 }
                 await session.commitTransaction();
                 session.endSession();
-                const newRetreat = await getRetreaties({_id: retreat._id})
+                const newRetreat = await getAdminRetreaties({_id: retreat._id})
                 res.status(201).json(newRetreat)
             } else {
                 throw new Error("Failed to add a retreat")
@@ -201,7 +201,7 @@ const updateRetreat = asyncHandler(async(req, res) => {
                 }
                 await session.commitTransaction();
                 session.endSession();
-                const newRetreat = await getRetreaties({_id: retreat._id})
+                const newRetreat = await getAdminRetreaties({_id: retreat._id})
                 res.status(201).json(newRetreat)
             } else {
                 throw new Error("Failed to add a retreat")
@@ -324,4 +324,20 @@ const getRetreatByParamater = asyncHandler(async(req, res) => {
     
 })
 
-export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage }
+const getRecommendedRetreat = asyncHandler(async(req, res) => {
+    try {
+        const retreat = await getClientRetreaties({params: {}, limit: 8, skip: 0})
+        console.log(retreat)
+        const finalRetreat = retreat.map(({rooms, ...data}) => {
+            let price = rooms.sort()[0]
+            return {...data, price, country: data?.country[0].name, city: data?.city[0].name}
+        })
+        
+        res.status(200).json(finalRetreat)
+    } catch (error) {
+        res.status(400)
+        throw new Error("Failed getting retreat")
+    }
+})
+
+export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat }

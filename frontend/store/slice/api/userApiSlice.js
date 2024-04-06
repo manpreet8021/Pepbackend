@@ -23,7 +23,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 url: 'auth/auth',
                 credentials: 'include'
             }),
-            keepUnusedDataFor: 60
         }),
         logout: builder.mutation({
             query: () => ({

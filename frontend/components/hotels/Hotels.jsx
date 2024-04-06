@@ -7,8 +7,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import { hotelsData } from "../../data/hotels";
 import isTextMatched from "../../utils/isTextMatched";
+import { useGetRecommendedRetreatQuery } from "@/store/slice/api/retreatApiSlice";
 
 const Hotels = () => {
+  const {data} = useGetRecommendedRetreatQuery()
   return (
     <>
       <Swiper
@@ -39,13 +41,13 @@ const Hotels = () => {
           },
         }}
       >
-        {hotelsData.slice(0, 8).map((item) => (
-          <SwiperSlide key={item?.id}>
+        {data && data.slice(0, 8).map((item) => (
+          <SwiperSlide key={item?._id}>
             <Link
-              href={`/hotel-single-v1/${item.id}`}
+              href={`/search/${item?._id}`}
               className="hotelsCard -type-1 hover-inside-slider"
               data-aos="fade"
-              data-aos-delay={item.delayAnimation}
+              data-aos-delay={200}
             >
               <div className="hotelsCard__image">
                 <div className="cardImage ratio ratio-1:1">
@@ -59,17 +61,18 @@ const Hotels = () => {
                         }}
                         navigation={true}
                       >
-                        {item?.slideImg?.map((slide, i) => (
-                          <SwiperSlide key={i}>
+                        {/* below is the map to make multiple image scrollable */}
+                        {/*item?.thumbnail?.map((slide, i) => (*/}
+                          <SwiperSlide key={item._id}>
                             <Image
                               width={300}
                               height={300}
                               className="rounded-4 col-12 js-lazy"
-                              src={slide}
+                              src={item?.thumbnail?.location}
                               alt="image"
                             />
                           </SwiperSlide>
-                        ))}
+                        {/* ))} */}
                       </Swiper>
                     </div>
                   </div>
@@ -113,23 +116,23 @@ const Hotels = () => {
                   <span>{item?.title}</span>
                 </h4>
                 <p className="text-light-1 lh-14 text-14 mt-5">
-                  {item?.location}
+                  {item?.city}, {item?.country}
                 </p>
                 <div className="d-flex items-center mt-20">
                   <div className="flex-center bg-blue-1 rounded-4 size-30 text-12 fw-600 text-white">
-                    {item?.ratings}
+                    4.7
                   </div>
                   <div className="text-14 text-dark-1 fw-500 ml-10">
                     Exceptional
                   </div>
                   <div className="text-14 text-light-1 ml-10">
-                    {item?.numberOfReviews} reviews
+                    290 reviews
                   </div>
                 </div>
                 <div className="mt-5">
                   <div className="fw-500">
                     Starting from{" "}
-                    <span className="text-blue-1">US${item?.price}</span>
+                    <span className="text-blue-1">INR <span>&#8377;</span>{item?.price}</span>
                   </div>
                 </div>
               </div>

@@ -37,10 +37,16 @@ const retreatApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
                 credentials: 'include'
             })
+        }),
+        getRecommendedRetreat: builder.query({
+            query: () => ({
+                url: 'recommended/retreat',
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useGetAllRetreatQuery, useAddRetreatMutation, useUpdateRetreatMutation, useDeleteRetreatImageMutation, useDeleteRoomImageMutation } = retreatApiSlice
+export const { useGetAllRetreatQuery, useAddRetreatMutation, useUpdateRetreatMutation, useDeleteRetreatImageMutation, useDeleteRoomImageMutation, useGetRecommendedRetreatQuery } = retreatApiSlice
 
 export default retreatApiSlice;

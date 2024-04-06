@@ -7,7 +7,6 @@ const countryApiSlice = apiSlice.injectEndpoints({
                 url: 'admin/country',
                 credentials: 'include'
             }),
-            keepUnusedDataFor: 300
         }),
         addCountry: builder.mutation ({
             query: (data) => ({
