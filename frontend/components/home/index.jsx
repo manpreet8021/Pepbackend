@@ -34,7 +34,7 @@ const Home = () => {
 
             <div className="col-auto md:d-none">
               <Link
-                href="/search"
+                href="/retreat"
                 className="button -md -blue-1 bg-blue-1-05 text-blue-1"
               >
                 View All Destinations
