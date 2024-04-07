@@ -1,3 +1,4 @@
+'use client'
 import dynamic from "next/dynamic";
 import "photoswipe/dist/photoswipe.css";
 import { hotelsData } from "@/data/hotels";
@@ -23,10 +24,12 @@ import Hotels2 from "@/components/hotels/Hotels2";
 import CallToActions from "@/components/common/CallToActions";
 import DefaultFooter from "@/components/footer/default";
 import GalleryOne from "@/components/hotel-single/GalleryOne";
+import { useGetRetreatDetailByIdQuery } from "@/store/slice/api/retreatApiSlice";
 
 const HotelSingleV1Dynamic = ({ params }) => {
   const id = params.id;
   const hotel = hotelsData.find((item) => item.id == id) || hotelsData[0];
+  const {data} = useGetRetreatDetailByIdQuery(id)
 
   return (
     <>

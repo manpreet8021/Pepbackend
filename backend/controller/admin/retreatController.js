@@ -321,7 +321,7 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
 })
 
 const getRetreatByParamater = asyncHandler(async(req, res) => {
-    
+    res.status(200).json()
 })
 
 const getRecommendedRetreat = asyncHandler(async(req, res) => {
@@ -340,4 +340,4 @@ const getRecommendedRetreat = asyncHandler(async(req, res) => {
     }
 })
 
-export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat }
+export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat, getRetreatByParamater }
