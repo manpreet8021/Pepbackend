@@ -210,7 +210,7 @@ export const getRetreatDetails = (value) => retreatModel.populate(retreatModel.a
     [
         {
             $match: {
-                _id: value
+                _id: new mongoose.Types.ObjectId(value)
             }
         },
         {
@@ -235,6 +235,22 @@ export const getRetreatDetails = (value) => retreatModel.populate(retreatModel.a
                 localField: 'type',
                 foreignField: '_id',
                 as: 'type'
+            }
+        },
+        {
+            $lookup: {
+                from: 'lookupvalues',
+                localField: 'retreatHighlight',
+                foreignField: '_id',
+                as: 'retreatHighlights'
+            }
+        },
+        {
+            $lookup: {
+                from: 'lookupvalues',
+                localField: 'retreatType',
+                foreignField: '_id',
+                as: 'retreatTypes'
             }
         },
         {
@@ -284,8 +300,12 @@ export const getRetreatDetails = (value) => retreatModel.populate(retreatModel.a
                         ]
                     }
                 },
-                retreatHighlight: 1,
-                retreatType: 1,
+                retreatHighlights: {
+                    name: 1
+                },
+                retreatTypes: {
+                    name: 1
+                },
                 thumbnail: {
                     location: 1
                 }
@@ -293,7 +313,6 @@ export const getRetreatDetails = (value) => retreatModel.populate(retreatModel.a
         }
     ]),'type', 'name'
 )
-
 export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggregate(
     [
         {

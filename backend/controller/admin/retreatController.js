@@ -1,6 +1,6 @@
 import Joi from "joi";
 import asyncHandler from "../../middleware/asyncHandler.js"
-import { getRetreatByParams, getAdminRetreaties, saveRetreat, updateRetreatById, getClientRetreaties } from "../../models/retreatModel.js";
+import { getRetreatByParams, getAdminRetreaties, saveRetreat, updateRetreatById, getClientRetreaties, getRetreatDetails } from "../../models/retreatModel.js";
 import { saveSchedule } from "../../models/scheduleModel.js";
 import { getRoomById, getRoomByParams, saveRoom, updateRoomById } from "../../models/roomModel.js";
 import { deleteImageFromCloudinary, uploadMultipleImages } from "../../helpers/imageUpload.js";
@@ -321,7 +321,8 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
 })
 
 const getRetreatByParamater = asyncHandler(async(req, res) => {
-    res.status(200).json()
+    const retreat = await getRetreatDetails(req.params.id)
+    res.status(200).json(retreat)
 })
 
 const getRecommendedRetreat = asyncHandler(async(req, res) => {

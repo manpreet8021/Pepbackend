@@ -1,4 +1,4 @@
-
+'use client'
 import CallToActions from "@/components/common/CallToActions";
 import Header from "@/components/header";
 import DefaultFooter from "@/components/footer/default";
