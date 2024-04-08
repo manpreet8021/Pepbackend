@@ -206,11 +206,12 @@ export const getAdminRetreaties = (value) => retreatModel.populate(retreatModel.
         }
     ]),'type', 'name'
 );
-export const getRetreatDetails = (value) => retreatModel.populate(retreatModel.aggregate(
+export const getRetreatDetails = (value) => retreatModel.aggregate(
     [
         {
             $match: {
-                _id: new mongoose.Types.ObjectId(value)
+                _id: new mongoose.Types.ObjectId(value),
+                active: true
             }
         },
         {
@@ -254,25 +255,36 @@ export const getRetreatDetails = (value) => retreatModel.populate(retreatModel.a
             }
         },
         {
+            $lookup: {
+                from: 'countries',
+                localField: 'address.country',
+                foreignField: '_id',
+                as: 'country'
+            }
+        },
+        {
+            $lookup: {
+                from: 'cities',
+                localField: 'address.city',
+                foreignField: '_id',
+                as: 'city'
+            }
+        },
+        {
             $project: {
-                _id: 1,
                 title: 1,
                 overview: 1,
                 description: 1,
                 retreatDuration: 1,
-                type: {
-                    $let: {
-                        vars: { typeElem: { $arrayElemAt: ['$type', 0] } },
-                        in: {
-                            name: '$$typeElem.name'
-                        }
-                    }
-                },
-                images: {
-                    location: 1
-                },
+                type: '$type.name',
+                images: '$images.location',
                 youtubeUrl: 1,
-                address: 1,
+                address: {
+                    line1: 1,
+                    line2: 1,
+                    city: '$city.name',
+                    country: '$country.name'
+                },
                 Guest: 1,
                 directBook: 1,
                 rooms: {
@@ -306,13 +318,11 @@ export const getRetreatDetails = (value) => retreatModel.populate(retreatModel.a
                 retreatTypes: {
                     name: 1
                 },
-                thumbnail: {
-                    location: 1
-                }
+                thumbnail: '$thumbnail.location',
+                price: '$rooms.price'
             }
         }
-    ]),'type', 'name'
-)
+    ])
 export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggregate(
     [
         {
@@ -356,8 +366,8 @@ export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggre
                     location: 1
                 },
                 rooms: '$rooms.price',
-                country: '$country',
-                city: '$city'
+                country: '$country.name',
+                city: '$city.name'
             }
         }
     ]

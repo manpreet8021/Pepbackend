@@ -167,7 +167,6 @@ const updateRetreat = asyncHandler(async(req, res) => {
 
         try{
             const retreat = await updateRetreatById(existingRetreat._id, { title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, images: updatedImages, thumbnail: updatedThumbnail, retreatType, retreatHighlight }, session)
-            console.log(retreat)
             if(retreat) {
                 if(rooms && rooms.length){
                     for(let i=0; i< rooms.length; i++) {
@@ -321,17 +320,34 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
 })
 
 const getRetreatByParamater = asyncHandler(async(req, res) => {
-    const retreat = await getRetreatDetails(req.params.id)
-    res.status(200).json(retreat)
+    try {
+        const retreat = await getRetreatDetails(req.params.id)
+        if(retreat.length) {
+            const finalRetreat = retreat.map(({price, address, ...data}) => {
+                let finalPrice = price.sort()[0]
+                let finalAddress = {...address}
+                finalAddress['country'] = finalAddress.country[0]
+                finalAddress['city'] = finalAddress.city[0]
+                console.log(finalAddress)
+
+                return {...data, price: finalPrice, address: finalAddress}
+            })
+            res.status(200).json(finalRetreat[0])
+        } else {
+            throw new Error("Retreat not found")
+        }
+    } catch (error) {
+        res.status(404)
+        throw new Error("Retreat not found")
+    }
 })
 
 const getRecommendedRetreat = asyncHandler(async(req, res) => {
     try {
-        const retreat = await getClientRetreaties({params: {}, limit: 8, skip: 0})
-        console.log(retreat)
+        const retreat = await getClientRetreaties({params: {active: true}, limit: 8, skip: 0})
         const finalRetreat = retreat.map(({rooms, ...data}) => {
             let price = rooms.sort()[0]
-            return {...data, price, country: data?.country[0].name, city: data?.city[0].name}
+            return {...data, price, country: data?.country[0], city: data?.city[0]}
         })
         
         res.status(200).json(finalRetreat)

@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const StickyHeader = ({ hotel }) => {
+const StickyHeader = ({ price }) => {
   const [header, setHeader] = useState(false);
 
   const changeBackground = () => {
@@ -51,7 +51,7 @@ const StickyHeader = ({ hotel }) => {
                   <div className="text-14">
                     From{" "}
                     <span className="text-22 text-dark-1 fw-500">
-                      US${hotel?.price}
+                      INR<span>&#8377;</span>{price}
                     </span>
                   </div>
                 </div>

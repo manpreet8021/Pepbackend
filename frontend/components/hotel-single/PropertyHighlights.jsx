@@ -1,4 +1,4 @@
-const PropertyHighlights2 = () => {
+const PropertyHighlights2 = ({highlight}) => {
   const highlightsContent = [
     {
       id: 1,
@@ -24,11 +24,11 @@ const PropertyHighlights2 = () => {
 
   return (
     <div className="row y-gap-20 pt-30">
-      {highlightsContent.map((item) => (
-        <div className="col-lg-3 col-6" key={item.id}>
+      {highlight.map((item, i) => (
+        <div className="col-lg-3 col-6" key={i}>
           <div className="text-center">
-            <i className={`${item.icon} text-24 text-blue-1`} />
-            <div className="text-15 lh-1 mt-10">{item.text}</div>
+            <i className={`text-24 text-blue-1`} />
+            <div className="text-15 lh-1 mt-10">{item.name}</div>
           </div>
         </div>
       ))}
