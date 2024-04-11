@@ -23,10 +23,6 @@ const page = () => {
         accessor: 'title'
        },
        {
-        Header: 'Overview',
-        accessor: 'overview'
-       },
-       {
         Header: 'Type',
         accessor: 'type.name'
        },

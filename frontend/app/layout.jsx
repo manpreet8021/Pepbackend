@@ -12,7 +12,6 @@ import "aos/dist/aos.css";
 import "../styles/index.scss";
 import { Provider } from "react-redux";
 import { store } from "../store/store";
-import Auth from "./auth";
 
 if (typeof window !== "undefined") {
   require("bootstrap/dist/js/bootstrap");
@@ -44,9 +43,7 @@ export default function RootLayout({ children }) {
       <body>
         <main>
           <Provider store={store}>
-            <Auth>
-              {children}
-            </Auth>
+            {children}
             <SrollTop />
           </Provider>
         </main>

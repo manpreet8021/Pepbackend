@@ -43,29 +43,36 @@ const BookingTable = ({column, values}) => {
               <table className="table-3 -border-bottom col-12" {...getTableProps()}>
                 <thead className="bg-light-2">
                   {
-                    headerGroups.map(headerGroup => (
-                      <tr key={headerGroup.getHeaderGroupProps().key} {...headerGroup.getHeaderGroupProps()}>
-                        <th>S No</th>
-                        {headerGroup.headers.map(column => (
-                            <th key={column.getHeaderProps().key} 
-                              {...column.getHeaderProps(column.getSortByToggleProps())}
-
-                              >{column.render('Header')}</th>
-                          )
-                        )}
-                      </tr>
-                    ))
+                    headerGroups.map(headerGroup => {
+                      const {key, ...restOfHeaderGroup} = headerGroup.getHeaderGroupProps()
+                      return (
+                        <tr key={key} {...restOfHeaderGroup}>
+                          <th>S No</th>
+                          {headerGroup.headers.map(column => {
+                              const {key, ...restOfHeaderProps} = column.getHeaderProps(column.getSortByToggleProps())
+                              return (
+                                <th key={key} 
+                                  {...restOfHeaderProps}
+                                >{column.render('Header')}</th>
+                              )
+                            }
+                          )}
+                        </tr>
+                      )
+                    })
                   }
                 </thead>
                 <tbody {...getTableBodyProps()}>
                   {
                     page.map((row,index) => {
                       prepareRow(row)
+                      const { key, ...restRowProps } = row.getRowProps()
                       return(
-                        <tr key={row.getRowProps().key} {...row.getRowProps()}>
+                        <tr key={key} {...restRowProps}>
                           <td>{index+1}</td>
                           {row.cells.map(cell => {
-                            return <td key={cell.getCellProps().key} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                            const { key, ...restCellProps } = cell.getCellProps();
+                            return <td key={key} {...restCellProps}>{cell.render('Cell')}</td>
                           })}
                         </tr>
                       )
