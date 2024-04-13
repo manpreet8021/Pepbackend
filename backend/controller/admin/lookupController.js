@@ -12,6 +12,7 @@ const addlookUpDataSchema = Joi.object({
 const addlookUpValueSchema = Joi.object({
     name: Joi.string().required(),
     parent: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
+    icon: Joi.string(),
     active: Joi.boolean().required()
 })
 
@@ -68,8 +69,8 @@ const addLookUpValue = asyncHandler(async(req, res) => {
         throw new Error(error.message)
     }
 
-    const { name, active, parent } = req.body
-    const lookUpValue = await saveLookUpValue({name, parent, active});
+    const { name, active, parent, icon } = req.body
+    const lookUpValue = await saveLookUpValue({name, parent, active, icon});
     
     if(lookUpValue) {
         res.status(201).json(lookUpValue);

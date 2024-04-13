@@ -27,7 +27,7 @@ const PropertyHighlights2 = ({highlight}) => {
       {highlight.map((item, i) => (
         <div className="col-lg-3 col-6" key={i}>
           <div className="text-center">
-            <i className={`text-24 text-blue-1`} />
+            <i className={`${item?.icon} text-24 text-blue-1`} />
             <div className="text-15 lh-1 mt-10">{item.name}</div>
           </div>
         </div>

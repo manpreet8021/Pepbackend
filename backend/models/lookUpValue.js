@@ -10,6 +10,9 @@ const lookUpValueSchema = new mongoose.Schema({
         required: true,
         ref: 'LookUpData'
     },
+    icon: {
+        type: String
+    },
     active: {
         type: Boolean,
         required: true,

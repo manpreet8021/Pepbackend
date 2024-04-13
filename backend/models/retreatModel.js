@@ -313,7 +313,8 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
                     }
                 },
                 retreatHighlights: {
-                    name: 1
+                    name: 1,
+                    icon: 1
                 },
                 retreatTypes: {
                     name: 1

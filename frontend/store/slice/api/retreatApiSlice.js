@@ -4,13 +4,13 @@ const retreatApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getAllRetreat: builder.query({
             query: () => ({
-                url: 'admin/retreat/',
+                url: 'protect/retreat/',
                 credentials: 'include'
             })
         }),
         addRetreat: builder.mutation({
             query: (data) => ({
-                url: 'admin/retreat',
+                url: 'protect/retreat',
                 method: 'POST',
                 body: data,
                 credentials: 'include'
@@ -18,7 +18,7 @@ const retreatApiSlice = apiSlice.injectEndpoints({
         }),
         updateRetreat: builder.mutation({
             query: (data) => ({
-                url: `admin/retreat/${data.get('id')}`,
+                url: `protect/retreat/${data.get('id')}`,
                 method: 'PUT',
                 body: data,
                 credentials: 'include'
@@ -26,14 +26,14 @@ const retreatApiSlice = apiSlice.injectEndpoints({
         }),
         deleteRetreatImage: builder.mutation({
             query: ({id, image_id}) => ({
-                url: `admin/retreat/image/${id}/${image_id}`,
+                url: `protect/retreat/image/${id}/${image_id}`,
                 method: 'DELETE',
                 credentials: 'include'
             })
         }),
         deleteRoomImage: builder.mutation({
             query: ({id, image_id}) => ({
-                url: `admin/retreat/room/${id}/${image_id}`,
+                url: `protect/retreat/room/${id}/${image_id}`,
                 method: 'DELETE',
                 credentials: 'include'
             })

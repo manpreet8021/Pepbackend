@@ -65,10 +65,12 @@ const HotelSingleV1Dynamic = ({ params }) => {
 
                       <div className="col-12">
                         <h3 className="text-22 fw-500 pt-40 border-top-light">
-                          Most Popular Facilities
+                          Description
                         </h3>
                         <div className="row y-gap-10 pt-20">
-                          <PopularFacilities />
+                          <p className={`text-dark-1 text-15 mt-20`}>
+                            {data?.description}
+                          </p>
                         </div>
                       </div>
                       {/* End .col-12 Most Popular Facilities */}
