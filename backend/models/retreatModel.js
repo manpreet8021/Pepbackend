@@ -177,15 +177,22 @@ export const getAdminRetreaties = (value) => retreatModel.populate(retreatModel.
                         in: {
                             _id: '$$room._id',
                             name: '$$room.name',
-                            images: {
-                                _id: '$$room.images._id',
-                                location: '$$room.images.location'
+                            image: {
+                                $map: {
+                                    input: '$$room.images',
+                                    as: 'image',
+                                    in: {
+                                        id: '$$image.id',
+                                        location: '$$image.location'
+                                    }
+                                }
                             },
                             active: '$$room.active',
                             price: '$$room.price',
                             allowedGuest: '$$room.allowedGuest',
                             advance: '$$room.advance',
-                            description: '$$room.description'
+                            description: '$$room.description',
+                            highlight: '$$room.highlight'
                         }
                     }
                 },
@@ -201,7 +208,10 @@ export const getAdminRetreaties = (value) => retreatModel.populate(retreatModel.
                 },
                 retreatHighlight: 1,
                 retreatType: 1,
-                thumbnail: 1
+                thumbnail: {
+                    id: 1,
+                    location: 1
+                }
             }
         }
     ]),'type', 'name'
@@ -220,6 +230,14 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
                 localField: '_id',
                 foreignField: 'retreat',
                 as: 'rooms'
+            }
+        },
+        {
+            $lookup: {
+              from: 'lookupvalues',
+              localField: 'rooms.highlight',
+              foreignField: '_id',
+              as: 'roomHighlight'
             }
         },
         {
@@ -298,7 +316,17 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
                             price: '$$room.price',
                             allowedGuest: '$$room.allowedGuest',
                             advance: '$$room.advance',
-                            description: '$$room.description'
+                            description: '$$room.description',
+                            highlight: {
+                                $map: {
+                                    input: '$roomHighlight',
+                                    as: 'highlight',
+                                    in: {
+                                        name: '$$highlight.name',
+                                        icon: '$$highlight.icon'
+                                    }
+                                }
+                            }
                         }
                     }
                 },

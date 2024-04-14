@@ -44,12 +44,12 @@ export default function GalleryOne({detail}) {
                   </div>
                 </div>
                 <div className="col-auto">
-                  <button
+                  {/* <button
                     data-x-click="mapFilter"
                     className="text-blue-1 text-15 underline"
                   >
                     Show on map
-                  </button>
+                  </button> */}
                 </div>
               </div>
               {/* End .row */}

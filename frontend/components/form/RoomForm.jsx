@@ -1,7 +1,8 @@
 import { ErrorMessage, Field } from "formik";
 import Image from 'next/image'
+import MultiSelectField from "./MultiSelectField";
 
-export default function RoomForm({title, number, room, setFieldValue, setFieldTouched, handleImageDelete}) {
+export default function RoomForm({title, number, room, setFieldValue, setFieldTouched, handleImageDelete, data}) {
     return (
         <div className="row x-gap-20 y-gap-20">
             <Field type="hidden" required name={`rooms[${number}].roomUpdated`} />
@@ -40,10 +41,14 @@ export default function RoomForm({title, number, room, setFieldValue, setFieldTo
                 </div>
                 <ErrorMessage name={`rooms[${number}].allowedGuest`} component="div" className="error-message"/>
             </div>
+            <div className="col-6">
+                <Field name={`rooms[${number}].highlight`} disabled={title === "View"} component={MultiSelectField} data={data} placeholder='Retreat Highlight'/>
+                <ErrorMessage name={`rooms[${number}].highlight`} component="div" className="error-message"/>
+            </div>
             {
                 title !== "View" && ( 
                     <>
-                        <div className="col-12">
+                        <div className="col-6">
                             <div className="form-input ">
                                 <input type="file"
                                     name={`rooms[${number}].images`}
@@ -61,9 +66,9 @@ export default function RoomForm({title, number, room, setFieldValue, setFieldTo
                 ) 
             }
 
-            { room.images && room.images.length && 
+            { room.image && room.image.length && 
                 <div className="col-12 d-flex overflow-auto">
-                    {room.images.map(image => (
+                    {room.image.map(image => (
                         <div className="col-auto" key={image.id} id={image.id}>
                             <Image src={image.location} width={150} height={100} alt="Retreat Images" className="custom-image"/>
                             {

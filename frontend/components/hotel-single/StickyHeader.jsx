@@ -35,12 +35,12 @@ const StickyHeader = ({ price }) => {
                 <div className="col-auto">
                   <a href="#reviews">Reviews</a>
                 </div>
-                <div className="col-auto">
+                {/* <div className="col-auto">
                   <a href="#facilities">Facilities</a>
                 </div>
                 <div className="col-auto">
                   <a href="#faq">Faq</a>
-                </div>
+                </div> */}
               </div>
             </div>
             {/* End .col */}

@@ -55,59 +55,6 @@ export default function RetreatForm({closeModal, title, data}) {
         imageUpdated: data.images ? false : true,
         thumbnailUpdated: data.thumbnail ? false : true
     }
-    
-    const handleSubmit = async(values, actions) => {
-        const formData = new FormData()
-
-        for (let value in values) {
-            if (Array.isArray(values[value])) {
-                if(values[value][0] instanceof File){
-                    for (let i = 0; i < values[value].length; i++) {
-                        formData.append(`images`, values[value][i]);
-                    }
-                } else {
-                    values[value].forEach((item, index) => {
-                        if (typeof item === 'object' && item !== null) {
-                            for (let prop in item) {
-                                if(Array.isArray(item[prop]) && item[prop][0] instanceof File){
-                                    for (let i = 0; i < item[prop].length; i++) {
-                                        formData.append(`${value}[${index}][${prop}]`, item[prop][i]);
-                                    }
-                                } else {
-                                    formData.append(`${value}[${index}][${prop}]`, item[prop]);
-                                }
-                            }
-                        } else {
-                            formData.append(`${value}[${index}]`, item);
-                        }
-                    });
-                }
-            } else {
-                formData.append(value, values[value]);
-            }
-        }
-
-        try{
-            const result = formData.get('id') != '' ? await updateRetreat(formData) :await addRetreat(formData)
-            if(result.error) throw new Error(JSON.stringify(result.error))
-
-            const fileInput = document.querySelectorAll('input[type="file"]');
-            
-            fileInput.forEach(input => {
-                fileInput.value = '';
-            });
-            
-            actions.resetForm();
-            closeModal()
-        } catch (error) {
-            let errorText = 'Something went wrong'
-
-            const e = JSON.parse(error.message)
-            
-            if(e.status !== 500) errorText = e.data.message 
-            dispatch(showToast({ header: 'Error', body: errorText, type: 'danger'}))
-        }
-    }
 
     const roomSchema = Yup.object().shape({
         name: Yup.string().required(),
@@ -116,6 +63,7 @@ export default function RetreatForm({closeModal, title, data}) {
         allowedGuest: Yup.number().positive().required(),
         advance: Yup.number().positive().max(100).required(),
         active: Yup.boolean().required(),
+        highlight: Yup.array().required().min(1),
         images: Yup.mixed().when(
             'roomImageUpdated', {
                 is: true,
@@ -158,6 +106,60 @@ export default function RetreatForm({closeModal, title, data}) {
         retreatType: Yup.array().required().min(1),
         retreatHighlight: Yup.array().required().min(1),
     })
+
+    const handleSubmit = async(values, actions) => {
+        const formData = new FormData()
+
+        for (let value in values) {
+            if (Array.isArray(values[value])) {
+                if(values[value][0] instanceof File){
+                    for (let i = 0; i < values[value].length; i++) {
+                        formData.append(`images`, values[value][i]);
+                    }
+                } else {
+                    values[value].forEach((item, index) => {
+                        if (typeof item === 'object' && item !== null) {
+                            for (let prop in item) {
+                                if(Array.isArray(item[prop])){
+                                    if(prop === 'image') continue;
+                                    for (let i = 0; i < item[prop].length; i++) {
+                                        formData.append(`${value}[${index}][${prop}]`, item[prop][i]);
+                                    }
+                                } else {
+                                    formData.append(`${value}[${index}][${prop}]`, item[prop]);
+                                }
+                            }
+                        } else {
+                            formData.append(`${value}[${index}]`, item);
+                        }
+                    });
+                }
+            } else {
+                formData.append(value, values[value]);
+            }
+        }
+
+        try{
+            const result = formData.get('id') != '' ? await updateRetreat(formData) :await addRetreat(formData)
+            if(result.error) throw new Error(JSON.stringify(result.error))
+
+            const fileInput = document.querySelectorAll('input[type="file"]');
+            
+            fileInput.forEach(input => {
+                fileInput.value = '';
+            });
+            
+            actions.resetForm();
+            closeModal()
+        } catch (error) {
+            let errorText = 'Something went wrong'
+
+            const e = JSON.parse(error.message)
+            
+            if(e.status !== 500) errorText = e.data.message 
+            dispatch(showToast({ header: 'Error', body: errorText, type: 'danger'}))
+        }
+    }
 
     const handleImageDelete = async (id, image_id, type) => {
         try {
@@ -402,7 +404,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                             <button type="button" 
                                                                 className="button h-50 px-24 -dark-1 bg-blue-1 text-white" 
                                                                 disabled={values.rooms.length>=3}
-                                                                onClick={() => {values.rooms.length < 5 && arrayHelper.push({name: '', description: '', price: '', images: [], allowedGuest: '', advance: '', active: true, roomImageUpdated: true})}}>
+                                                                onClick={() => {values.rooms.length < 5 && arrayHelper.push({name: '', description: '', price: '', images: [], allowedGuest: '', advance: '', active: true, roomImageUpdated: true, highlight: []})}}>
                                                                     Add Room <div className="icon-plus ml-15" />
                                                             </button>
                                                         : null
@@ -412,7 +414,7 @@ export default function RetreatForm({closeModal, title, data}) {
                                                         <Card border="light" className="my-1" key={index}>
                                                             <Card.Header className="d-flex justify-between">Room {index+1}{!room._id && <CloseButton onClick={() => arrayHelper.remove(index)}/>}</Card.Header>
                                                             <Card.Body>
-                                                                <RoomForm key={index} number={index} title={title} room={room} setFieldValue={setFieldValue} setFieldTouched={setFieldTouched} handleImageDelete={handleImageDelete} />
+                                                                <RoomForm key={index} number={index} title={title} room={room} setFieldValue={setFieldValue} setFieldTouched={setFieldTouched} handleImageDelete={handleImageDelete} data={lookup?.roomHighlights}/>
                                                             </Card.Body>
                                                         </Card>
                                                     ))}

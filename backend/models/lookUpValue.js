@@ -39,7 +39,8 @@ export const getRetreatLookUpValues = () => lookUpValueModel.aggregate(
                 parent: {$in : [
                     new mongoose.Types.ObjectId('65d10cb4675106006ec49700'), 
                     new mongoose.Types.ObjectId('66000e041a6d8d03f622a85e'),
-                    new mongoose.Types.ObjectId('660122f34d4e4c8595c9068e')
+                    new mongoose.Types.ObjectId('660122f34d4e4c8595c9068e'),
+                    new mongoose.Types.ObjectId('661adb9f8759d221c0651c4d')
                 ]},
                 active: true
             }

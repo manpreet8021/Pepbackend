@@ -1,27 +1,4 @@
 const PropertyHighlights2 = ({highlight}) => {
-  const highlightsContent = [
-    {
-      id: 1,
-      icon: "icon-city",
-      text: `In London City Centre`,
-    },
-    {
-      id: 2,
-      icon: "icon-airplane",
-      text: `Airport transfer`,
-    },
-    {
-      id: 3,
-      icon: "icon-bell-ring",
-      text: `Front desk [24-hour]`,
-    },
-    {
-      id: 4,
-      icon: "icon-tv",
-      text: `Premium TV channels`,
-    },
-  ];
-
   return (
     <div className="row y-gap-20 pt-30">
       {highlight.map((item, i) => (

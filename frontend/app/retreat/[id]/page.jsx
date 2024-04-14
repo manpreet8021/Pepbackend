@@ -102,7 +102,7 @@ const HotelSingleV1Dynamic = ({ params }) => {
                   </div>
                 </div>
                 {/* End .row */}
-                <AvailableRooms hotel={hotel} />
+                <AvailableRooms hotels={data.rooms} />
               </div>
               {/* End .container */}
             </section>

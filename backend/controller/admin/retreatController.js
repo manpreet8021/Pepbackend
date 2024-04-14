@@ -6,6 +6,8 @@ import { getRoomById, getRoomByParams, saveRoom, updateRoomById } from "../../mo
 import { deleteImageFromCloudinary, uploadMultipleImages } from "../../helpers/imageUpload.js";
 import mongoose from "mongoose";
 
+const MultiSelectValidationSchema = Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required()
+
 const roomValidationSchema = Joi.object({
     _id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
     name: Joi.string().required(),
@@ -15,7 +17,7 @@ const roomValidationSchema = Joi.object({
     advance: Joi.number().positive().max(100).required(),
     active: Joi.boolean().required(),
     roomImageUpdated: Joi.boolean(),
-    images: Joi.string()
+    highlight: Joi.array().items(MultiSelectValidationSchema).required().min(1)
 })
 
 const durationValidationSchema = Joi.array().items(
@@ -27,8 +29,6 @@ const deleteImageSchema = Joi.object({
     id: Joi.string().required(),
     image_id: Joi.string().required()
 })
-
-const MultiSelectValidationSchema = Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required()
 
 const addRetreatSchema = Joi.object({
     title: Joi.string().required(),
@@ -94,7 +94,7 @@ const addRetreat = asyncHandler(async(req, res) => {
                     for(let i=0; i<rooms.length; i++){
                         let uploadedRoomImage = await uploadMultipleImages(req.files[`rooms[${i}][images]`], 'rooms')
                         if(uploadedRoomImage.length) {
-                            await saveRoom({name: rooms[i].name, description: rooms[i].description, price: rooms[i].price, allowedGuest: rooms[i].allowedGuest, active: rooms[i].active, advance: rooms[i].advance, retreat: retreat._id, images: uploadedRoomImage },session)
+                            await saveRoom({name: rooms[i].name, description: rooms[i].description, price: rooms[i].price, allowedGuest: rooms[i].allowedGuest, active: rooms[i].active, advance: rooms[i].advance, retreat: retreat._id, images: uploadedRoomImage, highlight: rooms[i].highlight },session)
                         }
                     }
                 }
@@ -185,7 +185,7 @@ const updateRetreat = asyncHandler(async(req, res) => {
                             if(existingRoom) {
                                 let roomTotalImage = existingRoom.images.length + uploadedRoomImage.length
                                 if(roomTotalImage <= 5) {
-                                    await updateRoomById(rooms[i]._id, {name: rooms[i].name, description: rooms[i].description, price: rooms[i].price, allowedGuest: rooms[i].allowedGuest, active: rooms[i].active, advance: rooms[i].advance, retreat: retreat._id, images: [...existingRoom.images, ...uploadedRoomImage] }, session)
+                                    await updateRoomById(rooms[i]._id, {name: rooms[i].name, description: rooms[i].description, price: rooms[i].price, allowedGuest: rooms[i].allowedGuest, active: rooms[i].active, advance: rooms[i].advance, retreat: retreat._id, images: [...existingRoom.images, ...uploadedRoomImage], highlight: rooms[i].highlight }, session)
                                 } else {
                                     throw new Error("Each room should not have more than 5 images")
                                 }
@@ -337,6 +337,7 @@ const getRetreatByParamater = asyncHandler(async(req, res) => {
             throw new Error("Retreat not found")
         }
     } catch (error) {
+        console.log(error)
         res.status(404)
         throw new Error("Retreat not found")
     }

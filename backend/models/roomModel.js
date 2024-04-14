@@ -34,6 +34,11 @@ const roomSchema =  new mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    highlight: {
+        type: [mongoose.Schema.Types.ObjectId],
+        required: true,
+        ref: 'LookUpValue'
     }
 },{
     timestamps: true
