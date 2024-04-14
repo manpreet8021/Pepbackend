@@ -114,14 +114,11 @@ const HotelSingleV1Dynamic = ({ params }) => {
                     <h3 className="text-22 fw-500">Guest reviews</h3>
                   </div>
                 </div>
-                {/* End .row */}
 
                 <ReviewProgress />
-                {/* End review with progress */}
 
                 <div className="pt-40">
                   <DetailsReview />
-                  {/* End review with details */}
                 </div>
 
                 <div className="row pt-30">
@@ -132,10 +129,7 @@ const HotelSingleV1Dynamic = ({ params }) => {
                     </a>
                   </div>
                 </div>
-                {/* End .row */}
               </div>
-              {/* End .container */}
-              {/* End container */}
             </section>
 
             <section className="pt-40">

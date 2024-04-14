@@ -16,7 +16,7 @@ const AvailableRooms = ({ hotels }) => {
                   <div className="roomGrid__header">
                     <div>Room Type</div>
                     <div>Description</div>
-                    <div>Sleeps</div>
+                    <div>Capacity</div>
                     <div>Price per person</div>
                     <div />
                   </div>
