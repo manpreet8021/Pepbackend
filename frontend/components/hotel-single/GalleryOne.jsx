@@ -14,7 +14,7 @@ export default function GalleryOne({detail}) {
         channel="youtube"
         autoplay
         isOpen={isOpen}
-        videoId={detail.youtubeUrl}
+        videoId="F94ygdyeook"
         onClose={() => setOpen(false)}
       />
     <section className="pt-40">
