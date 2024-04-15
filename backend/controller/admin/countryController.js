@@ -74,7 +74,7 @@ const updateCountry = asyncHandler(async(req, res) => {
             
             const imageInfo = await imageUpload(req.file.path, 'country')
             if(imageInfo) {
-                await deleteImageFromCloudinary(existingCountry.logo.public_id)
+                if(existingCountry.logo.public_id) await deleteImageFromCloudinary(existingCountry.logo.public_id)
                 existingCountry.logo = imageInfo
             } else {
                 res.status(400)
