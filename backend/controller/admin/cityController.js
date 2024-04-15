@@ -83,7 +83,7 @@ const updateCity = asyncHandler(async(req, res) => {
                 throw new Error("Failed to upload image")
             }
             const uploadedImage = await imageUpload(req.file.path, 'city')
-            await deleteImageFromCloudinary(existingCity.images.public_id)
+            if(existingCity.images.public_id) await deleteImageFromCloudinary(existingCity.images.public_id)
             existingCity.images = uploadedImage;
         }
 
