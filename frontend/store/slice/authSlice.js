@@ -11,7 +11,6 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout: (state, action) => {
-            localStorage.removeItem("userInfo")
             state.userInfo = null
         },
         setToken: (state, action) => {
@@ -22,35 +21,30 @@ const authSlice = createSlice({
         builder.addMatcher(
             userApiSlice.endpoints.login.matchFulfilled,
             (state, { payload }) => {
-                localStorage.setItem("userInfo", JSON.stringify(payload))
                 state.userInfo = payload
             }
         ),
         builder.addMatcher(
             userApiSlice.endpoints.signup.matchFulfilled,
             (state, {payload}) => {
-                localStorage.setItem("userInfo", JSON.stringify(payload))
                 state.userInfo = payload
             }
         )
         builder.addMatcher(
             userApiSlice.endpoints.getInfo.matchFulfilled,
             (state, {payload}) => {
-                localStorage.setItem("userInfo", JSON.stringify(payload))
                 state.userInfo = payload
             }
         ),
         builder.addMatcher(
             userApiSlice.endpoints.logout.matchFulfilled,
             (state, {payload}) => {
-                localStorage.removeItem("userInfo")
                 state.userInfo = null
             }
         ),
         builder.addMatcher(
             userApiSlice.endpoints.getInfo.matchRejected,
             (state, {payload}) => {
-                localStorage.setItem("userInfo")
                 state.userInfo = null
             }
         )

@@ -12,11 +12,6 @@ export function middleware(request) {
     return NextResponse.rewrite(new URL('/' , request.url))
   }
   
-  if(request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/signup')) {
-    if(auth) {
-      return NextResponse.redirect(new URL('/' , request.url))
-    }
-  }
   return NextResponse.next()
 }
 

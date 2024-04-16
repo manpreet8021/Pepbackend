@@ -8,5 +8,6 @@ const router = express.Router();
 router.use('/city', cityRoutes)
 router.use('/country', countryRoutes)
 router.use('/lookup', lookUpRoutes)
+router.use('/blog', lookUpRoutes)
 
 export default router

@@ -5,9 +5,27 @@ import React, { useState } from "react";
 import CustomerInfo from "../CustomerInfo";
 import PaymentInfo from "../PaymentInfo";
 import OrderSubmittedInfo from "../OrderSubmittedInfo";
+import { useCreateOrderMutation, usePaymentVerifyMutation } from "@/store/slice/api/paymentApiSlice";
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [createOrder, {isLoading, isError}] = useCreateOrderMutation()
+  const [paymentVerified] = usePaymentVerifyMutation()
+
+  function loadScript(src) {
+    return new Promise((resolve) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = () => {
+          resolve(true);
+        };
+        script.onerror = () => {
+          resolve(false);
+        };
+        document.body.appendChild(script);
+    });
+  }
+
   const steps = [
     {
       title: "Personal Details",
@@ -21,21 +39,21 @@ const Index = () => {
       ),
       content: <CustomerInfo />,
     },
-    {
-      title: "Payment Details",
-      stepNo: "2",
-      stepBar: (
-        <>
-          <div className="col d-none d-sm-block">
-            <div className="w-full h-1 bg-border"></div>
-          </div>
-        </>
-      ),
-      content: <PaymentInfo />,
-    },
+    // {
+    //   title: "Payment Details",
+    //   stepNo: "2",
+    //   stepBar: (
+    //     <>
+    //       <div className="col d-none d-sm-block">
+    //         <div className="w-full h-1 bg-border"></div>
+    //       </div>
+    //     </>
+    //   ),
+    //   content: <PaymentInfo />,
+    // },
     {
       title: "Final Step",
-      stepNo: "3",
+      stepNo: "2",
       stepBar: "",
       content: <OrderSubmittedInfo />,
     },
@@ -46,15 +64,67 @@ const Index = () => {
     return <>{content}</>;
   };
 
-  const nextStep = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
+  const createRazorPayOrder = async() => {
+    try{
+      const res = await loadScript(
+        "https://checkout.razorpay.com/v1/checkout.js"
+      );
+      
+      if (!res) {
+        throw new Error("Razor pay is unable to initalize")
+      }
 
-  const previousStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+      const response = await createOrder({retreat: '661cf65d849e8c01075f645c'})
+
+      if(response.error) {
+        throw new Error("Unable to get retreat")
+      }
+
+      const { amount, id: order_id, currency } = response.data;
+
+      const options = {
+        key: "rzp_test_NC7HqdpPDJRgJY",
+        amount: amount.toString(),
+        currency: currency,
+        name: "Soumya Corp.",
+        description: "Test Transaction",
+        order_id: order_id,
+        handler: async function (response) {
+            const result = await paymentVerified(response);
+            if(result.error) throw new Error("Payment failed")
+            setCurrentStep(1)
+        },
+        modal: {
+          confirm_close: true,
+          ondismiss: async (reason) => {
+
+            const {
+              reason: paymentReason, field, step, code,
+            } = reason && reason.error ? reason.error : {};
+
+            if (reason === undefined) {
+              setCurrentStep(0)
+            } 
+            
+            else if (reason === 'timeout') {
+              setCurrentStep(0)
+            } 
+            
+            else {
+              //payment failed
+              setCurrentStep(0)
+              console.log(paymentReason, field, step, code)
+            }
+          },
+        },
+        theme: {
+          color: "#3554d1",
+        },
+      };
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch(e) {
+
     }
   };
 
@@ -65,8 +135,7 @@ const Index = () => {
           <React.Fragment key={index}>
             <div className="col-auto">
               <div
-                className="d-flex items-center cursor-pointer transition"
-                onClick={() => setCurrentStep(index)}
+                className="d-flex items-center transition"
               >
                 <div
                   className={
@@ -103,22 +172,11 @@ const Index = () => {
       <div className="row x-gap-20 y-gap-20 pt-20">
         <div className="col-auto">
           <button
-            className="button h-60 px-24 -blue-1 bg-light-2"
-            disabled={currentStep === 0}
-            onClick={previousStep}
-          >
-            Previous
-          </button>
-        </div>
-        {/* End prvious btn */}
-
-        <div className="col-auto">
-          <button
             className="button h-60 px-24 -dark-1 bg-blue-1 text-white"
             disabled={currentStep === steps.length - 1}
-            onClick={nextStep}
+            onClick={createRazorPayOrder}
           >
-            Next <div className="icon-arrow-top-right ml-15" />
+            Pay <div className="icon-arrow-top-right ml-15" />
           </button>
         </div>
         {/* End next btn */}
