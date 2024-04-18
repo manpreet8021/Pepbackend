@@ -8,9 +8,10 @@ import CurrenctyMegaMenu from "./CurrenctyMegaMenu";
 import LanguageMegaMenu from "./LanguageMegaMenu";
 import MobileMenu from "./MobileMenu";
 import { usePathname } from 'next/navigation'
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "@/store/slice/authSlice";
+import { useSelector } from "react-redux";
 import CustomToast from "../toast/toast";
+import { useLogoutMutation } from "@/store/slice/api/userApiSlice";
+import { googleLogout } from '@react-oauth/google';
 
 export const metadata = {
   title: "Home-1 || GoTrip - Travel & Tour React NextJS Template",
@@ -18,12 +19,12 @@ export const metadata = {
 };
 
 const Header1 = () => {
+  const [logout] = useLogoutMutation()
   const [navbar, setNavbar] = useState(false);
   const path = usePathname()
   const [dark, setDark] = useState('bg-dark-1')
 
   const userState = useSelector(state => state.auth)
-  const dispatch = useDispatch()
 
   const darkColorValue = () => {
     if(path !== '/') {
@@ -97,7 +98,8 @@ const Header1 = () => {
                       </Link>
                       <button
                         onClick={() => {
-                          dispatch(logout())
+                          logout()
+                          googleLogout()
                         }}
                         className="button px-30 fw-400 text-14 border-white -outline-white h-50 text-white ml-20"
                       >

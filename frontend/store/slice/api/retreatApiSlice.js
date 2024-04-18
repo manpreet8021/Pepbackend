@@ -49,10 +49,18 @@ const retreatApiSlice = apiSlice.injectEndpoints({
                 url: `common/retreat/${id}`,
                 credentials: 'include'
             })
+        }),
+        getRetreatByParameter: builder.mutation({
+            query: (data) => ({
+                url: 'common/retreat',
+                method: 'POST',
+                body: data,
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useGetAllRetreatQuery, useAddRetreatMutation, useUpdateRetreatMutation, useDeleteRetreatImageMutation, useDeleteRoomImageMutation, useGetRecommendedRetreatQuery, useGetRetreatDetailByIdQuery } = retreatApiSlice
+export const { useGetAllRetreatQuery, useAddRetreatMutation, useUpdateRetreatMutation, useDeleteRetreatImageMutation, useGetRetreatByParameterMutation, useDeleteRoomImageMutation, useGetRecommendedRetreatQuery, useGetRetreatDetailByIdQuery } = retreatApiSlice
 
 export default retreatApiSlice;

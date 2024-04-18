@@ -6,8 +6,29 @@ import TopHeaderFilter from "@/components/hotel-list/hotel-list-v2/TopHeaderFilt
 import HotelProperties from "@/components/hotel-list/hotel-list-v2/HotelProperties";
 import Pagination from "@/components/hotel-list/common/Pagination";
 import Sidebar from "@/components/hotel-list/hotel-list-v2/Sidebar";
+import { useEffect, useState } from "react";
+import { useGetRetreatByParameterMutation } from "@/store/slice/api/retreatApiSlice";
+import { useInView } from 'react-intersection-observer'
 
 const search = () => {
+  const [offset, setOffset] = useState(4)
+  const [retreat, setRetreat] = useState([])
+  const { ref, inView } = useInView()
+
+  const [getRetreatByParameter] = useGetRetreatByParameterMutation()
+
+  const loadMoreUsers = async() => {
+    const result = await getRetreatByParameter({limit: offset, skip: offset-4})
+    console.log(result)
+    setOffset(offset+4)
+  }
+
+  useEffect(() => {
+    if (inView) {
+      loadMoreUsers()
+    }
+  }, [inView])
+
   return (
     <>
       {/* End Page Title */}
@@ -62,9 +83,11 @@ const search = () => {
               {/* End mt--30 */}
               <div className="row y-gap-30">
                 <HotelProperties />
+                <div ref={ref}>
+                  Loading...
+                </div>
               </div>
               {/* End .row */}
-              <Pagination />
             </div>
             {/* End .col for right content */}
           </div>
@@ -72,12 +95,6 @@ const search = () => {
         </div>
         {/* End .container */}
       </section>
-      {/* End layout for listing sidebar and content */}
-
-      <CallToActions />
-      {/* End Call To Actions Section */}
-
-      <DefaultFooter />
     </>
   );
 };

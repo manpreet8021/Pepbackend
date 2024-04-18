@@ -2,6 +2,7 @@ import { createUser, getUserByEmail, getUserBySessionToken } from '../models/use
 import {authentication, random} from '../helpers/index.js'
 import Joi from 'joi';
 import asyncHandler from '../middleware/asyncHandler.js';
+import { OAuth2Client } from 'google-auth-library'
 
 const registerSchema = Joi.object({
     displayName: Joi.string().required(),
@@ -15,8 +16,14 @@ const loginSchema = Joi.object({
     password: Joi.string().required()
 })
 
+const googleSchemaValidation = Joi.object({
+    clientId: Joi.string(),
+    credential: Joi.string().required(),
+    select_by: Joi.string().required()
+})
+
 export const register = asyncHandler(async (req,res)=>{
-    const { error, value } = registerSchema.validate(req.body, { abortEarly: false })
+    const { error } = registerSchema.validate(req.body, { abortEarly: false })
 
     if(error) {
         res.status(400)
@@ -40,10 +47,7 @@ export const register = asyncHandler(async (req,res)=>{
             salt,password:authentication(salt,password)
         }
     })
-    res.status(200).json({
-        name: user.displayName,
-        isAdmin: user.isAdmin
-    })
+    res.status(201).json()
 })
  
 export const login = asyncHandler(async (req,res)=>{
@@ -65,17 +69,17 @@ export const login = asyncHandler(async (req,res)=>{
     
     const expectedHash = authentication(user.authentication.salt, password);
 
-    if(user.authentication.password!= expectedHash){
+    if(user.authentication.password != expectedHash){
         res.status(403);
         throw new Error("Password not valid")
     }
 
-    const salt = random()
-    user.authentication.sessionStorage = authentication(salt,user._id.toString())
-    
+    const token = getTokenCookie(user._id)
+
+    user.authentication.sessionStorage = token
     await user.save()
 
-    res.cookie('PEPRELIER-AUTH', user.authentication.sessionStorage, { 
+    res.cookie('PEPRELIER-AUTH', token , { 
         httpOnly: true, 
         secure: true, 
         sameSite: 'strict', 
@@ -103,3 +107,62 @@ export const logout = asyncHandler(async(req, res) => {
     res.clearCookie('PEPRELIER-AUTH');
     res.status(200).json()
 })
+
+export const googleLogin = asyncHandler(async(req, res) => {
+    try {
+        const {error} = googleSchemaValidation.validate(req.body)
+
+        if (error) {
+            throw new Error("Invalid login")
+        }
+
+        const client = new OAuth2Client();
+        const { credential, client_id } = req.body;
+
+        const response = await client.verifyIdToken({
+            idToken: credential,
+            audience: client_id,
+        });
+
+        const result = response.getPayload()
+        let user = null
+
+        if(result) {
+            user = await getUserByEmail(result.email)
+            if(!user) {
+                user = await createUser({
+                    email: result.email,
+                    displayName: `${result.given_name} ${result.family_name}`,
+                    authSource: 'google'
+                })
+            }
+        } else {
+            throw new Error()
+        }
+
+        const token = getTokenCookie(user._id)
+        user.authentication.sessionStorage = token
+        await user.save()
+
+        res.cookie('PEPRELIER-AUTH', token , { 
+            httpOnly: true, 
+            secure: true, 
+            sameSite: 'strict', 
+            maxAge: 30 * 24 * 60 * 60 * 1000
+        });
+
+        res.status(200).json({
+            name: user.displayName,
+            isAdmin: user.isAdmin
+        })
+    } catch (error) {
+        res.status(400)
+        throw new Error("Invalid Login")
+    }
+})
+
+const getTokenCookie = (id) => {
+    const salt = random()
+    const token = authentication(salt,id.toString())
+    return token
+}

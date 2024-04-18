@@ -12,6 +12,8 @@ import "aos/dist/aos.css";
 import "../styles/index.scss";
 import { Provider } from "react-redux";
 import { store } from "../store/store";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import Auth from "./auth";
 
 if (typeof window !== "undefined") {
   require("bootstrap/dist/js/bootstrap");
@@ -42,10 +44,14 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <main>
-          <Provider store={store}>
-            {children}
-            <SrollTop />
-          </Provider>
+          <GoogleOAuthProvider clientId="641212104634-6fhlv4qgomtjubnss8vsh66uq6qh7i9l.apps.googleusercontent.com">
+            <Provider store={store}>
+              <Auth>
+                {children}
+              </Auth>
+              <SrollTop />
+            </Provider>
+          </GoogleOAuthProvider>
         </main>
       </body>
     </html>

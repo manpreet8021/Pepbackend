@@ -25,6 +25,12 @@ const authSlice = createSlice({
             }
         ),
         builder.addMatcher(
+            userApiSlice.endpoints.googleLogin.matchFulfilled,
+            (state, { payload }) => {
+                state.userInfo = payload
+            }
+        ),
+        builder.addMatcher(
             userApiSlice.endpoints.signup.matchFulfilled,
             (state, {payload}) => {
                 state.userInfo = payload

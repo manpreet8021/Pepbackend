@@ -5,16 +5,8 @@ import DefaultFooter from "@/components/footer/default";
 import LoginWithSocial from "@/components/common/LoginWithSocial";
 import LoginForm from "@/components/common/LoginForm";
 import Header from "@/components/header";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { logout } from "@/store/slice/authSlice";
 
 const LogIn = () => {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(logout())
-  },[])
 
   return (
     <>

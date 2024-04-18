@@ -13,8 +13,7 @@ const userSchema = new mongoose.Schema({
     authentication: { 
         password: {
             type: String,
-            required: true,
-            select:false
+            select: false
         },
         salt: {type: String, select: false},
         sessionStorage: {type: String, select: false}
@@ -23,6 +22,11 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    authSource: {
+        type: String,
+        enum: ['self', 'google'],
+        default: 'self'
+    }
 },{
     timestamps: true
 })

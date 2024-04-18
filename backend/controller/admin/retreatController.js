@@ -118,6 +118,7 @@ const addRetreat = asyncHandler(async(req, res) => {
 
 const updateRetreat = asyncHandler(async(req, res) => {
     let query = {_id: req.params.id}
+
     if(!req.user.isAdmin) {
         query.owner = req.user._id
     }
@@ -231,6 +232,7 @@ const deleteRetreatImage = asyncHandler(async(req, res) => {
     }
 
     let query = {_id: req.params.id}
+
     if(!req.user.isAdmin) {
         query.owner = req.user._id
     }
@@ -279,6 +281,7 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
     }
 
     let query = {_id: req.params.id}
+
     if(!req.user.isAdmin) {
         query['retreat.owner'] = req.user._id
     }
@@ -319,7 +322,7 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
     }
 })
 
-const getRetreatByParamater = asyncHandler(async(req, res) => {
+const getRetreatDetailById = asyncHandler(async(req, res) => {
     try {
         const retreat = await getRetreatDetails(req.params.id)
         if(retreat.length) {
@@ -328,7 +331,6 @@ const getRetreatByParamater = asyncHandler(async(req, res) => {
                 let finalAddress = {...address}
                 finalAddress['country'] = finalAddress.country[0]
                 finalAddress['city'] = finalAddress.city[0]
-                console.log(finalAddress)
 
                 return {...data, price: finalPrice, address: finalAddress}
             })
@@ -358,4 +360,10 @@ const getRecommendedRetreat = asyncHandler(async(req, res) => {
     }
 })
 
-export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat, getRetreatByParamater }
+const getRetreatByParameter = asyncHandler(async(req, res) => {
+    const retreat = await getClientRetreaties({limit: req.body.limit, skip: req.body.skip, params: {active: true}})
+    res.status(200).json(retreat)
+})
+
+
+export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat, getRetreatDetailById, getRetreatByParameter }

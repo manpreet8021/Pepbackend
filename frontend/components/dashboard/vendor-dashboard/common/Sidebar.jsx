@@ -1,9 +1,11 @@
 import { useLogoutMutation } from "@/store/slice/api/userApiSlice";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const [logout] = useLogoutMutation()
+  const router = useRouter()
 
   const sidebarData = [
     {
@@ -217,7 +219,7 @@ const Sidebar = () => {
 
         <div className="sidebar__item ">
           <button
-            onClick={() => {logout()}}
+            onClick={() => {logout(); router.push("/")}}
             className="sidebar__button d-flex items-center text-15 lh-1 fw-500"
           >
             <Image
