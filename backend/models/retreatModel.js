@@ -31,6 +31,10 @@ const retreatSchema =  new mongoose.Schema({
         type: String,
         required: false
     },
+    price: {
+        type: Number,
+        required: true
+    },
     active: {
         type: Boolean,
         required: true,
@@ -170,6 +174,7 @@ export const getAdminRetreaties = (value) => retreatModel.populate(retreatModel.
                 active: 1,
                 Guest: 1,
                 directBook: 1,
+                price: 1,
                 rooms: {
                     $map: {
                         input: '$rooms',
@@ -348,7 +353,8 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
                     name: 1
                 },
                 thumbnail: '$thumbnail.location',
-                price: '$rooms.price'
+                roomPrice: '$rooms.price',
+                price: 1
             }
         }
     ])
@@ -395,7 +401,8 @@ export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggre
                 rooms: '$rooms.price',
                 country: '$country.name',
                 city: '$city.name',
-                retreatDuration: 1
+                retreatDuration: 1,
+                price: 1
             }
         }
     ]

@@ -37,6 +37,7 @@ export default function RetreatForm({closeModal, title, data}) {
         minGuest: data?.Guest?.min || '',
         maxGuest: data?.Guest?.max || '',
         youtubeUrl: data?.youtubeUrl || '',
+        price: data?.price || '',
         type: data?.type?.id || '',
         line1: data?.address?.line1 || '',
         line2: data?.address?.line2 || '',
@@ -82,6 +83,7 @@ export default function RetreatForm({closeModal, title, data}) {
         minGuest: Yup.number("The value should be of type number").positive().min(1).required(),
         maxGuest: Yup.number("The value should be of type number").positive().min(Yup.ref('minGuest')).required(),
         youtubeUrl: Yup.string(),
+        price: Yup.number("Price should be a number").positive().min(1).required(),
         type: Yup.string().required(),
         duration: Yup.array().required(),
         retreatDuration: Yup.number().required(),
@@ -220,7 +222,7 @@ export default function RetreatForm({closeModal, title, data}) {
 
                                             <div className="col-6">
                                                 <div className="form-input ">
-                                                    <Field name="minGuest" required disabled={title === "View"}/>
+                                                    <Field type="text" name="minGuest" required disabled={title === "View"}/>
                                                     <label className="lh-1 text-16 text-light-1">Min Guest</label>
                                                 </div>
                                                 <ErrorMessage name="minGuest" component="div" className="error-message"/>
@@ -235,11 +237,19 @@ export default function RetreatForm({closeModal, title, data}) {
                                             </div>
 
                                             <div className="col-6">
-                                                <div className="form-input ">
+                                                <div className="form-input">
                                                     <Field type="text" name="youtubeUrl" disabled={title === "View"} />
                                                     <label className="lh-1 text-16 text-light-1">Youtube URL</label>
                                                 </div>
                                                 <ErrorMessage name="youtubeUrl" component="div" className="error-message"/>
+                                            </div>
+
+                                            <div className="col-6">
+                                                <div className="form-input ">
+                                                    <Field type="text" name="price" disabled={title === "View"} />
+                                                    <label className="lh-1 text-16 text-light-1">Price</label>
+                                                </div>
+                                                <ErrorMessage name="price" component="div" className="error-message"/>
                                             </div>
                                             
                                             <div className="col-6">

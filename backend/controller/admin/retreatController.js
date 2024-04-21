@@ -37,6 +37,7 @@ const addRetreatSchema = Joi.object({
     minGuest: Joi.number().positive().required(),
     maxGuest: Joi.number().min(Joi.ref('minGuest')).required(),
     youtubeUrl: Joi.string().allow(''),
+    price: Joi.number().positive().min(1).required(),
     type: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     line1: Joi.string().required(),
     line2: Joi.string().allow(''),
@@ -63,8 +64,8 @@ const getRetreat = asyncHandler(async(req, res) => {
 })
 
 const addRetreat = asyncHandler(async(req, res) => {
-    const { title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType } = req.body;
-    const {error} = addRetreatSchema.validate({title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType}, {abortEarly: false})
+    const { title, overview, description, minGuest, maxGuest, youtubeUrl, price, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType } = req.body;
+    const {error} = addRetreatSchema.validate({title, overview, description, minGuest, maxGuest, youtubeUrl, price, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType}, {abortEarly: false})
     
     if(error) {
         res.status(400)
@@ -85,7 +86,7 @@ const addRetreat = asyncHandler(async(req, res) => {
 
     try{
         if(uploadedImage.length && uploadedThumbnail) {
-            const retreat = await saveRetreat({ title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, owner: req.user._id, images: uploadedImage, thumbnail: uploadedThumbnail[0], retreatType, retreatHighlight }, session)
+            const retreat = await saveRetreat({ title, overview, description, youtubeUrl, price, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, owner: req.user._id, images: uploadedImage, thumbnail: uploadedThumbnail[0], retreatType, retreatHighlight }, session)
             if(retreat) {
                 for(let i=0; i<duration.length; i++) {
                     await saveSchedule({startDate: duration[i][0], endDate: duration[i][1], retreat: retreat._id},session)
@@ -126,8 +127,8 @@ const updateRetreat = asyncHandler(async(req, res) => {
     const existingRetreat = await getRetreatByParams(query)
 
     if(existingRetreat) {
-        const { title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType } = req.body;
-        const {error} = addRetreatSchema.validate({title, overview, description, minGuest, maxGuest, youtubeUrl, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType}, {abortEarly: false})
+        const { title, overview, description, minGuest, maxGuest, youtubeUrl, price, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType } = req.body;
+        const {error} = addRetreatSchema.validate({title, overview, description, minGuest, maxGuest, youtubeUrl, price, type, duration, retreatDuration, line1, line2, zipcode, city, country, active, directBook, rooms, retreatHighlight, retreatType}, {abortEarly: false})
         
         if(error) {
             res.status(400)
@@ -167,7 +168,7 @@ const updateRetreat = asyncHandler(async(req, res) => {
         session.startTransaction()
 
         try{
-            const retreat = await updateRetreatById(existingRetreat._id, { title, overview, description, youtubeUrl, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, images: updatedImages, thumbnail: updatedThumbnail, retreatType, retreatHighlight }, session)
+            const retreat = await updateRetreatById(existingRetreat._id, { title, overview, description, youtubeUrl, price, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, images: updatedImages, thumbnail: updatedThumbnail, retreatType, retreatHighlight }, session)
             if(retreat) {
                 if(rooms && rooms.length){
                     for(let i=0; i< rooms.length; i++) {
@@ -326,8 +327,15 @@ const getRetreatDetailById = asyncHandler(async(req, res) => {
     try {
         const retreat = await getRetreatDetails(req.params.id)
         if(retreat.length) {
-            const finalRetreat = retreat.map(({price, address, ...data}) => {
-                let finalPrice = price.sort()[0]
+            const finalRetreat = retreat.map(({roomPrice, price, address, ...data}) => {
+                let finalPrice = 0;
+
+                if(roomPrice.length) {
+                    finalPrice = roomPrice.sort()[0]
+                } else {
+                    finalPrice = price;
+                }
+
                 let finalAddress = {...address}
                 finalAddress['country'] = finalAddress.country[0]
                 finalAddress['city'] = finalAddress.city[0]
@@ -348,9 +356,14 @@ const getRetreatDetailById = asyncHandler(async(req, res) => {
 const getRecommendedRetreat = asyncHandler(async(req, res) => {
     try {
         const retreat = await getClientRetreaties({params: {active: true}, limit: 8, skip: 0})
-        const finalRetreat = retreat.map(({rooms, ...data}) => {
-            let price = rooms.sort()[0]
-            return {...data, price, country: data?.country[0], city: data?.city[0]}
+        const finalRetreat = retreat.map(({rooms, price, ...data}) => {
+            let finalPrice = 0;
+            if(rooms.length) {
+                finalPrice = rooms.sort()[0]
+            } else {
+                finalPrice = price
+            }
+            return {...data, price: finalPrice, country: data?.country[0], city: data?.city[0]}
         })
         
         res.status(200).json(finalRetreat)
@@ -362,9 +375,14 @@ const getRecommendedRetreat = asyncHandler(async(req, res) => {
 
 const getRetreatByParameter = asyncHandler(async(req, res) => {
     const retreat = await getClientRetreaties({limit: req.body.limit, skip: req.body.skip, params: {active: true}})
-    const finalRetreat = retreat.map(({rooms, ...data}) => {
-        let price = rooms.sort()[0]
-        return {...data, price, country: data?.country[0], city: data?.city[0]}
+    const finalRetreat = retreat.map(({rooms, price, ...data}) => {
+        let finalPrice = 0;
+            if(rooms.length) {
+                finalPrice = rooms.sort()[0]
+            } else {
+                finalPrice = price
+            }
+            return {...data, price: finalPrice, country: data?.country[0], city: data?.city[0]}
     })
     
     res.status(200).json(finalRetreat)

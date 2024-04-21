@@ -13,6 +13,10 @@ const errorHandler = (err, req, res, next) => {
         statusCode = 404;
     }
 
+    if(statusCode === 500 || statusCode === 400) {
+        //send mail
+    }
+
     res.status(statusCode).json({
         message,
         stack: process.env.ENVIRONMENT === 'production' ? '' : err.stack
