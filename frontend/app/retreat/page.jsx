@@ -4,30 +4,30 @@ import Header from "@/components/header";
 import DefaultFooter from "@/components/footer/default";
 import TopHeaderFilter from "@/components/hotel-list/hotel-list-v2/TopHeaderFilter";
 import HotelProperties from "@/components/hotel-list/hotel-list-v2/HotelProperties";
-import Pagination from "@/components/hotel-list/common/Pagination";
 import Sidebar from "@/components/hotel-list/hotel-list-v2/Sidebar";
 import { useEffect, useState } from "react";
 import { useGetRetreatByParameterMutation } from "@/store/slice/api/retreatApiSlice";
-import { useInView } from 'react-intersection-observer'
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const search = () => {
-  const [offset, setOffset] = useState(4)
-  const [retreat, setRetreat] = useState([])
-  const { ref, inView } = useInView()
-
   const [getRetreatByParameter] = useGetRetreatByParameterMutation()
+  const [retreat, setRetreat] = useState([])
+  const [hasMore, setHasMore] = useState(true)
 
-  const loadMoreUsers = async() => {
-    const result = await getRetreatByParameter({limit: offset, skip: offset-4})
-    console.log(result)
-    setOffset(offset+4)
+  const loadMoreRetreat = async() => {
+    try{
+      const result = await getRetreatByParameter({limit: 8, skip: retreat.length})
+      if(result.error) throw new Error("Failed Fetching retreat")
+      setRetreat([...retreat, ...result.data])
+      if(result.length < 6) setHasMore(false)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   useEffect(() => {
-    if (inView) {
-      loadMoreUsers()
-    }
-  }, [inView])
+    loadMoreRetreat()
+  },[])
 
   return (
     <>
@@ -78,15 +78,17 @@ const search = () => {
             {/* End col */}
 
             <div className="col-xl-9 ">
-              <TopHeaderFilter />
-              <div className="mt-30"></div>
+              {/* <TopHeaderFilter numberOfRetreat={retreat.length}/> */}
+              {/* <div className="mt-30"></div> */}
               {/* End mt--30 */}
-              <div className="row y-gap-30">
-                <HotelProperties />
-                <div ref={ref}>
-                  Loading...
-                </div>
-              </div>
+              <InfiniteScroll
+                dataLength={retreat.length}
+                next={loadMoreRetreat}
+                hasMore={hasMore}
+                style={{overflow: 'hidden'}}
+                >
+                <HotelProperties retreat={retreat}/>
+              </InfiniteScroll>
               {/* End .row */}
             </div>
             {/* End .col for right content */}

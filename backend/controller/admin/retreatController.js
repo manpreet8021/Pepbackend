@@ -362,7 +362,12 @@ const getRecommendedRetreat = asyncHandler(async(req, res) => {
 
 const getRetreatByParameter = asyncHandler(async(req, res) => {
     const retreat = await getClientRetreaties({limit: req.body.limit, skip: req.body.skip, params: {active: true}})
-    res.status(200).json(retreat)
+    const finalRetreat = retreat.map(({rooms, ...data}) => {
+        let price = rooms.sort()[0]
+        return {...data, price, country: data?.country[0], city: data?.city[0]}
+    })
+    
+    res.status(200).json(finalRetreat)
 })
 
 

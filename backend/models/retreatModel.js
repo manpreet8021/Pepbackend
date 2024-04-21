@@ -358,10 +358,10 @@ export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggre
             $match: params
         },
         {
-            $limit: limit
+            $skip: skip
         },
         {
-            $skip: skip
+            $limit: limit
         },
         {
             $lookup: {
@@ -391,12 +391,11 @@ export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggre
             $project: {
                 _id: 1,
                 title: 1,
-                thumbnail: {
-                    location: 1
-                },
+                thumbnail: '$thumbnail.location',
                 rooms: '$rooms.price',
                 country: '$country.name',
-                city: '$city.name'
+                city: '$city.name',
+                retreatDuration: 1
             }
         }
     ]

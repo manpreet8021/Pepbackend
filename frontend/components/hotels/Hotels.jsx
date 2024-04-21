@@ -68,7 +68,7 @@ const Hotels = () => {
                               width={300}
                               height={300}
                               className="rounded-4 col-12 js-lazy"
-                              src={item?.thumbnail?.location}
+                              src={item?.thumbnail}
                               alt="image"
                             />
                           </SwiperSlide>
