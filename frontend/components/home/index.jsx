@@ -159,9 +159,9 @@ const Home = () => {
           </div>
           {/* End .row */}
 
-          <div className="tabs -pills pt-40 js-tabs">
+          {/* <div className="tabs -pills pt-40 js-tabs">
             <Destinations />
-          </div>
+          </div> */}
           {/* End tabs */}
         </div>
       </section>
