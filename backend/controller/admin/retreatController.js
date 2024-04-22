@@ -2,7 +2,7 @@ import Joi from "joi";
 import asyncHandler from "../../middleware/asyncHandler.js"
 import { getRetreatByParams, getAdminRetreaties, saveRetreat, updateRetreatById, getClientRetreaties, getRetreatDetails } from "../../models/retreatModel.js";
 import { saveSchedule } from "../../models/scheduleModel.js";
-import { getRoomById, getRoomByParams, saveRoom, updateRoomById } from "../../models/roomModel.js";
+import { getRoomById, getRoomByRetreat, saveRoom, updateRoomById } from "../../models/roomModel.js";
 import { deleteImageFromCloudinary, uploadMultipleImages } from "../../helpers/imageUpload.js";
 import mongoose from "mongoose";
 
@@ -287,8 +287,6 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
         query['retreat.owner'] = req.user._id
     }
 
-    const retreat = await getRoomByParams(query)
-
     const room = await getRoomById(id)
 
     if(room) {
@@ -326,22 +324,18 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
 const getRetreatDetailById = asyncHandler(async(req, res) => {
     try {
         const retreat = await getRetreatDetails(req.params.id)
+        retreat[0].rooms = await getRoomByRetreat(req.params.id)
+        
         if(retreat.length) {
-            const finalRetreat = retreat.map(({roomPrice, price, address, ...data}) => {
-                let finalPrice = 0;
-
-                if(roomPrice.length) {
-                    finalPrice = roomPrice.sort()[0]
-                } else {
-                    finalPrice = price;
-                }
+            const finalRetreat = retreat.map(({address, ...data}) => {
 
                 let finalAddress = {...address}
                 finalAddress['country'] = finalAddress.country[0]
                 finalAddress['city'] = finalAddress.city[0]
 
-                return {...data, price: finalPrice, address: finalAddress}
+                return {...data, address: finalAddress}
             })
+            console.log(finalRetreat)
             res.status(200).json(finalRetreat[0])
         } else {
             throw new Error("Retreat not found")

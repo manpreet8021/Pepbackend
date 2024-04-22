@@ -55,7 +55,7 @@ const AvailableRooms = ({ hotels }) => {
                       </div>
                       {/* End image */}
                       <div className="y-gap-5 mt-20">
-                        {hotel.highlight.map((highlight, i) => (
+                        {hotel.roomHighlight.map((highlight, i) => (
                           <div className="d-flex items-center" key={i}>
                             <i className={`${highlight.icon} text-20 mr-10`} />
                             <div className="text-15">{highlight.name}</div>
@@ -68,7 +68,7 @@ const AvailableRooms = ({ hotels }) => {
                       <div className="roomGrid__content">
                         <div>
                           <div className="text-15">
-                            {hotel?.description}
+                            <p style={{whiteSpace: 'pre-line'}}>{hotel?.description}</p>
                           </div>
                         </div>
 

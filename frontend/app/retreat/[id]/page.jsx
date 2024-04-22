@@ -43,7 +43,7 @@ const HotelSingleV1Dynamic = ({ params }) => {
           
             <TopBreadCrumb title={data.title}/>
             
-            <StickyHeader price={data.price} />
+            <StickyHeader price={data?.rooms.length? data.rooms[0].price : data.price} />
             
             <GalleryOne detail={data} />
 
@@ -68,7 +68,7 @@ const HotelSingleV1Dynamic = ({ params }) => {
                           Description
                         </h3>
                         <div className="row y-gap-10 pt-20">
-                          <p className={`text-dark-1 text-15 mt-20`}>
+                          <p className={`text-dark-1 text-15 mt-20`} style={{whiteSpace: 'pre-line'}}>
                             {data?.description}
                           </p>
                         </div>

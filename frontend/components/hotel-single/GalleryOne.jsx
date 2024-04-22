@@ -62,7 +62,7 @@ export default function GalleryOne({detail}) {
                   <div className="text-14">
                     From{" "}
                     <span className="text-22 text-dark-1 fw-500">
-                      INR<span>&#8377;</span>{detail?.price}
+                      INR<span>&#8377;</span>{ detail?.rooms.length? detail.rooms[0].price : detail.price }
                     </span>
                   </div>
                 </div>

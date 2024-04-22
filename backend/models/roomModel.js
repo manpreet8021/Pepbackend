@@ -53,4 +53,39 @@ export const getRoomById = (id) => roomModel.findById(id);
 export const deleteRoomById = (id) => roomModel.findOneAndDelete({ _id: id });
 export const updateRoomById = (id, value) => roomModel.findByIdAndUpdate(id, value, {new: true});
 export const saveRoom = (values, session) => new roomModel(values).save({session}).then((room) => room.toObject());
-export const getRoomByParams = (data) => roomModel.findOne(data).populate('retreat')
+export const getRoomByRetreat = (data) => roomModel.aggregate([
+    {
+        $match: {
+            retreat: new mongoose.Types.ObjectId(data),
+            active: true
+        }
+    },
+    {
+        $lookup: {
+            from: 'lookupvalues',
+            localField: 'highlight',
+            foreignField: '_id',
+            as: 'roomHighlight'
+        }
+    },
+    {
+        $project: {
+            _id: 1,
+            name: 1,
+            images: '$images.location',
+            price: 1,
+            allowedGuest: 1,
+            advance: 1,
+            description: 1,
+            roomHighlight: {
+                name: 1,
+                icon: 1
+            }
+        }
+    },
+    {
+        $sort: {
+            price: 1
+        }
+    }
+])

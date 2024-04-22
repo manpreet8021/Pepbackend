@@ -231,22 +231,6 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
         },
         {
             $lookup: {
-                from: 'rooms',
-                localField: '_id',
-                foreignField: 'retreat',
-                as: 'rooms'
-            }
-        },
-        {
-            $lookup: {
-              from: 'lookupvalues',
-              localField: 'rooms.highlight',
-              foreignField: '_id',
-              as: 'roomHighlight'
-            }
-        },
-        {
-            $lookup: {
                 from: 'schedules',
                 localField: '_id',
                 foreignField: 'retreat',
@@ -310,31 +294,6 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
                 },
                 Guest: 1,
                 directBook: 1,
-                rooms: {
-                    $map: {
-                        input: '$rooms',
-                        as: 'room',
-                        in: {
-                            _id: '$$room._id',
-                            name: '$$room.name',
-                            images: '$$room.images.location',
-                            price: '$$room.price',
-                            allowedGuest: '$$room.allowedGuest',
-                            advance: '$$room.advance',
-                            description: '$$room.description',
-                            highlight: {
-                                $map: {
-                                    input: '$roomHighlight',
-                                    as: 'highlight',
-                                    in: {
-                                        name: '$$highlight.name',
-                                        icon: '$$highlight.icon'
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
                 schedules:{
                     $map: {
                         input: '$schedules',
@@ -353,11 +312,11 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
                     name: 1
                 },
                 thumbnail: '$thumbnail.location',
-                roomPrice: '$rooms.price',
                 price: 1
             }
         }
-    ])
+    ]
+)
 export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggregate(
     [
         {
