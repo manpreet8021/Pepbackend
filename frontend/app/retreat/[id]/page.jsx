@@ -43,7 +43,7 @@ const HotelSingleV1Dynamic = ({ params }) => {
           
             <TopBreadCrumb title={data.title}/>
             
-            <StickyHeader price={data?.rooms.length? data.rooms[0].price : data.price} />
+            <StickyHeader price={data.price} retreatId={data._id} roomId={data.roomId} />
             
             <GalleryOne detail={data} />
 
@@ -94,18 +94,23 @@ const HotelSingleV1Dynamic = ({ params }) => {
               {/* End container */}
             </section>
 
-            <section id="rooms" className="pt-30">
-              <div className="container">
-                <div className="row pb-20">
-                  <div className="col-auto">
-                    <h3 className="text-22 fw-500">Available Rooms</h3>
+            {
+              data.rooms.length ?
+                <section id="rooms" className="pt-30">
+                  <div className="container">
+                    <div className="row pb-20">
+                      <div className="col-auto">
+                        <h3 className="text-22 fw-500">Available Rooms</h3>
+                      </div>
+                    </div>
+                    {/* End .row */}
+                    <AvailableRooms hotels={data.rooms} />
                   </div>
-                </div>
-                {/* End .row */}
-                <AvailableRooms hotels={data.rooms} />
-              </div>
-              {/* End .container */}
-            </section>
+                  {/* End .container */}
+                </section> 
+              : null
+            }
+            
 
             <section className="pt-40" id="reviews">
               <div className="container">

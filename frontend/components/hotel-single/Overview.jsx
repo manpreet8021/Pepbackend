@@ -9,13 +9,18 @@ const Overview = ({detail}) => {
       <p className={`text-dark-1 text-15 mt-20`}>
         {showMore ? detail : detail.slice(0,300)}
       </p>
-      <a
-        href="#"
-        className="d-block text-14 text-blue-1 fw-500 underline mt-10"
-        onClick={(e) => {e.preventDefault(); setShowMore(!showMore)}}
-      >
-        {showMore ? 'Show Less' : 'Show More'}
-      </a>
+      {
+        detail.length > 300 ? 
+          <a
+            href="#"
+            className="d-block text-14 text-blue-1 fw-500 underline mt-10"
+            onClick={(e) => {e.preventDefault(); setShowMore(!showMore)}}
+          >
+            {showMore ? 'Show Less' : 'Show More'}
+          </a> 
+        : null
+      } 
+      
     </>
   );
 };

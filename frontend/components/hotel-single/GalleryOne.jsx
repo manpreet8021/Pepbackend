@@ -14,7 +14,7 @@ export default function GalleryOne({detail}) {
         channel="youtube"
         autoplay
         isOpen={isOpen}
-        videoId="F94ygdyeook"
+        videoId={detail.youtubeUrl}
         onClose={() => setOpen(false)}
       />
     <section className="pt-40">
@@ -62,13 +62,13 @@ export default function GalleryOne({detail}) {
                   <div className="text-14">
                     From{" "}
                     <span className="text-22 text-dark-1 fw-500">
-                      INR<span>&#8377;</span>{ detail?.rooms.length? detail.rooms[0].price : detail.price }
+                      INR<span>&#8377;</span>{ detail.price }
                     </span>
                   </div>
                 </div>
                 <div className="col-auto">
                   <Link
-                    href="/booking-page"
+                    href={`/booking-page/${detail._id}/${detail.roomId}`}
                     className="button h-50 px-24 -dark-1 bg-blue-1 text-white"
                   >
                     Select Room <div className="icon-arrow-top-right ml-15" />

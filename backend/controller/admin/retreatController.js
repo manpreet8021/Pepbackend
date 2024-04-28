@@ -327,13 +327,15 @@ const getRetreatDetailById = asyncHandler(async(req, res) => {
         retreat[0].rooms = await getRoomByRetreat(req.params.id)
         
         if(retreat.length) {
-            const finalRetreat = retreat.map(({address, ...data}) => {
-
+            const finalRetreat = retreat.map(({address, rooms, price, ...data}) => {
                 let finalAddress = {...address}
                 finalAddress['country'] = finalAddress.country[0]
                 finalAddress['city'] = finalAddress.city[0]
+                
+                let defaultRoom = rooms.length ? rooms[0]._id : ''
+                let finalPrice = rooms.length ? rooms[0].price : price
 
-                return {...data, address: finalAddress}
+                return {...data, address: finalAddress, roomId: defaultRoom, price: finalPrice, rooms}
             })
             res.status(200).json(finalRetreat[0])
         } else {

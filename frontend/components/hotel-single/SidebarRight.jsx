@@ -6,7 +6,7 @@ const SidebarRight = ({ detail }) => {
       <div className="px-30 py-30 border-light rounded-4 shadow-4">
         <div className="d-flex items-center justify-between">
           <div>
-            <span className="text-20 fw-500">INR <span>&#8377;</span>{detail?.rooms.length? detail.rooms[0].price : detail.price}</span>
+            <span className="text-20 fw-500">INR <span>&#8377;</span>{detail.price}</span>
             <span className="text-14 text-light-1 ml-5">retreat</span>
           </div>
           <div className="d-flex items-center">
@@ -24,7 +24,7 @@ const SidebarRight = ({ detail }) => {
         {/* End d-flex */}
 
         <div className="row y-gap-20 pt-30">
-          <FilterBox />
+          <FilterBox schedule={detail.schedules}/>
         </div>
       </div>
       {/* End px-30 FilterBox */}

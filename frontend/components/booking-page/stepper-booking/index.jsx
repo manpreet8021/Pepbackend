@@ -3,14 +3,15 @@
 
 import React, { useState } from "react";
 import CustomerInfo from "../CustomerInfo";
-import PaymentInfo from "../PaymentInfo";
 import OrderSubmittedInfo from "../OrderSubmittedInfo";
 import { useCreateOrderMutation, usePaymentVerifyMutation } from "@/store/slice/api/paymentApiSlice";
+import { useSelector } from "react-redux";
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [createOrder, {isLoading, isError}] = useCreateOrderMutation()
   const [paymentVerified] = usePaymentVerifyMutation()
+  const user = useSelector(state => state.auth)
 
   function loadScript(src) {
     return new Promise((resolve) => {
@@ -37,20 +38,8 @@ const Index = () => {
           </div>
         </>
       ),
-      content: <CustomerInfo />,
+      content: <CustomerInfo user={user.userInfo}/>,
     },
-    // {
-    //   title: "Payment Details",
-    //   stepNo: "2",
-    //   stepBar: (
-    //     <>
-    //       <div className="col d-none d-sm-block">
-    //         <div className="w-full h-1 bg-border"></div>
-    //       </div>
-    //     </>
-    //   ),
-    //   content: <PaymentInfo />,
-    // },
     {
       title: "Final Step",
       stepNo: "2",
@@ -173,7 +162,7 @@ const Index = () => {
         <div className="col-auto">
           <button
             className="button h-60 px-24 -dark-1 bg-blue-1 text-white"
-            disabled={currentStep === steps.length - 1}
+            disabled={currentStep === steps.length - 1 || !user.userInfo}
             onClick={createRazorPayOrder}
           >
             Pay <div className="icon-arrow-top-right ml-15" />
