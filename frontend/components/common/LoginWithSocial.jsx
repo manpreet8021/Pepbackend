@@ -17,7 +17,6 @@ const LoginWithSocial = () => {
   }
 
   const handleGoogleFailure = () => {
-    console.log("fail")
   }
 
   return (

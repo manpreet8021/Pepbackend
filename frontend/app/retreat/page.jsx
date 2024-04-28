@@ -21,7 +21,6 @@ const search = () => {
       setRetreat([...retreat, ...result.data])
       if(result.length < 6) setHasMore(false)
     } catch (e) {
-      console.log(e)
     }
   }
 

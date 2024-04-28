@@ -31,6 +31,7 @@ const AvailableRooms = ({ hotels }) => {
                             clickable: true,
                           }}
                           navigation={true}
+                          style={{position: 'absolute'}}
                         >
                           {hotel?.images?.map((slide, i) => (
                             <SwiperSlide key={i}>
@@ -44,14 +45,6 @@ const AvailableRooms = ({ hotels }) => {
                             </SwiperSlide>
                           ))}
                         </Swiper>
-                        
-                        <Image
-                          width={180}
-                          height={180}
-                          src={`${hotel.images[0]}`}
-                          alt="image"
-                          className=""
-                        />
                       </div>
                       {/* End image */}
                       <div className="y-gap-5 mt-20">

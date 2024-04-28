@@ -335,13 +335,11 @@ const getRetreatDetailById = asyncHandler(async(req, res) => {
 
                 return {...data, address: finalAddress}
             })
-            console.log(finalRetreat)
             res.status(200).json(finalRetreat[0])
         } else {
             throw new Error("Retreat not found")
         }
     } catch (error) {
-        console.log(error)
         res.status(404)
         throw new Error("Retreat not found")
     }
