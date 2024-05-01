@@ -14,14 +14,13 @@ const index = ({schedule, duration, retreatId, roomId}) => {
   
   return (
     <>
-      {console.log(scheduleIndex)}
       {
         schedule.length > 1 && (
           <div className="col-12">
             <div className="searchMenu-date px-20 py-10 border-light rounded-4 -right js-form-dd js-calendar">
               <div>
                 <h4 className="text-15 fw-500 ls-2 lh-16">Select Dates(yyyy-mm-dd)</h4>
-                <select onChange={(event) => {setScheduleIndex(event.target.value)}} className="text-15 text-light-1 ls-2 lh-16">
+                <select onChange={(event) => {setSelectedDate([]);setScheduleIndex(event.target.value)}} className="text-15 text-light-1 ls-2 lh-16">
                   {scheduleArray.map((dates, index) => {
                     const dateFrom = new Date(dates[0])
                     const dateTo = new Date(dates[1])
