@@ -17,7 +17,7 @@ export default function GalleryOne({detail}) {
         videoId={detail.youtubeUrl}
         onClose={() => setOpen(false)}
       />
-    <section className="pt-40">
+      <section className="pt-40">
         <div className="container">
           <div className="row y-gap-20 justify-between items-end">
             <div className="col-auto">
@@ -68,10 +68,10 @@ export default function GalleryOne({detail}) {
                 </div>
                 <div className="col-auto">
                   <Link
-                    href={`/booking-page/${detail._id}/${detail.roomId}`}
+                    href="#bookBox"
                     className="button h-50 px-24 -dark-1 bg-blue-1 text-white"
                   >
-                    Select Room <div className="icon-arrow-top-right ml-15" />
+                    Book retreat <div className="icon-arrow-top-right ml-15" />
                   </Link>
                 </div>
               </div>

@@ -26,11 +26,14 @@ import DefaultFooter from "@/components/footer/default";
 import GalleryOne from "@/components/hotel-single/GalleryOne";
 import Loading from '@/components/loader/Loding'
 import { useGetRetreatDetailByIdQuery } from "@/store/slice/api/retreatApiSlice";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const HotelSingleV1Dynamic = ({ params }) => {
   const id = params.id;
   const hotel = hotelsData.find((item) => item.id == id) || hotelsData[0];
-  const {data, isLoading} = useGetRetreatDetailByIdQuery(id)
+  const {isLoading} = useGetRetreatDetailByIdQuery(id)
+  const data = useSelector(state => state.retreat?.selectedRetreat)
 
   return (
     <>
@@ -43,7 +46,7 @@ const HotelSingleV1Dynamic = ({ params }) => {
           
             <TopBreadCrumb title={data.title}/>
             
-            <StickyHeader price={data.price} retreatId={data._id} roomId={data.roomId} />
+            <StickyHeader price={data.price}/>
             
             <GalleryOne detail={data} />
 
@@ -84,7 +87,7 @@ const HotelSingleV1Dynamic = ({ params }) => {
                   </div>
                   {/* End .col-xl-8 */}
 
-                  <div className="col-xl-4">
+                  <div className="col-xl-4" id="bookBox">
                     <SidebarRight detail={data} />
                   </div>
                   {/* End .col-xl-4 */}
@@ -104,7 +107,7 @@ const HotelSingleV1Dynamic = ({ params }) => {
                       </div>
                     </div>
                     {/* End .row */}
-                    <AvailableRooms hotels={data.rooms} />
+                    <AvailableRooms hotels={data.rooms}/>
                   </div>
                   {/* End .container */}
                 </section> 

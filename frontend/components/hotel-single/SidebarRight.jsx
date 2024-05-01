@@ -24,7 +24,7 @@ const SidebarRight = ({ detail }) => {
         {/* End d-flex */}
 
         <div className="row y-gap-20 pt-30">
-          <FilterBox schedule={detail.schedules}/>
+          <FilterBox roomId={detail.roomId} retreatId={detail._id} schedule={detail.schedules} duration={detail.retreatDuration-1}/>
         </div>
       </div>
       {/* End px-30 FilterBox */}

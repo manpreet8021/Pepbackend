@@ -2,12 +2,18 @@ const { createSlice } = require("@reduxjs/toolkit");
 import retreatApiSlice from "./api/retreatApiSlice";
 
 const initialState = {
-    data: null
+    data: null,
+    selectedRetreat: null
 }
 
 const retreatSlice = createSlice({
     name: 'retreat',
     initialState: initialState,
+    reducers: {
+        updateRoomDetail: (state, {payload}) => {
+            state.selectedRetreat = {...state.selectedRetreat, price: payload.price, roomId: payload.roomId}
+        }
+    },
     extraReducers(builder) {
         builder.addMatcher(
             retreatApiSlice.endpoints.getAllRetreat.matchFulfilled,
@@ -26,8 +32,16 @@ const retreatSlice = createSlice({
             (state, {payload}) => {
                 state.data = [...state.data.filter(data => data._id !== payload[0]._id), payload[0]]
             }
+        ),
+        builder.addMatcher(
+            retreatApiSlice.endpoints.getRetreatDetailById.matchFulfilled,
+            (state, {payload}) => {
+                state.selectedRetreat = payload
+            }
         )
     }
 })
+
+export const { updateRoomDetail } = retreatSlice.actions
 
 export default retreatSlice.reducer

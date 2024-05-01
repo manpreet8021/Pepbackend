@@ -1,15 +1,46 @@
+import { useState } from "react";
 import GuestSearch from "./GuestSearch";
+import Link from "next/link";
 import SelectedDateSearch from "./SelectedDateSearch";
+import { useRouter } from "next/navigation";
 
 
-const index = ({schedule}) => {
+const index = ({schedule, duration, retreatId, roomId}) => {
+  const scheduleArray = schedule;
+  const [scheduleIndex, setScheduleIndex] = useState(0)
+  const [selectedDate, setSelectedDate] = useState([])
+
+  const router = useRouter()
+  
   return (
     <>
+      {console.log(scheduleIndex)}
+      {
+        schedule.length > 1 && (
+          <div className="col-12">
+            <div className="searchMenu-date px-20 py-10 border-light rounded-4 -right js-form-dd js-calendar">
+              <div>
+                <h4 className="text-15 fw-500 ls-2 lh-16">Select Dates(yyyy-mm-dd)</h4>
+                <select onChange={(event) => {setScheduleIndex(event.target.value)}} className="text-15 text-light-1 ls-2 lh-16">
+                  {scheduleArray.map((dates, index) => {
+                    const dateFrom = new Date(dates[0])
+                    const dateTo = new Date(dates[1])
+                    return(
+                      <option key={index} value={index}>{dateFrom.getFullYear()}/{dateFrom.getMonth()+1}/{dateFrom.getDate()} - {dateTo.getFullYear()}/{dateTo.getMonth() + 1}/{dateTo.getDate()}</option>
+                    )
+                  })}
+                </select>
+              </div>
+            </div>
+          </div>
+        )
+      }
+      
       <div className="col-12">
         <div className="searchMenu-date px-20 py-10 border-light rounded-4 -right js-form-dd js-calendar">
           <div>
             <h4 className="text-15 fw-500 ls-2 lh-16">Check in - Check out</h4>
-            <SelectedDateSearch enabledDates={schedule}/>
+            <SelectedDateSearch duration={duration} minDate={scheduleArray[scheduleIndex][0]} maxDate={scheduleArray[scheduleIndex][1]} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
           </div>
         </div>
         {/* End check-in-out */}
@@ -24,8 +55,8 @@ const index = ({schedule}) => {
 
       <div className="col-12">
         <div className="button-item h-full">
-          <button className="button -dark-1 px-35 h-60 col-12 bg-blue-1 text-white">
-            Check availability
+          <button type="button" onClick={() => router.push(`/booking-page/${retreatId}/${roomId}`)} className="button -dark-1 px-35 h-60 col-12 bg-blue-1 text-white" disabled={!selectedDate.length}>
+            Book retreat  
           </button>
         </div>
         {/* End search button_item */}

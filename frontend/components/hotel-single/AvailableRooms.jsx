@@ -1,8 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
+import { useDispatch } from "react-redux";
+import { updateRoomDetail } from "@/store/slice/retreatSlice";
 
 const AvailableRooms = ({ hotels }) => {
+  const dispatch = useDispatch()
 
   return (
     <>
@@ -93,12 +97,13 @@ const AvailableRooms = ({ hotels }) => {
                     {/* End price features */}
 
                     <div>
-                      <a
-                        href="#"
+                      <Link
+                        href="#bookBox"
+                        onClick={() => dispatch(updateRoomDetail({price: hotel?.price, roomId: hotel?._id}))}
                         className="button h-50 px-24 -dark-1 bg-blue-1 text-white mt-10"
                       >
                         Reserve <div className="icon-arrow-top-right ml-15" />
-                      </a>
+                      </Link>
                       <div className="text-15 fw-500 mt-30">
                         You&lsquo;ll be taken to the next step
                       </div>
