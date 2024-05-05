@@ -7,6 +7,7 @@ const razorpayInstance = new Razorpay({
 });
 
 const createOrder = asyncHandler(async(req, res) => {
+    
     const options = {
         amount: 100 * 100,
         currency: 'INR',

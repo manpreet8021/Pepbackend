@@ -221,6 +221,7 @@ export const getAdminRetreaties = (value) => retreatModel.populate(retreatModel.
         }
     ]),'type', 'name'
 );
+
 export const getRetreatDetails = (value) => retreatModel.aggregate(
     [
         {
@@ -317,6 +318,7 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
         }
     ]
 )
+
 export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggregate(
     [
         {
@@ -358,6 +360,78 @@ export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggre
                 title: 1,
                 thumbnail: '$thumbnail.location',
                 rooms: '$rooms.price',
+                country: '$country.name',
+                city: '$city.name',
+                retreatDuration: 1,
+                price: 1
+            }
+        }
+    ]
+)
+
+export const getRetreatDetailForBookingTable = ({retreatId, inDate, outDate, adult, roomId}) => retreatModel.aggregate(
+    [
+        {
+            $match: {
+                _id: new mongoose.Types.ObjectId(retreatId)
+            }
+        },
+        {
+            $lookup: {
+                from: 'rooms',
+                localField: '_id',
+                foreignField: 'retreat',
+                as: 'rooms'
+            }
+        },
+        {
+            $unwind: '$rooms'
+        },
+        {
+            $match: {
+                'rooms._id': new mongoose.Types.ObjectId(roomId)
+            }
+        },
+        {
+            $lookup: {
+                from: 'schedules',
+                localField: '_id',
+                foreignField: 'retreat',
+                as: 'schedules'
+            }
+        },
+        {
+            $unwind: '$schedules'
+        },
+        {
+            $match: {
+                'schedules.startDate': { $lte: inDate },
+                'schedules.endDate': { $gte: outDate }
+            }
+        },
+        {
+            $lookup: {
+                from: 'countries',
+                localField: 'address.country',
+                foreignField: '_id',
+                as: 'country'
+            }
+        },
+        {
+            $lookup: {
+                from: 'cities',
+                localField: 'address.city',
+                foreignField: '_id',
+                as: 'city'
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                title: 1,
+                thumbnail: '$thumbnail.location',
+                rooms: '$rooms.price',
+                roomName: '$rooms.name',
                 country: '$country.name',
                 city: '$city.name',
                 retreatDuration: 1,

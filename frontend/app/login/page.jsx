@@ -5,8 +5,12 @@ import DefaultFooter from "@/components/footer/default";
 import LoginWithSocial from "@/components/common/LoginWithSocial";
 import LoginForm from "@/components/common/LoginForm";
 import Header from "@/components/header";
+import { useSearchParams } from "next/navigation";
+
 
 const LogIn = () => {
+  const searchParam = useSearchParams()
+  const q = searchParam.get('q')  
 
   return (
     <>
@@ -23,14 +27,14 @@ const LogIn = () => {
           <div className="row justify-center">
             <div className="col-xl-6 col-lg-7 col-md-9">
               <div className="px-50 py-50 sm:px-20 sm:py-20 bg-white shadow-4 rounded-4">
-                <LoginForm />
+                <LoginForm query={q}/>
                 {/* End .Login */}
 
                 <div className="row y-gap-20 pt-30">
                   <div className="col-12">
                     <div className="text-center">or sign in with</div>
                   </div>
-                  <LoginWithSocial />
+                  <LoginWithSocial query={q}/>
                   <div className="col-12">
                     <div className="text-center px-30">
                       By creating an account, you agree to our Terms of Service

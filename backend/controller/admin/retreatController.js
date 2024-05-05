@@ -1,6 +1,6 @@
 import Joi from "joi";
 import asyncHandler from "../../middleware/asyncHandler.js"
-import { getRetreatByParams, getAdminRetreaties, saveRetreat, updateRetreatById, getClientRetreaties, getRetreatDetails } from "../../models/retreatModel.js";
+import { getRetreatByParams, getAdminRetreaties, saveRetreat, updateRetreatById, getClientRetreaties, getRetreatDetails, getRetreatDetailForBookingTable } from "../../models/retreatModel.js";
 import { saveSchedule } from "../../models/scheduleModel.js";
 import { getRoomById, getRoomByRetreat, saveRoom, updateRoomById } from "../../models/roomModel.js";
 import { deleteImageFromCloudinary, uploadMultipleImages } from "../../helpers/imageUpload.js";
@@ -51,6 +51,15 @@ const addRetreatSchema = Joi.object({
     rooms: Joi.array().items(roomValidationSchema),
     retreatType: Joi.array().items(MultiSelectValidationSchema).required().min(1),
     retreatHighlight: Joi.array().items(MultiSelectValidationSchema).required().min(1)
+})
+
+const bookingRetreatSchema = Joi.object({
+    retreatId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
+    roomId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+    inDate: Joi.string().required(),
+    outDate: Joi.string().required(),
+    adult: Joi.number().positive().min(1).required(),
+    children: Joi.number().min(0)
 })
 
 const getRetreat = asyncHandler(async(req, res) => {
@@ -382,5 +391,49 @@ const getRetreatByParameter = asyncHandler(async(req, res) => {
     res.status(200).json(finalRetreat)
 })
 
+const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
+    try {
+        const {error} = bookingRetreatSchema.validate(req.body)
+    
+        if(error) {
+            res.status(400)
+            throw new Error("Data is not valid")
+        }
 
-export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat, getRetreatDetailById, getRetreatByParameter }
+        let {inDate, outDate, adult, retreatId, roomId} = req.body
+
+        inDate = new Date(JSON.parse(inDate))
+        outDate = new Date(JSON.parse(outDate))
+
+        const detail = await getRetreatDetailForBookingTable({ retreatId, inDate, outDate, roomId })
+        
+        const response = {}
+        response.user= {}
+
+        if(detail) {
+            let finalPrice = null
+        
+            const finalDetail = detail.map(({rooms, price, ...data}) => {
+                finalPrice = rooms ? rooms : price
+                return {...data, country: data?.country[0], city: data?.city[0] }
+            })
+            
+            response.retreat = finalDetail[0]
+            response.price = adult * finalPrice
+            response.adult = adult
+            response.user.email= req.user.email
+            response.user.name= req.user.displayName
+            response.user.address= req.user.address
+        } else {
+            throw new Error("Retreat not found for added settings")
+        }
+
+        res.status(200).json(response)
+    } catch(error) {
+        res.status(400)
+        const message = error.message ? error.message : 'Unable to book this retreat'
+        throw new Error(message)
+    }
+})
+
+export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat, getRetreatDetailById, getRetreatByParameter, getRetreatDetailForBooking }

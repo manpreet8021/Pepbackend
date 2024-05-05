@@ -12,6 +12,9 @@ const retreatSlice = createSlice({
     reducers: {
         updateRoomDetail: (state, {payload}) => {
             state.selectedRetreat = {...state.selectedRetreat, price: payload.price, roomId: payload.roomId}
+        },
+        addBookingDetail: (state, {payload}) => {
+            state.selectedRetreat = {...state.selectedRetreat, inDate: payload.inDate, outDate: payload.outDate, adult: payload.adult, children: payload.children}
         }
     },
     extraReducers(builder) {
@@ -42,6 +45,6 @@ const retreatSlice = createSlice({
     }
 })
 
-export const { updateRoomDetail } = retreatSlice.actions
+export const { updateRoomDetail, addBookingDetail } = retreatSlice.actions
 
 export default retreatSlice.reducer

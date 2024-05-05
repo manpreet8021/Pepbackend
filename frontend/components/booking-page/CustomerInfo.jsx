@@ -1,7 +1,7 @@
 import Link from "next/link";
 import BookingDetails from "./sidebar/BookingDetails";
 
-const CustomerInfo = ({user}) => {
+const CustomerInfo = ({user, query, data}) => {
 
   return (
     <>
@@ -9,8 +9,8 @@ const CustomerInfo = ({user}) => {
         {
           !user ? 
           <div className="py-15 px-20 rounded-4 text-15 bg-blue-1-05">
-            Sign in to book with your saved details or{" "}
-            <Link href="/signup" className="text-blue-1 fw-500">
+            <Link href={`/login?q=${query}`} className="text-blue-1 fw-500">Sign in</Link> to book with your saved details or{" "}
+            <Link href={`/signup?q=${query}`} className="text-blue-1 fw-500">
               register
             </Link>{" "}
             to manage your bookings on the go!
@@ -27,7 +27,7 @@ const CustomerInfo = ({user}) => {
         <div className="row x-gap-20 y-gap-20 pt-20">
           <div className="col-12">
             <div className="form-input ">
-              <input type="text" required />
+              <input type="text" required value={data?.user?.name}/>
               <label className="lh-1 text-16 text-light-1">Full Name</label>
             </div>
           </div>
@@ -35,7 +35,7 @@ const CustomerInfo = ({user}) => {
 
           <div className="col-md-6">
             <div className="form-input ">
-              <input type="text" required />
+              <input type="text" required value={data?.user?.email} />
               <label className="lh-1 text-16 text-light-1">Email</label>
             </div>
           </div>
@@ -43,7 +43,7 @@ const CustomerInfo = ({user}) => {
 
           <div className="col-md-6">
             <div className="form-input ">
-              <input type="text" required />
+              <input type="text" required value={data?.user?.phone} />
               <label className="lh-1 text-16 text-light-1">Phone Number</label>
             </div>
           </div>
@@ -51,7 +51,7 @@ const CustomerInfo = ({user}) => {
 
           <div className="col-12">
             <div className="form-input ">
-              <input type="text" required />
+              <input type="text" required value={data?.user?.line1}/>
               <label className="lh-1 text-16 text-light-1">
                 Address line 1
               </label>
@@ -61,7 +61,7 @@ const CustomerInfo = ({user}) => {
 
           <div className="col-12">
             <div className="form-input ">
-              <input type="text" required />
+              <input type="text" required value={data?.user?.line2}/>
               <label className="lh-1 text-16 text-light-1">
                 Address line 2
               </label>
@@ -71,7 +71,7 @@ const CustomerInfo = ({user}) => {
 
           <div className="col-md-6">
             <div className="form-input ">
-              <input type="text" required />
+              <input type="text" required value={data?.user?.state} />
               <label className="lh-1 text-16 text-light-1">
                 State/Province/Region
               </label>
@@ -81,9 +81,9 @@ const CustomerInfo = ({user}) => {
 
           <div className="col-md-6">
             <div className="form-input ">
-              <input type="text" required />
+              <input type="text" required value={data?.user?.country}/>
               <label className="lh-1 text-16 text-light-1">
-                ZIP code/Postal code
+                Country
               </label>
             </div>
           </div>
@@ -118,7 +118,7 @@ const CustomerInfo = ({user}) => {
 
       <div className="col-xl-5 col-lg-4 mt-30">
         <div className="booking-sidebar">
-          <BookingDetails />
+          <BookingDetails data={data?.retreat}/>
         </div>
       </div>
       {/*  */}

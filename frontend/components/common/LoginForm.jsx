@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { showToast } from "@/store/slice/toastSlice";
 import { useDispatch } from "react-redux";
 
-const LoginForm = () => {
+const LoginForm = ({query}) => {
   const [login] = useLoginMutation();
   const router = useRouter()
   const dispatch = useDispatch()
@@ -27,7 +27,9 @@ const LoginForm = () => {
     try{
       const res = await login(values);
       if(res.error) throw new Error(JSON.stringify(res.error))
-      router.push('/')
+
+      query ? router.push(`/booking-page/${query}`) : router.push('/')
+      
     } catch (error) {
       let errorText = 'Something went wrong'
       const e = JSON.parse(error.message)

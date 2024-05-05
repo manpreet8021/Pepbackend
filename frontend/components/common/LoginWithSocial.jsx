@@ -2,7 +2,7 @@ import { useGoogleLoginMutation } from '@/store/slice/api/userApiSlice';
 import { GoogleLogin } from '@react-oauth/google';
 import { useRouter } from "next/navigation";
 
-const LoginWithSocial = () => {
+const LoginWithSocial = ({query}) => {
   const router = useRouter()
   const [googleLogin] = useGoogleLoginMutation()
 
@@ -10,7 +10,8 @@ const LoginWithSocial = () => {
     try{
       const result = await googleLogin(response)
       if(result.error) throw new Error(JSON.stringify(result.error))
-      router.push('/')
+      
+      query ? router.push(`/booking-page/${query}`) : router.push('/')
     } catch (error) {
 
     }

@@ -9,6 +9,7 @@ const index = ({schedule, duration, retreatId, roomId}) => {
   const scheduleArray = schedule;
   const [scheduleIndex, setScheduleIndex] = useState(0)
   const [selectedDate, setSelectedDate] = useState([])
+  const [guestCounts, setGuestCounts] = useState({Adults: 1, Children: 0});
 
   const router = useRouter()
   
@@ -47,14 +48,17 @@ const index = ({schedule, duration, retreatId, roomId}) => {
       {/* End .col-12 */}
 
       <div className="col-12">
-        <GuestSearch />
+        <GuestSearch guestCounts={guestCounts} setGuestCounts={setGuestCounts}/>
         {/* End guest */}
       </div>
       {/* End .col-12 */}
 
       <div className="col-12">
         <div className="button-item h-full">
-          <button type="button" onClick={() => router.push(`/booking-page/${retreatId}/${roomId}`)} className="button -dark-1 px-35 h-60 col-12 bg-blue-1 text-white" disabled={!selectedDate.length}>
+          <button type="button" onClick={() => {
+            localStorage.setItem(retreatId, JSON.stringify({roomId: roomId,inDate: JSON.stringify(selectedDate[0]), outDate: JSON.stringify(selectedDate[1]), adult: guestCounts['Adults'], children: guestCounts['Children']}))
+            router.push(`/booking-page/${retreatId}`)
+          }} className="button -dark-1 px-35 h-60 col-12 bg-blue-1 text-white" disabled={!selectedDate.length}>
             Book retreat  
           </button>
         </div>

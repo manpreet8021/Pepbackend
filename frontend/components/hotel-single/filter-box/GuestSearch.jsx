@@ -60,14 +60,12 @@ const Counter = ({ name, defaultValue, onCounterChange }) => {
   );
 };
 
-const GuestSearch = () => {
-  const [guestCounts, setGuestCounts] = useState({
-    Adults: 1,
-    Children: 0
-  });
+const GuestSearch = ({ guestCounts, setGuestCounts }) => {
+  
   const handleCounterChange = (name, value) => {
     setGuestCounts((prevState) => ({ ...prevState, [name]: value }));
   };
+  
   return (
     <div className="searchMenu-guests px-20 py-10 border-light rounded-4 js-form-dd js-form-counters">
       <div

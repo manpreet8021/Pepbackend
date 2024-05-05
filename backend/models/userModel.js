@@ -26,6 +26,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['self', 'google'],
         default: 'self'
+    },
+    address: {
+        line1: {
+            type: String,
+        },
+        line2: {
+            type: String
+        },
+        state: {
+            type: String
+        },
+        Country: {
+            type: String
+        }
+    },
+    phoneNumber: {
+        type: String
     }
 },{
     timestamps: true

@@ -1,6 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 
-const BookingDetails = () => {
+const BookingDetails = ({data}) => {
   return (
     <div className="px-30 py-30 border-light rounded-4">
       <div className="text-20 fw-500 mb-30">Your booking details</div>
@@ -9,7 +10,7 @@ const BookingDetails = () => {
           <Image
             width={140}
             height={140}
-            src="/img/backgrounds/1.png"
+            src={data?.thumbnail}
             alt="image"
             className="size-140 rounded-4 object-cover"
           />
@@ -25,9 +26,9 @@ const BookingDetails = () => {
           </div>
           {/* End ratings */}
           <div className="lh-17 fw-500">
-            Great Northern Hotel, a Tribute Portfolio Hotel, London
+            {data?.title}
           </div>
-          <div className="text-14 lh-15 mt-5">Westminster Borough, London</div>
+          <div className="text-14 lh-15 mt-5">{data?.city}, {data?.country}</div>
           <div className="row x-gap-10 y-gap-10 items-center pt-10">
             <div className="col-auto">
               <div className="d-flex items-center">
@@ -67,23 +68,20 @@ const BookingDetails = () => {
       <div className="border-top-light mt-30 mb-20" />
       <div>
         <div className="text-15">Total length of stay:</div>
-        <div className="fw-500">9 nights</div>
-        <a href="#" className="text-15 text-blue-1 underline">
-          Travelling on different dates?
-        </a>
+        <div className="fw-500">{data?.retreatDuration} Days</div>
       </div>
 
       <div className="border-top-light mt-30 mb-20" />
       <div className="row y-gap-20 justify-between items-center">
         <div className="col-auto">
           <div className="text-15">You selected:</div>
-          <div className="fw-500">Superior Double Studio</div>
-          <a href="#" className="text-15 text-blue-1 underline">
+          <div className="fw-500">{data?.roomName}</div>
+          <Link href={`/retreat/${data?._id}`} className="text-15 text-blue-1 underline">
             Change your selection
-          </a>
+          </Link>
         </div>
         <div className="col-auto">
-          <div className="text-15">1 room, 4 adult</div>
+          <div className="text-15">{data?.adult} adults</div>
         </div>
       </div>
       {/* End row */}

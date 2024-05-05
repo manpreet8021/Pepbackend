@@ -5,13 +5,11 @@ import React, { useState } from "react";
 import CustomerInfo from "../CustomerInfo";
 import OrderSubmittedInfo from "../OrderSubmittedInfo";
 import { useCreateOrderMutation, usePaymentVerifyMutation } from "@/store/slice/api/paymentApiSlice";
-import { useSelector } from "react-redux";
 
-const Index = () => {
+const Index = ({user, query, data}) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [createOrder, {isLoading, isError}] = useCreateOrderMutation()
   const [paymentVerified] = usePaymentVerifyMutation()
-  const user = useSelector(state => state.auth)
 
   function loadScript(src) {
     return new Promise((resolve) => {
@@ -38,7 +36,7 @@ const Index = () => {
           </div>
         </>
       ),
-      content: <CustomerInfo user={user.userInfo}/>,
+      content: <CustomerInfo user={user.userInfo} query={query} data={data} />,
     },
     {
       title: "Final Step",
@@ -63,7 +61,7 @@ const Index = () => {
         throw new Error("Razor pay is unable to initalize")
       }
 
-      const response = await createOrder({retreat: '661cf65d849e8c01075f645c'})
+      const response = await createOrder({retreat: data?.retreat?._id})
 
       if(response.error) {
         throw new Error("Unable to get retreat")

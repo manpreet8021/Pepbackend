@@ -57,10 +57,18 @@ const retreatApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 credentials: 'include'
             })
+        }),
+        getRetreatDetailForBooking: builder.mutation({
+            query: ({ data }) => ({
+                url: `/protect/retreat/booking`,
+                method: 'POST',
+                body: data,
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useGetAllRetreatQuery, useAddRetreatMutation, useUpdateRetreatMutation, useDeleteRetreatImageMutation, useGetRetreatByParameterMutation, useDeleteRoomImageMutation, useGetRecommendedRetreatQuery, useGetRetreatDetailByIdQuery } = retreatApiSlice
+export const { useGetAllRetreatQuery, useAddRetreatMutation, useUpdateRetreatMutation, useDeleteRetreatImageMutation, useGetRetreatByParameterMutation, useDeleteRoomImageMutation, useGetRecommendedRetreatQuery, useGetRetreatDetailByIdQuery, useGetRetreatDetailForBookingMutation } = retreatApiSlice
 
 export default retreatApiSlice;
