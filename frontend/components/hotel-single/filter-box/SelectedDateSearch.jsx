@@ -1,10 +1,8 @@
-import { useEffect } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 
 const SelectedDateSearch = ({minDate, maxDate, selectedDate, setSelectedDate, duration}) => {
     const handleChange = (e) => {
         if(new DateObject(e[0]).add(duration, "days").setHour(0,0,0,0) > new DateObject(maxDate)) {
-            console.log("hete")
             setSelectedDate([new DateObject(e[0]), null])
         } else {
             setSelectedDate([new DateObject(e[0]), new DateObject(e[0]).add(duration, "days")])
@@ -24,7 +22,6 @@ const SelectedDateSearch = ({minDate, maxDate, selectedDate, setSelectedDate, du
                 minDate={minDate}
                 maxDate={maxDate}
                 calendarPosition="auto"
-
             />
         </div>
     );

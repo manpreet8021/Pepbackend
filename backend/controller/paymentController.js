@@ -1,25 +1,60 @@
+import Joi from "joi";
 import asyncHandler from "../middleware/asyncHandler.js";
 import Razorpay from "razorpay";
+import { getRetreatDetailForBookingTable } from "../models/retreatModel.js";
+import { createPaymentLog } from "../models/paymentLogModel.js";
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY,
     key_secret: process.env.RAZORPAY_SECRET
 });
 
-const createOrder = asyncHandler(async(req, res) => {
-    
-    const options = {
-        amount: 100 * 100,
-        currency: 'INR',
-        receipt: 'receipt#1',
-        payment_capture: 1
-    };
+const bookingRetreatSchema = Joi.object({
+    retreatId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
+    roomId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+    inDate: Joi.string().required(),
+    outDate: Joi.string().required(),
+    adult: Joi.number().positive().min(1).required(),
+    children: Joi.number().min(0)
+})
 
+const createOrder = asyncHandler(async(req, res) => {
     try {
-        const response = await razorpayInstance.orders.create(options);
-        res.json(response);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
+        const {error} = bookingRetreatSchema.validate(req.body)
+    
+        if(error) {
+            res.status(400)
+            throw new Error("Data is not valid")
+        }
+
+        let {inDate, outDate, adult, retreatId, roomId} = req.body
+
+        inDate = new Date(JSON.parse(inDate))
+        outDate = new Date(new Date(JSON.parse(outDate)).setHours(0,0,0,0))
+
+        const detail = await getRetreatDetailForBookingTable({ retreatId, inDate, outDate, roomId })
+
+        if(detail.length) {
+            const finalPrice = detail[0].rooms ? detail[0].rooms : detail[0].price
+            const receipt = `${req.user._id}${retreatId}`
+            const options = {
+                amount: finalPrice * 100,
+                currency: 'INR',
+                receipt: receipt,
+                payment_capture: 1
+            };
+            //await createPaymentLog({user: req.user._id, status: 'intialize', orderId: response, retreat: retreatId, amount: finalPrice, receipt})
+            const response = await razorpayInstance.orders.create(options);
+            console.log(response)
+
+            res.status(200).json(response)
+        } else {
+            throw new Error("Retreat not found for added settings")
+        }
+    } catch(error) {
+        res.status(400)
+        const message = error.message ? error.message : 'Unable to book this retreat'
+        throw new Error(message)
     }
 })
 

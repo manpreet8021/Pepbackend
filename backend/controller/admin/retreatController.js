@@ -403,16 +403,17 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
         let {inDate, outDate, adult, retreatId, roomId} = req.body
 
         inDate = new Date(JSON.parse(inDate))
-        outDate = new Date(JSON.parse(outDate))
-
+        outDate = new Date(new Date(JSON.parse(outDate)).setHours(0,0,0,0))
+        console.log(inDate);
+        console.log(outDate)
         const detail = await getRetreatDetailForBookingTable({ retreatId, inDate, outDate, roomId })
         
         const response = {}
         response.user= {}
 
-        if(detail) {
+        if(detail.length) {
             let finalPrice = null
-        
+
             const finalDetail = detail.map(({rooms, price, ...data}) => {
                 finalPrice = rooms ? rooms : price
                 return {...data, country: data?.country[0], city: data?.city[0] }
@@ -421,13 +422,15 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
             response.retreat = finalDetail[0]
             response.price = adult * finalPrice
             response.adult = adult
+            response.fromDate = inDate.toDateString()
+            response.toDate = outDate.toDateString()
             response.user.email= req.user.email
             response.user.name= req.user.displayName
             response.user.address= req.user.address
         } else {
             throw new Error("Retreat not found for added settings")
         }
-
+        
         res.status(200).json(response)
     } catch(error) {
         res.status(400)

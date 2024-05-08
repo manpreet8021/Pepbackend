@@ -9,11 +9,6 @@ import { useEffect, useState } from "react";
 import { useGetRetreatDetailForBookingMutation } from "@/store/slice/api/retreatApiSlice";
 import Loading from "@/components/loader/Loding";
 
-// export const metadata = {
-//   title: "Hotel Booking Page || GoTrip - Travel & Tour React NextJS Template",
-//   description: "GoTrip - Travel & Tour React NextJS Template",
-// };
-
 const index = ({params}) => {
   const [getRetreatDetailForBooking, {isLoading, data}] = useGetRetreatDetailForBookingMutation()
   

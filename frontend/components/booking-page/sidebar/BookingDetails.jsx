@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const BookingDetails = ({data}) => {
+const BookingDetails = ({data, fromDate, toDate, adult}) => {
   return (
     <div className="px-30 py-30 border-light rounded-4">
       <div className="text-20 fw-500 mb-30">Your booking details</div>
@@ -51,16 +51,16 @@ const BookingDetails = ({data}) => {
       <div className="row y-gap-20 justify-between">
         <div className="col-auto">
           <div className="text-15">Check-in</div>
-          <div className="fw-500">Thu 21 Apr 2022</div>
-          <div className="text-15 text-light-1">15:00 – 23:00</div>
+          <div className="fw-500">{fromDate}</div>
+          <div className="text-15 text-light-1">12:00 - 17:00</div>
         </div>
         <div className="col-auto md:d-none">
           <div className="h-full w-1 bg-border" />
         </div>
         <div className="col-auto text-right md:text-left">
           <div className="text-15">Check-out</div>
-          <div className="fw-500">Sat 30 Apr 2022</div>
-          <div className="text-15 text-light-1">01:00 – 11:00</div>
+          <div className="fw-500">{toDate}</div>
+          <div className="text-15 text-light-1">07:00 - 12:00</div>
         </div>
       </div>
       {/* End row */}
@@ -81,7 +81,7 @@ const BookingDetails = ({data}) => {
           </Link>
         </div>
         <div className="col-auto">
-          <div className="text-15">{data?.adult} adults</div>
+          <div className="text-15">{adult} Adults</div>
         </div>
       </div>
       {/* End row */}

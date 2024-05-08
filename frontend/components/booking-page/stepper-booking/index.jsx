@@ -10,6 +10,7 @@ const Index = ({user, query, data}) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [createOrder, {isLoading, isError}] = useCreateOrderMutation()
   const [paymentVerified] = usePaymentVerifyMutation()
+  const localData = JSON.parse(localStorage.getItem(data?.retreat?._id))
 
   function loadScript(src) {
     return new Promise((resolve) => {
@@ -53,6 +54,9 @@ const Index = ({user, query, data}) => {
 
   const createRazorPayOrder = async() => {
     try{
+      if(!localData || !localData.inDate || !localData.outDate || !localData.adult) {
+        throw new Error("Push to retreat")
+      }
       const res = await loadScript(
         "https://checkout.razorpay.com/v1/checkout.js"
       );
@@ -61,7 +65,14 @@ const Index = ({user, query, data}) => {
         throw new Error("Razor pay is unable to initalize")
       }
 
-      const response = await createOrder({retreat: data?.retreat?._id})
+      const response = await createOrder({
+        retreatId: data?.retreat?._id,
+        roomId: localData?.roomId,
+        inDate: localData.inDate,
+        outDate: localData.outDate,
+        adult: localData.adult,
+        children: localData.children
+      })
 
       if(response.error) {
         throw new Error("Unable to get retreat")
@@ -73,8 +84,8 @@ const Index = ({user, query, data}) => {
         key: "rzp_test_NC7HqdpPDJRgJY",
         amount: amount.toString(),
         currency: currency,
-        name: "Soumya Corp.",
-        description: "Test Transaction",
+        name: "Soulcation",
+        description: "Retreat Booking",
         order_id: order_id,
         handler: async function (response) {
             const result = await paymentVerified(response);
@@ -84,7 +95,6 @@ const Index = ({user, query, data}) => {
         modal: {
           confirm_close: true,
           ondismiss: async (reason) => {
-
             const {
               reason: paymentReason, field, step, code,
             } = reason && reason.error ? reason.error : {};

@@ -8,7 +8,7 @@ const CustomerInfo = ({user, query, data}) => {
       <div className="col-xl-7 col-lg-8 mt-30">
         {
           !user ? 
-          <div className="py-15 px-20 rounded-4 text-15 bg-blue-1-05">
+          <div className="py-15 mb-40 px-20 rounded-4 text-15 bg-blue-1-05">
             <Link href={`/login?q=${query}`} className="text-blue-1 fw-500">Sign in</Link> to book with your saved details or{" "}
             <Link href={`/signup?q=${query}`} className="text-blue-1 fw-500">
               register
@@ -20,7 +20,7 @@ const CustomerInfo = ({user, query, data}) => {
         
         {/* End register notify */}
 
-        <h2 className="text-22 fw-500 mt-40 md:mt-24">
+        <h2 className="text-22 fw-500 md:mt-24">
           Let us know who you are
         </h2>
 
@@ -118,7 +118,7 @@ const CustomerInfo = ({user, query, data}) => {
 
       <div className="col-xl-5 col-lg-4 mt-30">
         <div className="booking-sidebar">
-          <BookingDetails data={data?.retreat}/>
+          <BookingDetails data={data?.retreat} fromDate={data?.fromDate} toDate={data?.toDate} adult={data?.adult}/>
         </div>
       </div>
       {/*  */}
