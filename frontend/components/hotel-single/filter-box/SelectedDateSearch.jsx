@@ -8,6 +8,7 @@ const SelectedDateSearch = ({minDate, maxDate, selectedDate, setSelectedDate, du
             setSelectedDate([new DateObject(e[0]), new DateObject(e[0]).add(duration, "days")])
         }
     }
+    console.log(selectedDate)
 
     return (
         <div className="text-15 text-light-1 ls-2 lh-16 custom_dual_datepicker">
@@ -18,10 +19,9 @@ const SelectedDateSearch = ({minDate, maxDate, selectedDate, setSelectedDate, du
                 rangeHover
                 value={selectedDate}
                 onChange={handleChange}
-                format="MMMM DD YYYY"
+                format="YYYY/MM/DD"
                 minDate={minDate}
                 maxDate={maxDate}
-                calendarPosition="auto"
             />
         </div>
     );

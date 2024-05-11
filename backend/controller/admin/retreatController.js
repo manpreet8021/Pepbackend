@@ -5,6 +5,7 @@ import { saveSchedule } from "../../models/scheduleModel.js";
 import { getRoomById, getRoomByRetreat, saveRoom, updateRoomById } from "../../models/roomModel.js";
 import { deleteImageFromCloudinary, uploadMultipleImages } from "../../helpers/imageUpload.js";
 import mongoose from "mongoose";
+import moment from "moment";
 
 const MultiSelectValidationSchema = Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required()
 
@@ -56,8 +57,8 @@ const addRetreatSchema = Joi.object({
 const bookingRetreatSchema = Joi.object({
     retreatId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     roomId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
-    inDate: Joi.string().required(),
-    outDate: Joi.string().required(),
+    inDate: Joi.required(),
+    outDate: Joi.required(),
     adult: Joi.number().positive().min(1).required(),
     children: Joi.number().min(0)
 })
@@ -394,18 +395,16 @@ const getRetreatByParameter = asyncHandler(async(req, res) => {
 const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
     try {
         const {error} = bookingRetreatSchema.validate(req.body)
-    
+        
         if(error) {
             res.status(400)
             throw new Error("Data is not valid")
         }
 
         let {inDate, outDate, adult, retreatId, roomId} = req.body
+        inDate = new Date(moment(inDate).utcOffset(0).startOf("day").toISOString())
+        outDate = new Date(moment(outDate).utcOffset(0).startOf("day").toISOString())
 
-        inDate = new Date(JSON.parse(inDate))
-        outDate = new Date(new Date(JSON.parse(outDate)).setHours(0,0,0,0))
-        console.log(inDate);
-        console.log(outDate)
         const detail = await getRetreatDetailForBookingTable({ retreatId, inDate, outDate, roomId })
         
         const response = {}

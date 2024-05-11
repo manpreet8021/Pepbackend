@@ -56,7 +56,7 @@ const index = ({schedule, duration, retreatId, roomId}) => {
       <div className="col-12">
         <div className="button-item h-full">
           <button type="button" onClick={() => {
-            localStorage.setItem(retreatId, JSON.stringify({roomId: roomId,inDate: JSON.stringify(selectedDate[0]), outDate: JSON.stringify(selectedDate[1]), adult: guestCounts['Adults'], children: guestCounts['Children']}))
+            localStorage.setItem(retreatId, JSON.stringify({roomId: roomId, inDate: selectedDate[0], outDate: selectedDate[1], adult: guestCounts['Adults'], children: guestCounts['Children']}))
             router.push(`/booking-page/${retreatId}`)
           }} className="button -dark-1 px-35 h-60 col-12 bg-blue-1 text-white" disabled={!selectedDate.length}>
             Book retreat  
