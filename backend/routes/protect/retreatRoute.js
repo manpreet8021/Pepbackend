@@ -1,6 +1,6 @@
 import express from 'express';
 import { upload } from '../../middleware/multerMiddleware.js';
-import { addRetreat, deleteRetreat, getRetreat, updateRetreat, deleteRetreatImage, deleteRoomImage, getRetreatDetailForBooking } from '../../controller/admin/retreatController.js';
+import { addRetreat, deleteRetreat, getRetreat, updateRetreat, deleteRetreatImage, deleteRoomImage } from '../../controller/admin/retreatController.js';
 
 const router = express.Router()
 
@@ -24,6 +24,5 @@ router.route('/:id').put(upload.fields([
 router.route('/:id').delete(deleteRetreat)
 router.route('/image/:id/:image_id').delete(deleteRetreatImage)
 router.route('/room/:id/:image_id').delete(deleteRoomImage)
-router.route('/booking').post(getRetreatDetailForBooking)
 
 export default router
