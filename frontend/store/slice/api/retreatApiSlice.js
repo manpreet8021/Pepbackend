@@ -60,7 +60,7 @@ const retreatApiSlice = apiSlice.injectEndpoints({
         }),
         getRetreatDetailForBooking: builder.mutation({
             query: ({ data }) => ({
-                url: `/protect/retreat/booking`,
+                url: `/common/booking`,
                 method: 'POST',
                 body: data,
                 credentials: 'include'

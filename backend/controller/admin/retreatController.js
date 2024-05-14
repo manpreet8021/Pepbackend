@@ -402,8 +402,9 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
         }
 
         let {inDate, outDate, adult, retreatId, roomId} = req.body
-        inDate = new Date(moment(inDate).utcOffset(0).startOf("day").toISOString())
-        outDate = new Date(moment(outDate).utcOffset(0).startOf("day").toISOString())
+        inDate = new Date(moment(inDate).startOf("day").format("YYYY-MM-DD"))
+        outDate = new Date(moment(outDate).startOf("day").format("YYYY-MM-DD"))
+        console.log(inDate)
 
         const detail = await getRetreatDetailForBookingTable({ retreatId, inDate, outDate, roomId })
         
@@ -423,9 +424,9 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
             response.adult = adult
             response.fromDate = inDate.toDateString()
             response.toDate = outDate.toDateString()
-            response.user.email= req.user.email
-            response.user.name= req.user.displayName
-            response.user.address= req.user.address
+            response.user.email= req.user?.email
+            response.user.name= req.user?.displayName
+            response.user.address= req.user?.address
         } else {
             throw new Error("Retreat not found for added settings")
         }
