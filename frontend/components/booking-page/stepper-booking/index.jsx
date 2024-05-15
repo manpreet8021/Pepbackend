@@ -26,32 +26,6 @@ const Index = ({user, query, data}) => {
     });
   }
 
-  const steps = [
-    {
-      title: "Personal Details",
-      stepNo: "1",
-      stepBar: (
-        <>
-          <div className="col d-none d-sm-block">
-            <div className="w-full h-1 bg-border"></div>
-          </div>
-        </>
-      ),
-      content: <CustomerInfo user={user.userInfo} query={query} data={data} />,
-    },
-    {
-      title: "Final Step",
-      stepNo: "2",
-      stepBar: "",
-      content: <OrderSubmittedInfo />,
-    },
-  ];
-
-  const renderStep = () => {
-    const { content } = steps[currentStep];
-    return <>{content}</>;
-  };
-
   const createRazorPayOrder = async() => {
     try{
       if(!localData || !localData.inDate || !localData.outDate || !localData.adult) {
@@ -125,6 +99,32 @@ const Index = ({user, query, data}) => {
     }
   };
 
+  const steps = [
+    {
+      title: "Personal Details",
+      stepNo: "1",
+      stepBar: (
+        <>
+          <div className="col d-none d-sm-block">
+            <div className="w-full h-1 bg-border"></div>
+          </div>
+        </>
+      ),
+      content: <CustomerInfo user={user.userInfo} query={query} data={data} createRazorPayOrder={createRazorPayOrder}/>,
+    },
+    {
+      title: "Final Step",
+      stepNo: "2",
+      stepBar: "",
+      content: <OrderSubmittedInfo />,
+    },
+  ];
+
+  const renderStep = () => {
+    const { content } = steps[currentStep];
+    return <>{content}</>;
+  };
+
   return (
     <>
       <div className="row x-gap-40 y-gap-30 items-center">
@@ -164,21 +164,6 @@ const Index = ({user, query, data}) => {
       {/* End stepper header part */}
 
       <div className="row">{renderStep()}</div>
-      {/* End main content */}
-
-      <div className="row x-gap-20 y-gap-20 pt-20">
-        <div className="col-auto">
-          <button
-            className="button h-60 px-24 -dark-1 bg-blue-1 text-white"
-            disabled={currentStep === steps.length - 1 || !user.userInfo}
-            onClick={createRazorPayOrder}
-          >
-            Pay <div className="icon-arrow-top-right ml-15" />
-          </button>
-        </div>
-        {/* End next btn */}
-      </div>
-      {/* End stepper button */}
     </>
   );
 };

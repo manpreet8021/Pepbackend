@@ -6,6 +6,7 @@ import { getRoomById, getRoomByRetreat, saveRoom, updateRoomById } from "../../m
 import { deleteImageFromCloudinary, uploadMultipleImages } from "../../helpers/imageUpload.js";
 import mongoose from "mongoose";
 import moment from "moment";
+import { getUserBySessionToken } from "../../models/userModel.js";
 
 const MultiSelectValidationSchema = Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required()
 
@@ -54,7 +55,7 @@ const addRetreatSchema = Joi.object({
     retreatHighlight: Joi.array().items(MultiSelectValidationSchema).required().min(1)
 })
 
-const bookingRetreatSchema = Joi.object({
+export const bookingRetreatSchema = Joi.object({
     retreatId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     roomId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
     inDate: Joi.required(),
@@ -401,12 +402,17 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
             throw new Error("Data is not valid")
         }
 
-        let {inDate, outDate, adult, retreatId, roomId} = req.body
-        inDate = new Date(moment(inDate).startOf("day").format("YYYY-MM-DD"))
-        outDate = new Date(moment(outDate).startOf("day").format("YYYY-MM-DD"))
-        console.log(inDate)
+        let loggedInUser = null
 
-        const detail = await getRetreatDetailForBookingTable({ retreatId, inDate, outDate, roomId })
+        if(req.cookies['PEPRELIER-AUTH']) {
+            const user = await getUserBySessionToken(req.cookies['PEPRELIER-AUTH']);
+            if(user) {
+                loggedInUser = user
+            }
+        }
+
+        const returnValue = await commonRetreatDetail(req.body)
+        const {inDate, outDate, adult, detail} = returnValue
         
         const response = {}
         response.user= {}
@@ -424,9 +430,9 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
             response.adult = adult
             response.fromDate = inDate.toDateString()
             response.toDate = outDate.toDateString()
-            response.user.email= req.user?.email
-            response.user.name= req.user?.displayName
-            response.user.address= req.user?.address
+            response.user.email= loggedInUser?.email
+            response.user.name= loggedInUser?.displayName
+            response.user.address= loggedInUser?.address
         } else {
             throw new Error("Retreat not found for added settings")
         }
@@ -438,5 +444,20 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
         throw new Error(message)
     }
 })
+
+export const commonRetreatDetail = async(values) => {
+    let {inDate, outDate, adult, retreatId, roomId} = values
+    inDate = new Date(moment(inDate).startOf("day").format("YYYY-MM-DD"))
+    outDate = new Date(moment(outDate).startOf("day").format("YYYY-MM-DD"))
+
+    const response = {}
+    response.inDate = inDate
+    response.outDate = outDate
+    response.adult = adult
+
+    response.detail = await getRetreatDetailForBookingTable({ retreatId, inDate, outDate, roomId })
+
+    return response
+}
 
 export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat, getRetreatDetailById, getRetreatByParameter, getRetreatDetailForBooking }

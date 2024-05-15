@@ -4,20 +4,12 @@ import Razorpay from "razorpay";
 import { getRetreatDetailForBookingTable } from "../models/retreatModel.js";
 import { createPaymentLog } from "../models/paymentLogModel.js";
 import moment from "moment";
+import { bookingRetreatSchema, commonRetreatDetail } from "./admin/retreatController.js";
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY,
     key_secret: process.env.RAZORPAY_SECRET
 });
-
-const bookingRetreatSchema = Joi.object({
-    retreatId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
-    roomId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
-    inDate: Joi.required(),
-    outDate: Joi.required(),
-    adult: Joi.number().positive().min(1).required(),
-    children: Joi.number().min(0)
-})
 
 const createOrder = asyncHandler(async(req, res) => {
     try {
@@ -28,11 +20,7 @@ const createOrder = asyncHandler(async(req, res) => {
             throw new Error("Data is not valid")
         }
 
-        let {inDate, outDate, adult, retreatId, roomId} = req.body
-        inDate = new Date(moment(inDate).utcOffset(0).startOf("day").toISOString())
-        outDate = new Date(moment(outDate).utcOffset(0).startOf("day").toISOString())
-
-        const detail = await getRetreatDetailForBookingTable({ retreatId, inDate, outDate, roomId })
+        const { detail } = commonRetreatDetail(req.body)
 
         if(detail.length) {
             const finalPrice = detail[0].rooms ? detail[0].rooms : detail[0].price
