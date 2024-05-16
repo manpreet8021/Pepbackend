@@ -1,26 +1,41 @@
 import Joi from "joi";
 import asyncHandler from "../middleware/asyncHandler.js";
 import Razorpay from "razorpay";
-import { getRetreatDetailForBookingTable } from "../models/retreatModel.js";
 import { createPaymentLog } from "../models/paymentLogModel.js";
-import moment from "moment";
-import { bookingRetreatSchema, commonRetreatDetail } from "./admin/retreatController.js";
+import { commonRetreatDetail } from "./admin/retreatController.js";
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY,
     key_secret: process.env.RAZORPAY_SECRET
 });
 
+const paymentOrderSchema = Joi.object({
+    retreatId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
+    roomId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
+    inDate: Joi.required(),
+    outDate: Joi.required(),
+    adult: Joi.number().positive().min(1).required(),
+    children: Joi.number().min(0),
+    country: Joi.string().required(),
+    email: Joi.string().required(),
+    line1: Joi.string().required(),
+    line2: Joi.string().allow(''),
+    name: Joi.string().required(),
+    phone: Joi.string().required(),
+    state: Joi.string().required()
+})
+
 const createOrder = asyncHandler(async(req, res) => {
     try {
-        const {error} = bookingRetreatSchema.validate(req.body)
+        const {error} = paymentOrderSchema.validate(req.body)
     
         if(error) {
             res.status(400)
             throw new Error("Data is not valid")
         }
 
-        const { detail } = commonRetreatDetail(req.body)
+        const { detail, adult } = await commonRetreatDetail(req.body)
+        const {retreatId, roomId} = req.body
 
         if(detail.length) {
             const finalPrice = detail[0].rooms ? detail[0].rooms : detail[0].price
@@ -34,13 +49,12 @@ const createOrder = asyncHandler(async(req, res) => {
             };
             const response = await razorpayInstance.orders.create(options);
             
-            await createPaymentLog({user: req.user._id, status: 'intialize', orderId: JSON.stringify(response), retreat: retreatId, amount: amount, reciept: receipt})
+            await createPaymentLog({user: req.user._id, status: 'intialize', orderId: JSON.stringify(response), retreat: retreatId, room: roomId, amount: amount, reciept: receipt})
             res.status(200).json(response)
         } else {
             throw new Error("Retreat not found for added settings")
         }
     } catch(error) {
-        console.log(error)
         res.status(400)
         const message = error.message ? error.message : 'Unable to book this retreat'
         throw new Error(message)

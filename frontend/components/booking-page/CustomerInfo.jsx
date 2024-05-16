@@ -2,8 +2,11 @@ import Link from "next/link";
 import BookingDetails from "./sidebar/BookingDetails";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "Yup";
+import { useCreateOrderMutation } from "@/store/slice/api/paymentApiSlice";
 
 const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
+  const [createOrder, {isLoading}] = useCreateOrderMutation()
+  const localData = JSON.parse(localStorage.getItem(data?.retreat?._id))
 
   const initialState = {
     name: data?.user?.name || '',
@@ -16,8 +19,31 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
     line1: data?.user?.line1 || '',
   }
 
-  const handleSubmit = async(values, actions) => {
+  const handleSubmit = async(values) => {
+    try{
+      const response = await createOrder({
+        retreatId: data?.retreat?._id,
+        roomId: localData?.roomId,
+        inDate: localData.inDate,
+        outDate: localData.outDate,
+        adult: localData.adult,
+        children: localData.children,
+        country: values.country,
+        email: values.email,
+        line1: values.line1,
+        line2: values.line2,
+        name: values.name,
+        phone: values.phone,
+        state: values.state
+      })
+  
+      if(response.error)
+        throw new Error("Failed to book this retreat")
 
+      createRazorPayOrder(response)
+    } catch(error) {
+      console.log(error)
+    }
   }
 
   const validationSchema = Yup.object({
@@ -47,8 +73,8 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
         <h2 className="text-22 fw-500 md:mt-24">
           Let us know who you are
         </h2>
-        <Formik initialValues={initialState} enableReinitialize onSubmit={(values, actions) => handleSubmit(values, actions)} validationSchema={validationSchema}>
-          {({ handleSubmit, isSubmitting, isValid }) => (
+        <Formik initialValues={initialState} enableReinitialize onSubmit={(values) => handleSubmit(values)} validationSchema={validationSchema}>
+          {({ handleSubmit, isSubmitting, isValid, dirty }) => (
             <Form onSubmit={handleSubmit}>
               <>
                 <div className="row x-gap-20 y-gap-20 pt-20">
@@ -92,7 +118,7 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
 
                   <div className="col-12">
                     <div className="form-input ">
-                      <Field type="text" required name="line2" />
+                      <Field type="text" name="line2" />
                       <label className="lh-1 text-16 text-light-1">
                         Address line 2
                       </label>
@@ -125,7 +151,7 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
 
                   <div className="col-12">
                     <div className="form-input ">
-                      <Field component="textarea" required rows={6} name="request" />
+                      <Field component="textarea" rows={6} name="request" />
                       <label className="lh-1 text-16 text-light-1">
                         Special Requests
                       </label>
@@ -148,8 +174,9 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
                 <div className="row x-gap-20 y-gap-20 pt-20">
                   <div className="col-auto">
                     <button
+                      type="submit"
                       className="button h-60 px-24 -dark-1 bg-blue-1 text-white"
-                      disabled={!isValid || isSubmitting}
+                      disabled={!isValid || isSubmitting || !dirty || isLoading}
                       onClick={createRazorPayOrder}
                     >
                       Pay <div className="icon-arrow-top-right ml-15" />

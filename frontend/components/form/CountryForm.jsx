@@ -2,7 +2,7 @@
 
 import { useAddCountryMutation, useUpdateCountryMutation } from "@/store/slice/api/countryApiSlice";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from 'yup'
+import * as Yup from 'Yup'
 import ModalFooter from "../modal/ModalFooter";
 import ModalBody from "../modal/ModalBody";
 import ModalHeader from "../modal/ModalHeader";

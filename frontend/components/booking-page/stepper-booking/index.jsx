@@ -4,13 +4,11 @@
 import React, { useState } from "react";
 import CustomerInfo from "../CustomerInfo";
 import OrderSubmittedInfo from "../OrderSubmittedInfo";
-import { useCreateOrderMutation, usePaymentVerifyMutation } from "@/store/slice/api/paymentApiSlice";
+import { usePaymentVerifyMutation } from "@/store/slice/api/paymentApiSlice";
 
 const Index = ({user, query, data}) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [createOrder, {isLoading, isError}] = useCreateOrderMutation()
   const [paymentVerified] = usePaymentVerifyMutation()
-  const localData = JSON.parse(localStorage.getItem(data?.retreat?._id))
 
   function loadScript(src) {
     return new Promise((resolve) => {
@@ -26,11 +24,8 @@ const Index = ({user, query, data}) => {
     });
   }
 
-  const createRazorPayOrder = async() => {
+  const createRazorPayOrder = async(value) => {
     try{
-      if(!localData || !localData.inDate || !localData.outDate || !localData.adult) {
-        throw new Error("Push to retreat")
-      }
       const res = await loadScript(
         "https://checkout.razorpay.com/v1/checkout.js"
       );
@@ -39,20 +34,7 @@ const Index = ({user, query, data}) => {
         throw new Error("Razor pay is unable to initalize")
       }
 
-      const response = await createOrder({
-        retreatId: data?.retreat?._id,
-        roomId: localData?.roomId,
-        inDate: localData.inDate,
-        outDate: localData.outDate,
-        adult: localData.adult,
-        children: localData.children
-      })
-
-      if(response.error) {
-        throw new Error("Unable to get retreat")
-      }
-
-      const { amount, id: order_id, currency } = response.data;
+      const { amount, id: order_id, currency } = value.data;
 
       const options = {
         key: "rzp_test_NC7HqdpPDJRgJY",

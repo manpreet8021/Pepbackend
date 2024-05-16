@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from 'yup'
+import * as Yup from 'Yup'
 import { useLoginMutation } from "@/store/slice/api/userApiSlice";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/store/slice/toastSlice";

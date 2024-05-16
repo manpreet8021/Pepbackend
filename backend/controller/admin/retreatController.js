@@ -55,7 +55,7 @@ const addRetreatSchema = Joi.object({
     retreatHighlight: Joi.array().items(MultiSelectValidationSchema).required().min(1)
 })
 
-export const bookingRetreatSchema = Joi.object({
+const bookingRetreatSchema = Joi.object({
     retreatId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     roomId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
     inDate: Joi.required(),

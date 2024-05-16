@@ -6,7 +6,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import * as Yup from 'yup'
+import * as Yup from 'Yup'
 
 const SignUpForm = () => {
   const [signup] = useSignupMutation()

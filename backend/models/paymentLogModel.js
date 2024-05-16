@@ -20,6 +20,11 @@ const paymentLogSchema = new mongoose.Schema({
         required: true,
         ref: 'Retreat'
     },
+    room: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Room'
+    },
     amount: {
         type: Number,
         required: true
