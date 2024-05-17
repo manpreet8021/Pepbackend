@@ -1,7 +1,7 @@
 import Link from "next/link";
 import BookingDetails from "./sidebar/BookingDetails";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "Yup";
+import * as Yup from "yup";
 import { useCreateOrderMutation } from "@/store/slice/api/paymentApiSlice";
 
 const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {

@@ -1,7 +1,7 @@
 'use client'
 
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
-import * as Yup from 'Yup'
+import * as Yup from 'yup'
 import ModalFooter from "../modal/ModalFooter";
 import ModalBody from "../modal/ModalBody";
 import ModalHeader from "../modal/ModalHeader";
