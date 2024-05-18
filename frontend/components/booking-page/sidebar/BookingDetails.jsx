@@ -10,7 +10,7 @@ const BookingDetails = ({data, fromDate, toDate, adult}) => {
           <Image
             width={140}
             height={140}
-            src={data?.thumbnail}
+            src={data?.thumbnail || ''}
             alt="image"
             className="size-140 rounded-4 object-cover"
           />

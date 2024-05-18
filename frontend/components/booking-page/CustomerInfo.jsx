@@ -1,12 +1,13 @@
 import Link from "next/link";
 import BookingDetails from "./sidebar/BookingDetails";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useCreateOrderMutation } from "@/store/slice/api/paymentApiSlice";
 
 const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
   const [createOrder, {isLoading}] = useCreateOrderMutation()
   const localData = JSON.parse(localStorage.getItem(data?.retreat?._id))
+  const adultCount = localData?.adult || 0;
 
   const initialState = {
     name: data?.user?.name || '',
@@ -17,6 +18,8 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
     state: data?.user?.state || '',
     country: data?.user?.country || '',
     line1: data?.user?.line1 || '',
+    request: '',
+    users: []
   }
 
   const handleSubmit = async(values) => {
@@ -34,7 +37,9 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
         line2: values.line2,
         name: values.name,
         phone: values.phone,
-        state: values.state
+        state: values.state,
+        request: values.request,
+        users: values.users
       })
   
       if(response.error)
@@ -46,6 +51,12 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
     }
   }
 
+  const validationUserSchema = Yup.object({
+    name: Yup.string().required("It is a required field"),
+    gender: Yup.string().required("It is a required field"),
+    age: Yup.string().required("It is a required field")
+  })
+
   const validationSchema = Yup.object({
     name: Yup.string().required(),
     email: Yup.string().required(),
@@ -53,7 +64,8 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
     line1: Yup.string().required(),
     line2: Yup.string(),
     state: Yup.string().required(),
-    country: Yup.string().required()
+    country: Yup.string().required(),
+    users: Yup.array().of(validationUserSchema)
   })
 
   return (
@@ -160,7 +172,53 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
                   </div>
                   {/* End col-12 */}
 
-                  {/* <div className="col-12">
+                  <h2 className="text-22 fw-500 md:mt-24">
+                    User going for retreat details
+                  </h2>
+
+                  <div className="col-12">
+                    <FieldArray 
+                      name="users"
+                      render={(arrayHelper) => (
+                        <>
+                          {Array.from({ length: adultCount }).map((_, index) => (
+                            <div className="row x-gap-20 y-gap-20" key={index}>
+                              <div className="col-6">
+                                <div className="form-input ">
+                                  <Field type="text" name={`users.${index}.name`} required/>
+                                  <label className="lh-1 text-16 text-light-1">
+                                    Name
+                                  </label>
+                                </div>
+                                <ErrorMessage name={`users.${index}.name`} component="div" className="error-message"/>
+                              </div>
+
+                              <div className="col-3">
+                                <div className="form-input ">
+                                  <Field type="text" name={`users.${index}.gender`} required/>
+                                  <label className="lh-1 text-16 text-light-1">
+                                    Gender
+                                  </label>
+                                </div>
+                                <ErrorMessage name={`users.${index}.gender`} component="div" className="error-message"/>
+                              </div>
+
+                              <div className="col-3">
+                                <div className="form-input ">
+                                  <Field type="text" name={`users.${index}.age`} required/>
+                                  <label className="lh-1 text-16 text-light-1">
+                                    Age
+                                  </label>
+                                </div>
+                                <ErrorMessage name={`users.${index}.age`} component="div" className="error-message"/>
+                              </div>
+                            </div>
+                          ))}
+                        </>
+                      )}/>
+                  </div>
+
+                  <div className="col-12">
                     <div className="row y-gap-20 items-center justify-between">
                       <div className="col-auto">
                         <div className="text-14 text-light-1">
@@ -169,7 +227,7 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
                         </div>
                       </div>
                     </div>
-                  </div> */}
+                  </div>
                 </div>
                 <div className="row x-gap-20 y-gap-20 pt-20">
                   <div className="col-auto">

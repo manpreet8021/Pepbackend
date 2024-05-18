@@ -9,6 +9,12 @@ const razorpayInstance = new Razorpay({
     key_secret: process.env.RAZORPAY_SECRET
 });
 
+const userSchema = Joi.object({
+    name: Joi.string().required(),
+    gender: Joi.string().required(),
+    age: Joi.string().required()
+})
+
 const paymentOrderSchema = Joi.object({
     retreatId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
     roomId: Joi.string().pattern(/^[0-9a-fA-F]{24}$/),
@@ -22,7 +28,8 @@ const paymentOrderSchema = Joi.object({
     line2: Joi.string().allow(''),
     name: Joi.string().required(),
     phone: Joi.string().required(),
-    state: Joi.string().required()
+    state: Joi.string().required(),
+    users: Joi.array().items(userSchema)
 })
 
 const createOrder = asyncHandler(async(req, res) => {

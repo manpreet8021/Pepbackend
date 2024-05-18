@@ -449,7 +449,7 @@ export const commonRetreatDetail = async(values) => {
     let {inDate, outDate, adult, retreatId, roomId} = values
     inDate = new Date(moment(inDate).startOf("day").format("YYYY-MM-DD"))
     outDate = new Date(moment(outDate).startOf("day").format("YYYY-MM-DD"))
-
+    
     const response = {}
     response.inDate = inDate
     response.outDate = outDate

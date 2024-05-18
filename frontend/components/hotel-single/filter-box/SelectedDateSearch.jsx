@@ -3,9 +3,9 @@ import DatePicker, { DateObject } from "react-multi-date-picker";
 const SelectedDateSearch = ({minDate, maxDate, selectedDate, setSelectedDate, duration}) => {
     const handleChange = (e) => {
         if(new DateObject(e[0]).add(duration, "days").setHour(0,0,0,0) > new DateObject(maxDate)) {
-            setSelectedDate([new DateObject(e[0]), null])
+            setSelectedDate([new DateObject(e[0]).format("YYYY-MM-DD"), null])
         } else {
-            setSelectedDate([new DateObject(e[0]), new DateObject(e[0]).add(duration, "days")])
+            setSelectedDate([new DateObject(e[0]).format("YYYY-MM-DD"), new DateObject(e[0]).add(duration, "days").format("YYYY-MM-DD")])
         }
     }
 
