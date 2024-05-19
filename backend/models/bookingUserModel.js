@@ -31,4 +31,5 @@ const bookingUserModel = mongoose.model('BookingUser', bookingUserSchema)
 export const getUserForBooking = (bookingId) => bookingUserModel.find({booking: bookingId});
 export const getUserForBookingById = (id) => bookingUserModel.findById(id);
 export const createUserForBooking = (values) => new bookingUserModel(values).save();
+export const createBulkUserForBooking = (values) => bookingUserModel.insertMany(values)
 export const updateUserForBookingById = (id, value) => bookingUserModel.findByIdAndUpdate(id, value);

@@ -1,13 +1,14 @@
 
 'use client'
 
-import React, { useState } from "react";
+import React from "react";
 import CustomerInfo from "../CustomerInfo";
 import OrderSubmittedInfo from "../OrderSubmittedInfo";
 import { usePaymentVerifyMutation } from "@/store/slice/api/paymentApiSlice";
+import { useRouter } from "next/navigation";
 
 const Index = ({user, query, data}) => {
-  const [currentStep, setCurrentStep] = useState(0);
+  const router = useRouter()
   const [paymentVerified] = usePaymentVerifyMutation()
 
   function loadScript(src) {
@@ -44,9 +45,14 @@ const Index = ({user, query, data}) => {
         description: "Retreat Booking",
         order_id: order_id,
         handler: async function (response) {
+          try{
             const result = await paymentVerified(response);
             if(result.error) throw new Error("Payment failed")
-            setCurrentStep(1)
+            
+            router.push(`/final-page/${result.data}`)
+          } catch (error) {
+            console.log(error)
+          }    
         },
         modal: {
           confirm_close: true,
@@ -83,18 +89,6 @@ const Index = ({user, query, data}) => {
 
   const steps = [
     {
-      title: "Personal Details",
-      stepNo: "1",
-      stepBar: (
-        <>
-          <div className="col d-none d-sm-block">
-            <div className="w-full h-1 bg-border"></div>
-          </div>
-        </>
-      ),
-      content: <CustomerInfo user={user.userInfo} query={query} data={data} createRazorPayOrder={createRazorPayOrder}/>,
-    },
-    {
       title: "Final Step",
       stepNo: "2",
       stepBar: "",
@@ -102,50 +96,39 @@ const Index = ({user, query, data}) => {
     },
   ];
 
-  const renderStep = () => {
-    const { content } = steps[currentStep];
-    return <>{content}</>;
-  };
-
   return (
     <>
       <div className="row x-gap-40 y-gap-30 items-center">
-        {steps.map((step, index) => (
-          <React.Fragment key={index}>
-            <div className="col-auto">
-              <div
-                className="d-flex items-center transition"
-              >
-                <div
-                  className={
-                    currentStep === index
-                      ? "active size-40 rounded-full flex-center bg-blue-1"
-                      : "size-40 rounded-full flex-center bg-blue-1-05 text-blue-1 fw-500"
-                  }
-                >
-                  {currentStep === index ? (
-                    <>
-                      <i className="icon-check text-16 text-white"></i>
-                    </>
-                  ) : (
-                    <>
-                      <span>{step.stepNo}</span>
-                    </>
-                  )}
-                </div>
-
-                <div className="text-18 fw-500 ml-10"> {step.title}</div>
+        <React.Fragment>
+          <div className="col-auto">
+            <div className="d-flex items-center transition">
+              <div className="active size-40 rounded-full flex-center bg-blue-1">
+                <i className="icon-check text-16 text-white"></i>
               </div>
+              <div className="text-18 fw-500 ml-10">Personal Details</div>
             </div>
-            {/* End .col */}
-
-            {step.stepBar}
-          </React.Fragment>
-        ))}
+          </div>
+          <>
+            <div className="col d-none d-sm-block">
+              <div className="w-full h-1 bg-border"></div>
+            </div>
+          </>
+        </React.Fragment>
+        <React.Fragment>
+          <div className="col-auto">
+            <div className="d-flex items-center transition">
+              <div className="size-40 rounded-full flex-center bg-blue-1-05 text-blue-1 fw-500">
+                <span>2</span>
+              </div>
+              <div className="text-18 fw-500 ml-10">Final Step</div>
+            </div>
+          </div>
+        </React.Fragment>
       </div>
-      {/* End stepper header part */}
 
-      <div className="row">{renderStep()}</div>
+      <div className="row">
+        <CustomerInfo user={user.userInfo} query={query} data={data} createRazorPayOrder={createRazorPayOrder}/>
+      </div>
     </>
   );
 };

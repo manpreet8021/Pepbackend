@@ -8,7 +8,7 @@ const paymentLogSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['intialize', 'success','falure'],
+        enum: ['intialize', 'success','failure'],
         required: true
     },
     orderId: {
@@ -17,12 +17,10 @@ const paymentLogSchema = new mongoose.Schema({
     },
     retreat: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
         ref: 'Retreat'
     },
     room: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
         ref: 'Room'
     },
     amount: {
@@ -30,8 +28,7 @@ const paymentLogSchema = new mongoose.Schema({
         required: true
     },
     reciept: {
-        type: String,
-        required: true
+        type: String
     }
 },{
     timestamps: true

@@ -410,9 +410,9 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
                 loggedInUser = user
             }
         }
-
-        const returnValue = await commonRetreatDetail(req.body)
-        const {inDate, outDate, adult, detail} = returnValue
+        const {inDate, outDate, adult, retreatId, roomId} = req.body
+        const returnValue = await commonRetreatDetail({inDate, outDate, adult, retreatId, roomId})
+        const {inReturnDate, outReturnDate, detail} = returnValue
         
         const response = {}
         response.user= {}
@@ -428,16 +428,17 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
             response.retreat = finalDetail[0]
             response.price = adult * finalPrice
             response.adult = adult
-            response.fromDate = inDate.toDateString()
-            response.toDate = outDate.toDateString()
+            response.fromDate = inReturnDate.toDateString()
+            response.toDate = outReturnDate.toDateString()
             response.user.email= loggedInUser?.email
             response.user.name= loggedInUser?.displayName
             response.user.address= loggedInUser?.address
+            response.user.phone= loggedInUser?.phoneNumber
+
+            res.status(200).json(response)
         } else {
             throw new Error("Retreat not found for added settings")
         }
-        
-        res.status(200).json(response)
     } catch(error) {
         res.status(400)
         const message = error.message ? error.message : 'Unable to book this retreat'
@@ -445,15 +446,13 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
     }
 })
 
-export const commonRetreatDetail = async(values) => {
-    let {inDate, outDate, adult, retreatId, roomId} = values
+export const commonRetreatDetail = async({inDate, outDate, adult, retreatId, roomId}) => {
     inDate = new Date(moment(inDate).startOf("day").format("YYYY-MM-DD"))
     outDate = new Date(moment(outDate).startOf("day").format("YYYY-MM-DD"))
     
     const response = {}
-    response.inDate = inDate
-    response.outDate = outDate
-    response.adult = adult
+    response.inReturnDate = inDate
+    response.outReturnDate = outDate
 
     response.detail = await getRetreatDetailForBookingTable({ retreatId, inDate, outDate, roomId })
 

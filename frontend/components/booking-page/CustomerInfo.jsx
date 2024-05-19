@@ -13,11 +13,10 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
     name: data?.user?.name || '',
     email: data?.user?.email || '',
     phone: data?.user.phone || '',
-    line1: data?.user?.line1 || '',
-    line2: data?.user?.line2 || '',
-    state: data?.user?.state || '',
-    country: data?.user?.country || '',
-    line1: data?.user?.line1 || '',
+    line1: data?.user?.address?.line1 || '',
+    line2: data?.user?.address?.line2 || '',
+    state: data?.user?.address?.state || '',
+    country: data?.user?.address?.country || '',
     request: '',
     users: []
   }
