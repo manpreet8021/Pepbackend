@@ -17,10 +17,16 @@ const paymentAPiSlice = apiSlice.injectEndpoints({
                 body: data,
                 credentials: 'include'
             })
+        }),
+        getBookingDetail: builder.query({
+            query: (id) => ({
+                url: `protect/payment/getBookingDetail/${id}`,
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useCreateOrderMutation, usePaymentVerifyMutation } = paymentAPiSlice
+export const { useCreateOrderMutation, usePaymentVerifyMutation, useGetBookingDetailQuery } = paymentAPiSlice
 
 export default paymentAPiSlice

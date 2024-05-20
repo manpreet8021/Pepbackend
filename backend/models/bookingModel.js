@@ -55,3 +55,4 @@ export const getBookings = (params) => bookingModel.findOne(params);
 export const getBookingById = (id) => bookingModel.findById(id);
 export const createBooking = (values) => new bookingModel(values).save();
 export const updateBookingById = (id, value) => bookingModel.findByIdAndUpdate(id, value, {new: true}).select('bookingNumber');
+export const getBookingByOrderId = (params) => bookingModel.findOne(params).populate('retreat', 'title').select('bookingNumber method price retreat status');

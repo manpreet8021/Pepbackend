@@ -3,7 +3,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import Razorpay from "razorpay";
 import { createPaymentLog } from "../models/paymentLogModel.js";
 import { commonRetreatDetail } from "./admin/retreatController.js";
-import { createBooking, getBookings, updateBookingById } from "../models/bookingModel.js";
+import { createBooking, getBookingByOrderId, getBookings, updateBookingById } from "../models/bookingModel.js";
 import { createBulkUserForBooking } from "../models/bookingUserModel.js";
 import { updateUserById } from "../models/userModel.js";
 
@@ -129,4 +129,25 @@ const paymentVerified = asyncHandler(async(req, res) => {
     }
 })
 
-export { createOrder, paymentVerified }
+const getBookingDetail = asyncHandler(async(req, res) => {
+    try {
+        const response = {}
+        const detail = await getBookingByOrderId({user: req.user._id, bookingNumber: req.params.id})
+        if(detail) {
+            response.detail = detail
+            const {address, email, phoneNumber, displayName } = req.user
+            response.address = address
+            response.email = email
+            response.phoneNumber = phoneNumber
+            response.name = displayName
+            res.status(200).json(response)
+        } else {
+            throw new Error()
+        }
+    } catch (error) {
+        res.status(400)
+        throw new Error("Failed to get booking detail")
+    }
+})
+
+export { createOrder, paymentVerified, getBookingDetail }
