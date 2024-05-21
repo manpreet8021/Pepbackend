@@ -130,9 +130,14 @@ export const googleLogin = asyncHandler(async(req, res) => {
         if(result) {
             user = await getUserByEmail(result.email)
             if(!user) {
+                let name = result.given_name;
+                if (result.family_name) {
+                    name = `${name} ${result.family_name}`;
+                }
+
                 user = await createUser({
                     email: result.email,
-                    displayName: `${result.given_name} ${result.family_name}`,
+                    displayName: name,
                     authSource: 'google'
                 })
             }
