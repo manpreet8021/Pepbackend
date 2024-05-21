@@ -7,7 +7,7 @@ const initialState = {
     },
     date: [
         new Date().toISOString(),
-        new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000).toISOString()  // Adding 2 days and converting to string
+        new Date(new Date().getTime() + 60 * 24 * 60 * 60 * 1000).toISOString()  // Adding 2 days and converting to string
     ],
     guest: {
         Adults: 1,
@@ -35,6 +35,7 @@ const searchSlice = createSlice({
         },
         dateUpdate: (state, action) => {
             const filter = action.payload
+            console.log(filter)
             state.date = JSON.parse(filter)
         },
         guestUpdate: (state, action) => {

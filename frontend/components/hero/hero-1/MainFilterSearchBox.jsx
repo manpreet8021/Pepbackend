@@ -1,11 +1,9 @@
 
 'use client'
 
-import { useSelector, useDispatch } from "react-redux";
-import { addCurrentTab } from "../../../features/hero/findPlaceSlice";
-import DateSearch from "../DateSearch";
-import GuestSearch from "./GuestSearch";
-import LocationSearch from "./LocationSearch";
+import DateSearch from "@/components/common/DateSearch";
+import GuestSearch from "@/components/common/GuestSearch";
+import LocationSearch from "@/components/common/LocationSearch";
 import { useRouter } from "next/navigation";
 
 const MainFilterSearchBox = () => {

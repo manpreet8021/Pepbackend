@@ -4,14 +4,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { locationUpdate } from '@/store/slice/searchSlice'
 import { useGetActiveCityQuery } from "@/store/slice/api/cityApiSlice";
 
-const SearchBar = () => {
+const SearchBar = ({page = "home"}) => {
   const dispatch = useDispatch();
   const search = useSelector((state) => state.search)
   const {data} = useGetActiveCityQuery()
 
+  const className = page !== "home" ? 'px-20 py-10 bg-white rounded-4' : 'px-30 lg:py-20 lg:px-0'
+
   return (
     <>
-      <div className="searchMenu-loc px-30 lg:py-20 lg:px-0 js-form-dd js-liverSearch">
+      <div className={`searchMenu-loc js-form-dd js-liverSearch ${className}`}>
         <div
           data-bs-toggle="dropdown"
           data-bs-auto-close="true"

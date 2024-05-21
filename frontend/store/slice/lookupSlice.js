@@ -7,7 +7,7 @@ const initialState = {
     category: [],
     guest: [
         { name: "Adults" },
-        { name: "Children" }
+        // { name: "Children" }
     ],
     price: {
         min: 0,

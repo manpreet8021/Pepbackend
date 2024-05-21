@@ -1,12 +1,12 @@
-import DateSearch from "../common/DateSearch";
-import GuestSearch from "./GuestSearch";
-import LocationSearch from "./LocationSearch";
+import DateSearch from "@/components/common/DateSearch";
+import GuestSearch from "@/components/common/GuestSearch";
+import LocationSearch from "@/components/common/LocationSearch";
 
 const MainFilterSearchBox = () => {
   return (
     <>
       <div className="col-12">
-        <LocationSearch />
+        <LocationSearch page="retreat"/>
         {/* End Location */}
       </div>
       {/* End .col-12 */}
@@ -23,7 +23,7 @@ const MainFilterSearchBox = () => {
       {/* End .col-12 */}
 
       <div className="col-12">
-        <GuestSearch />
+        <GuestSearch page="retreat"/>
         {/* End guest */}
       </div>
       {/* End .col-12 */}

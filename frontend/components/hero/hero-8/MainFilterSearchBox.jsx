@@ -1,5 +1,5 @@
 'use client'
-import DateSearch from "../DateSearch";
+import DateSearch from "../../common/DateSearch";
 import GuestSearch from "./GuestSearch";
 import PickUpLocation from "./PickUpLocation";
 import DropOffLocation from "./DropOffLocation";

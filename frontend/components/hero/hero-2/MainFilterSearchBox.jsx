@@ -2,7 +2,7 @@
 'use client'
 
 import { useRouter } from "next/navigation";
-import DateSearch from "../DateSearch";
+import DateSearch from "../../common/DateSearch";
 import GuestSearch from "./GuestSearch";
 import LocationSearch from "./LocationSearch";
 

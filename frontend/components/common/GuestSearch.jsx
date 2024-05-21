@@ -11,8 +11,9 @@ const Counter = ({ name, defaultValue, onCounterChange }) => {
     setCount(count + 1);
     onCounterChange(name, count + 1);
   };
+
   const decrementCount = () => {
-    if (count > 0) {
+    if (count > 1) {
       setCount(count - 1);
       onCounterChange(name, count - 1);
     }
@@ -58,18 +59,20 @@ const Counter = ({ name, defaultValue, onCounterChange }) => {
   );
 };
 
-const GuestSearch = () => {
+const GuestSearch = ({page = "home"}) => {
   const dispatch = useDispatch();
 
   const lookup = useSelector((state) => state.lookup)
   const search = useSelector((state) => state.search)
+
+  const className = page !== "home" ? 'px-20 py-10 bg-white' : 'px-30 js-form-counters'
   
   const handleCounterChange = (name, value) => {
     dispatch(guestUpdate({name, value}))
   };
 
   return (
-    <div className="searchMenu-guests px-30 lg:py-20 lg:px-0 js-form-dd js-form-counters position-relative">
+    <div className={`searchMenu-guests lg:py-20 lg:px-0 js-form-dd js-form-counters position-relative ${className}`}>
       <div
         data-bs-toggle="dropdown"
         data-bs-auto-close="outside"
@@ -78,8 +81,9 @@ const GuestSearch = () => {
       >
         <h4 className="text-15 fw-500 ls-2 lh-16">Guest</h4>
         <div className="text-15 text-light-1 ls-2 lh-16">
-          <span className="js-count-adult">{search.guest.Adults}</span> adults -{" "}
-          <span className="js-count-child">{search.guest.Children}</span>{" "} childeren
+          <span className="js-count-adult">{search.guest.Adults}</span> adults 
+          {/* -{" "}
+          <span className="js-count-child">{search.guest.Children}</span>{" "} childeren */}
         </div>
       </div>
       {/* End guest */}
