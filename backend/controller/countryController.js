@@ -1,6 +1,6 @@
-import { deleteImageFromCloudinary, imageUpload } from "../../helpers/imageUpload.js";
-import asyncHandler from "../../middleware/asyncHandler.js"
-import { getAllCountries, saveCountry, updateCountryById, getCountryById, getCountriesByParams } from "../../models/countryModel.js"
+import { deleteImageFromCloudinary, imageUpload } from "../helpers/imageUpload.js";
+import asyncHandler from "../middleware/asyncHandler.js"
+import { getAllCountries, saveCountry, updateCountryById, getCountryById, getCountriesByParams } from "../models/countryModel.js"
 import Joi from "joi";
 
 const addCountrySchema = Joi.object({

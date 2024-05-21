@@ -1,5 +1,5 @@
 import express from 'express';
-import { getLookUpDatas, getLookUpValues, addLookUpData, addLookUpValue, getRetreatValue } from '../../controller/admin/lookupController.js';
+import { getLookUpDatas, getLookUpValues, addLookUpData, addLookUpValue, getRetreatValue } from '../../controller/lookupController.js';
 
 const router = express.Router()
 

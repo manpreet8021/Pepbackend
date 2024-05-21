@@ -1,6 +1,6 @@
 import express from 'express';
-import { getRecommendedCities } from '../controller/admin/cityController.js';
-import { getRecommendedRetreat } from '../controller/admin/retreatController.js';
+import { getRecommendedCities } from '../controller/cityController.js';
+import { getRecommendedRetreat } from '../controller/retreatController.js';
 
 const router = express.Router()
 

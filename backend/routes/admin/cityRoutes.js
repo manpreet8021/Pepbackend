@@ -1,5 +1,5 @@
 import express from 'express';
-import { addCity, deleteCity, getCity, updateCity } from '../../controller/admin/cityController.js';
+import { addCity, deleteCity, getCity, updateCity } from '../../controller/cityController.js';
 import { upload } from '../../middleware/multerMiddleware.js';
 
 const router = express.Router()

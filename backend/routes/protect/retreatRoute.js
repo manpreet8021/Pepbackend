@@ -1,6 +1,6 @@
 import express from 'express';
 import { upload } from '../../middleware/multerMiddleware.js';
-import { addRetreat, deleteRetreat, getRetreat, updateRetreat, deleteRetreatImage, deleteRoomImage } from '../../controller/admin/retreatController.js';
+import { addRetreat, deleteRetreat, getRetreat, updateRetreat, deleteRetreatImage, deleteRoomImage } from '../../controller/retreatController.js';
 
 const router = express.Router()
 

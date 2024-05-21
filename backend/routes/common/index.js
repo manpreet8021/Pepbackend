@@ -1,8 +1,8 @@
 import express from 'express';
-import { getCityByParams } from '../../controller/admin/cityController.js';
-import { getCountryByParams } from '../../controller/admin/countryController.js';
-import { getLookUpValueByType } from '../../controller/admin/lookupController.js';
-import { getRetreatByParameter, getRetreatDetailById, getRetreatDetailForBooking } from '../../controller/admin/retreatController.js';
+import { getCityByParams } from '../../controller/cityController.js';
+import { getCountryByParams } from '../../controller/countryController.js';
+import { getLookUpValueByType } from '../../controller/lookupController.js';
+import { getRetreatByParameter, getRetreatDetailById, getRetreatDetailForBooking } from '../../controller/retreatController.js';
 
 const router = express.Router();
 

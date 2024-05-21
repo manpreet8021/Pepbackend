@@ -2,7 +2,7 @@ import Joi from "joi";
 import asyncHandler from "../middleware/asyncHandler.js";
 import Razorpay from "razorpay";
 import { createPaymentLog } from "../models/paymentLogModel.js";
-import { commonRetreatDetail } from "./admin/retreatController.js";
+import { commonRetreatDetail } from "./retreatController.js";
 import { createBooking, getBookingByOrderId, getBookings, updateBookingById } from "../models/bookingModel.js";
 import { createBulkUserForBooking } from "../models/bookingUserModel.js";
 import { updateUserById } from "../models/userModel.js";

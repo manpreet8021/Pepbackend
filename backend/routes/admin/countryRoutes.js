@@ -1,5 +1,5 @@
 import express from 'express';
-import { getCountry, addCountry, updateCountry, deleteCountry } from '../../controller/admin/countryController.js';
+import { getCountry, addCountry, updateCountry, deleteCountry } from '../../controller/countryController.js';
 import { upload } from '../../middleware/multerMiddleware.js';
 
 const router = express.Router()

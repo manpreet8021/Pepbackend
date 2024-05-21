@@ -1,12 +1,12 @@
 import Joi from "joi";
-import asyncHandler from "../../middleware/asyncHandler.js"
-import { getRetreatByParams, getAdminRetreaties, saveRetreat, updateRetreatById, getClientRetreaties, getRetreatDetails, getRetreatDetailForBookingTable } from "../../models/retreatModel.js";
-import { saveSchedule } from "../../models/scheduleModel.js";
-import { getRoomById, getRoomByRetreat, saveRoom, updateRoomById } from "../../models/roomModel.js";
-import { deleteImageFromCloudinary, uploadMultipleImages } from "../../helpers/imageUpload.js";
+import asyncHandler from "../middleware/asyncHandler.js"
+import { getRetreatByParams, getAdminRetreaties, saveRetreat, updateRetreatById, getClientRetreaties, getRetreatDetails, getRetreatDetailForBookingTable } from "../models/retreatModel.js";
+import { saveSchedule } from "../models/scheduleModel.js";
+import { getRoomById, getRoomByRetreat, saveRoom, updateRoomById } from "../models/roomModel.js";
+import { deleteImageFromCloudinary, uploadMultipleImages } from "../helpers/imageUpload.js";
 import mongoose from "mongoose";
 import moment from "moment";
-import { getUserBySessionToken } from "../../models/userModel.js";
+import { getUserBySessionToken } from "../models/userModel.js";
 
 const MultiSelectValidationSchema = Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required()
 

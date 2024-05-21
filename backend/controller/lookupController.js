@@ -1,8 +1,7 @@
 import Joi from "joi";
-import asyncHandler from "../../middleware/asyncHandler.js"
-import { getLookUpData, saveLookUpData } from "../../models/lookUpData.js";
-import { getLookUpByParams, getLookUpValue, getRetreatLookUpValues, saveLookUpValue } from "../../models/lookUpValue.js";
-import mongoose from "mongoose";
+import asyncHandler from "../middleware/asyncHandler.js"
+import { getLookUpData, saveLookUpData } from "../models/lookUpData.js";
+import { getLookUpByParams, getLookUpValue, getRetreatLookUpValues, saveLookUpValue } from "../models/lookUpValue.js";
 
 const addlookUpDataSchema = Joi.object({
     name: Joi.string().required(),

@@ -1,7 +1,7 @@
 import Joi from "joi"
-import asyncHandler from "../../middleware/asyncHandler.js"
-import { saveCity, getCityById, updateCityById, getAllCities, getCitiesByParams, getRecommontedCity } from "../../models/cityModel.js"
-import { imageUpload, deleteImageFromCloudinary } from "../../helpers/imageUpload.js";
+import asyncHandler from "../middleware/asyncHandler.js"
+import { saveCity, getCityById, updateCityById, getAllCities, getCitiesByParams, getRecommontedCity } from "../models/cityModel.js"
+import { imageUpload, deleteImageFromCloudinary } from "../helpers/imageUpload.js";
 
 const addCitySchema = Joi.object({
     country: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required(),
