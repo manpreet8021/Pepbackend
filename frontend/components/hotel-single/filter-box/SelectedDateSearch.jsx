@@ -20,7 +20,7 @@ const SelectedDateSearch = ({minDate, maxDate, selectedDate, setSelectedDate, du
                 maxDate={new DateObject(maxDate)}
                 value={selectedDate}
                 onChange={handleChange}
-                format="YYYY/MM/DD"
+                format="DD/MM/YYYY"
             />
         </div>
     );

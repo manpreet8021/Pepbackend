@@ -5,7 +5,7 @@ import { priceUpdate } from "@/store/slice/searchSlice";
 import InputRange from "react-input-range";
 import { useDispatch, useSelector } from "react-redux";
 
-const PirceSlider = () => {
+const PirceSlider = ({setLoadMore, setRetreat}) => {
   const search = useSelector((state) => state.search)
   const lookup = useSelector((state) => state.lookup)
 
@@ -13,6 +13,8 @@ const PirceSlider = () => {
 
   const handleOnChange = (value) => {
     dispatch(priceUpdate({ min: value.min, max: value.max }));
+    setRetreat([])
+    setLoadMore(true)
   };
 
   return (

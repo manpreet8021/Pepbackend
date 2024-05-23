@@ -222,7 +222,7 @@ export const getAdminRetreaties = (value) => retreatModel.populate(retreatModel.
     ]),'type', 'name'
 );
 
-export const getRetreatDetails = (value) => retreatModel.aggregate(
+export const getRetreatDetails = (value, date) => retreatModel.aggregate(
     [
         {
             $match: {
@@ -279,6 +279,36 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
             }
         },
         {
+            $unwind: '$schedules'
+        },
+        {
+            $match: {
+                'schedules.endDate': {$gt: date}
+            }
+        },
+        {
+            $group: {
+                _id: '$_id',
+                title: { $first: '$title' },
+                overview: { $first: '$overview' },
+                description: { $first: '$description' },
+                retreatDuration: { $first: '$retreatDuration' },
+                type: { $first: '$type' },
+                images: { $first: '$images' },
+                youtubeUrl: { $first: '$youtubeUrl' },
+                address: { $first: '$address' },
+                city: { $first: '$city' },
+                country: { $first: '$country' },
+                Guest: { $first: '$Guest' },
+                directBook: { $first: '$directBook' },
+                schedules: { $push: '$schedules' },
+                retreatHighlights: { $first: '$retreatHighlights' },
+                retreatTypes: { $first: '$retreatTypes' },
+                thumbnail: { $first: '$thumbnail' },
+                price: { $first: '$price' }
+            }
+        },
+        {
             $project: {
                 title: 1,
                 overview: 1,
@@ -290,8 +320,8 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
                 address: {
                     line1: 1,
                     line2: 1,
-                    city: '$city.name',
-                    country: '$country.name'
+                    city: { $arrayElemAt: ['$city.name', 0] },
+                    country: { $arrayElemAt: ['$country.name', 0] }
                 },
                 Guest: 1,
                 directBook: 1,
@@ -319,16 +349,10 @@ export const getRetreatDetails = (value) => retreatModel.aggregate(
     ]
 )
 
-export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggregate(
-    [
+export const getClientRetreaties = ({params, limit, skip, extra=null}) => {
+    const pipeline = [
         {
             $match: params
-        },
-        {
-            $skip: skip
-        },
-        {
-            $limit: limit
         },
         {
             $lookup: {
@@ -353,6 +377,50 @@ export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggre
                 foreignField: '_id',
                 as: 'city'
             }
+        }
+    ]
+
+    if(extra && extra.retreatType?.length) {
+        pipeline.push(
+            {
+                $unwind: '$retreatType'
+            },
+            {
+                $match: {
+                    'retreatType': { $in : extra.retreatType}
+                }
+            }
+        )
+    }
+    
+    if (extra && extra.inDate && extra.outDate) {
+        pipeline.push(
+            {
+                $lookup: {
+                    from: 'schedules',
+                    localField: '_id',
+                    foreignField: 'retreat',
+                    as: 'schedule'
+                }
+            },
+            {
+                $unwind: '$schedule'
+            },
+            {
+                $match: {
+                    'schedule.startDate': { $gte: extra.inDate },
+                    'schedule.endDate': { $lte: extra.outDate }
+                }
+            }
+        );
+    }
+
+    pipeline.push(
+        {
+            $skip: skip
+        },
+        {
+            $limit: limit
         },
         {
             $project: {
@@ -360,14 +428,16 @@ export const getClientRetreaties = ({params, limit, skip}) => retreatModel.aggre
                 title: 1,
                 thumbnail: '$thumbnail.location',
                 rooms: '$rooms.price',
-                country: '$country.name',
-                city: '$city.name',
+                country: { $arrayElemAt: ['$country.name', 0] },
+                city: { $arrayElemAt: ['$city.name', 0] },
                 retreatDuration: 1,
                 price: 1
             }
         }
-    ]
-)
+    );
+    
+    return retreatModel.aggregate(pipeline).exec()
+}
 
 export const getRetreatDetailForBookingTable = ({retreatId, inDate, outDate, adult, roomId}) => retreatModel.aggregate(
     [
@@ -432,8 +502,8 @@ export const getRetreatDetailForBookingTable = ({retreatId, inDate, outDate, adu
                 thumbnail: '$thumbnail.location',
                 rooms: '$rooms.price',
                 roomName: '$rooms.name',
-                country: '$country.name',
-                city: '$city.name',
+                country: { $arrayElemAt: ['$country.name', 0] },
+                city: { $arrayElemAt: ['$city.name', 0] },
                 retreatDuration: 1,
                 price: 1
             }

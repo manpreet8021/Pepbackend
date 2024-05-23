@@ -18,7 +18,7 @@ const DateSearch = () => {
         offsetY={10}
         range
         rangeHover
-        format="MMMM DD"
+        format="DD/MM/YYYY"
       />
 
       <button className="absolute d-flex items-center h-full pointer-events-none">

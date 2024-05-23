@@ -22,7 +22,7 @@ const DateSearch = () => {
         range
         rangeHover
         minDate={minDate}
-        format="MMMM DD"
+        format="DD/MM/YYYY"
       />
     </div>
   );

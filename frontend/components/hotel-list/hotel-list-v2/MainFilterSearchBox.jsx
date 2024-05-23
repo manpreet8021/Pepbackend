@@ -2,7 +2,7 @@ import DateSearch from "@/components/common/DateSearch";
 import GuestSearch from "@/components/common/GuestSearch";
 import LocationSearch from "@/components/common/LocationSearch";
 
-const MainFilterSearchBox = () => {
+const MainFilterSearchBox = ({setLoadMore, setRetreat}) => {
   return (
     <>
       <div className="col-12">
@@ -30,7 +30,10 @@ const MainFilterSearchBox = () => {
 
       <div className="col-12">
         <div className="button-item h-full">
-          <button className="button -dark-1 py-15 px-40 h-full col-12 rounded-0 bg-blue-1 text-white">
+          <button className="button -dark-1 py-15 px-40 h-full col-12 rounded-0 bg-blue-1 text-white" type="button" onClick={() => {
+            setRetreat([])
+            setLoadMore(true)
+          }}>
             <i className="icon-search text-20 mr-10" />
             Search
           </button>

@@ -1,4 +1,4 @@
-import DealsFilter from "../sidebar/DealsFilter";
+import DealsFilter from "../../common/DealsFilter";
 import Map from "../sidebar/Map";
 import SearchBox from "../sidebar/SearchBox";
 import PopularFilters from "../sidebar/PopularFilters";
@@ -7,7 +7,7 @@ import RatingsFilter from "../sidebar/RatingsFilter";
 import GuestRatingFilters from "../sidebar/GuestRatingFilters";
 import StyleFilter from "../sidebar/StyleFilter";
 import NeighborhoddFilter from "../sidebar/NeighborhoddFilter";
-import PirceSlider from "../sidebar/PirceSlider";
+import PirceSlider from "../../common/PirceSlider";
 
 const Sidebar = () => {
   return (

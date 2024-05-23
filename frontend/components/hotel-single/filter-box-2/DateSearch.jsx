@@ -21,7 +21,7 @@ const DateSearch = () => {
         offsetY={10}
         range
         rangeHover
-        format="MMMM DD YYYY"
+        format="DD/MM/YYYY"
       />
     </div>
   );

@@ -8,15 +8,18 @@ import Sidebar from "@/components/hotel-list/hotel-list-v2/Sidebar";
 import { useEffect, useState } from "react";
 import { useGetRetreatByParameterMutation } from "@/store/slice/api/retreatApiSlice";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useSelector } from "react-redux";
 
 const search = () => {
-  const [getRetreatByParameter] = useGetRetreatByParameterMutation()
+  const [getRetreatByParameter, {isLoading}] = useGetRetreatByParameterMutation()
   const [retreat, setRetreat] = useState([])
   const [hasMore, setHasMore] = useState(true)
+  const search = useSelector(state => state.search)
+  const [loadMore, setLoadMore] = useState(true)
 
   const loadMoreRetreat = async() => {
     try{
-      const result = await getRetreatByParameter({limit: 8, skip: retreat.length})
+      const result = await getRetreatByParameter({limit: 8, skip: retreat.length, adult: search.guest?.Adults, city: search.location?.id, dates: search.date, title: search?.propertyName, retreatType: search.category, price: search.price})
       if(result.error) throw new Error("Failed Fetching retreat")
       setRetreat([...retreat, ...result.data])
       if(result.length < 6) setHasMore(false)
@@ -25,8 +28,11 @@ const search = () => {
   }
 
   useEffect(() => {
-    loadMoreRetreat()
-  },[])
+    if(loadMore){
+      loadMoreRetreat()
+      setLoadMore(false) 
+    }
+  },[loadMore])
 
   return (
     <>
@@ -43,7 +49,7 @@ const search = () => {
           <div className="row y-gap-30">
             <div className="col-xl-3">
               <aside className="sidebar y-gap-40 xl:d-none">
-                <Sidebar />
+                <Sidebar setLoadMore={setLoadMore} setRetreat={setRetreat}/>
               </aside>
               {/* End sidebar for desktop */}
 
@@ -81,7 +87,7 @@ const search = () => {
               {/* <div className="mt-30"></div> */}
               {/* End mt--30 */}
               <InfiniteScroll
-                dataLength={retreat.length}
+                dataLength={retreat?.length}
                 next={loadMoreRetreat}
                 hasMore={hasMore}
                 style={{overflow: 'hidden'}}

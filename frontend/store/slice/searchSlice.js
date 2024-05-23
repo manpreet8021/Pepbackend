@@ -7,7 +7,7 @@ const initialState = {
     },
     date: [
         new Date().toISOString(),
-        new Date(new Date().getTime() + 60 * 24 * 60 * 60 * 1000).toISOString()  // Adding 2 days and converting to string
+        new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000).toISOString()  // Adding 2 days and converting to string
     ],
     guest: {
         Adults: 1,
@@ -15,8 +15,8 @@ const initialState = {
     },
     propertyName: '',
     price: {
-        min: 1000,
-        max: 20000
+        min: 10000,
+        max: 2000000
     },
     companyRating: null,
     retreatRating: null,

@@ -334,25 +334,24 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
 
 const getRetreatDetailById = asyncHandler(async(req, res) => {
     try {
-        const retreat = await getRetreatDetails(req.params.id)
+        const todayDate = new Date(moment().startOf("day").format("YYYY-MM-DD"))
+        const retreat = await getRetreatDetails(req.params.id, todayDate)
         retreat[0].rooms = await getRoomByRetreat(req.params.id)
         
         if(retreat.length) {
-            const finalRetreat = retreat.map(({address, rooms, price, ...data}) => {
-                let finalAddress = {...address}
-                finalAddress['country'] = finalAddress.country[0]
-                finalAddress['city'] = finalAddress.city[0]
+            const finalRetreat = retreat.map(({rooms, price, ...data}) => {
                 
                 let defaultRoom = rooms.length ? rooms[0]._id : ''
                 let finalPrice = rooms.length ? rooms[0].price : price
 
-                return {...data, address: finalAddress, roomId: defaultRoom, price: finalPrice, rooms}
+                return {...data, roomId: defaultRoom, price: finalPrice, rooms}
             })
             res.status(200).json(finalRetreat[0])
         } else {
             throw new Error("Retreat not found")
         }
     } catch (error) {
+        console.log(error)
         res.status(404)
         throw new Error("Retreat not found")
     }
@@ -361,6 +360,7 @@ const getRetreatDetailById = asyncHandler(async(req, res) => {
 const getRecommendedRetreat = asyncHandler(async(req, res) => {
     try {
         const retreat = await getClientRetreaties({params: {active: true}, limit: 8, skip: 0})
+        
         const finalRetreat = retreat.map(({rooms, price, ...data}) => {
             let finalPrice = 0;
             if(rooms.length) {
@@ -368,7 +368,7 @@ const getRecommendedRetreat = asyncHandler(async(req, res) => {
             } else {
                 finalPrice = price
             }
-            return {...data, price: finalPrice, country: data?.country[0], city: data?.city[0]}
+            return {...data, price: finalPrice}
         })
         
         res.status(200).json(finalRetreat)
@@ -379,7 +379,29 @@ const getRecommendedRetreat = asyncHandler(async(req, res) => {
 })
 
 const getRetreatByParameter = asyncHandler(async(req, res) => {
-    const retreat = await getClientRetreaties({limit: req.body.limit, skip: req.body.skip, params: {active: true}})
+    const {city, dates, adult, limit, skip, title, retreatType, price} = req.body
+    const params = {}
+    const extra = {}
+
+    params.active = true
+    if(city) 
+        params['address.city'] = new mongoose.Types.ObjectId(city)
+    if(adult)
+        params['Guest.max'] = {$gte: adult}
+    if(title)
+        params.title = { $regex: title, $options: 'i' };
+    if(retreatType) {
+        const mongooseRetreatType = retreatType.map(type => new mongoose.Types.ObjectId(type))
+        extra.retreatType = mongooseRetreatType
+    }
+
+    if(dates && dates.length === 2) {
+        extra.inDate = new Date(moment(dates[0]).startOf("day").format("YYYY-MM-DD"))
+        extra.outDate = new Date(moment(dates[1]).startOf("day").format("YYYY-MM-DD"))
+    }
+    
+    const retreat = await getClientRetreaties({limit: limit, skip: skip, params: params, extra: extra})
+    
     const finalRetreat = retreat.map(({rooms, price, ...data}) => {
         let finalPrice = 0;
             if(rooms.length) {
@@ -387,7 +409,7 @@ const getRetreatByParameter = asyncHandler(async(req, res) => {
             } else {
                 finalPrice = price
             }
-            return {...data, price: finalPrice, country: data?.country[0], city: data?.city[0]}
+            return {...data, price: finalPrice}
     })
     
     res.status(200).json(finalRetreat)
@@ -422,7 +444,7 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
 
             const finalDetail = detail.map(({rooms, price, ...data}) => {
                 finalPrice = rooms ? rooms : price
-                return {...data, country: data?.country[0], city: data?.city[0] }
+                return { ...data }
             })
             
             response.retreat = finalDetail[0]
@@ -449,6 +471,7 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
 export const commonRetreatDetail = async({inDate, outDate, adult, retreatId, roomId}) => {
     inDate = new Date(moment(inDate).startOf("day").format("YYYY-MM-DD"))
     outDate = new Date(moment(outDate).startOf("day").format("YYYY-MM-DD"))
+    console.log(inDate)
     
     const response = {}
     response.inReturnDate = inDate

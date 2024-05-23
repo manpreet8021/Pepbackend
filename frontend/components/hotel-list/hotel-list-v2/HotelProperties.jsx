@@ -11,7 +11,7 @@ const HotelProperties = ({retreat}) => {
   return (
     <>
       <div className="row y-gap-30">
-        {retreat.map((item, index) => (
+        {retreat?.map((item, index) => (
           <div className="col-12" key={index}>
             <div className="border-top-light pt-30">
               <div className="row x-gap-20 y-gap-20">

@@ -4,7 +4,7 @@
 import { propertyNameUpdate } from "@/store/slice/searchSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-const SearchBox = () => {
+const SearchBox = ({setLoadMore, setRetreat}) => {
   const search = useSelector((state) => state.search)
   const dispatch = useDispatch()
 
@@ -16,7 +16,11 @@ const SearchBox = () => {
         placeholder="e.g. Best Western"
         required
         value={search.propertyName}
-        onChange={(e) => dispatch(propertyNameUpdate({propertyName: e.target.value}))}
+        onChange={(e) => {
+          dispatch(propertyNameUpdate({propertyName: e.target.value}))
+          setRetreat([])
+          setLoadMore(true)
+        }}
       />
       <span className="absolute d-flex items-center h-full">
         <i className="icon-search text-20 px-15 text-dark-1" />
