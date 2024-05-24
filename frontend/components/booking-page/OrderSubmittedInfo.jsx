@@ -1,5 +1,4 @@
 const OrderSubmittedInfo = ({data}) => {
-  console.log(data)  
   return (
     <>
       {

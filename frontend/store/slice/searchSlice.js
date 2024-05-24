@@ -35,7 +35,6 @@ const searchSlice = createSlice({
         },
         dateUpdate: (state, action) => {
             const filter = action.payload
-            console.log(filter)
             state.date = JSON.parse(filter)
         },
         guestUpdate: (state, action) => {

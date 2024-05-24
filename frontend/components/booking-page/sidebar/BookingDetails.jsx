@@ -7,13 +7,18 @@ const BookingDetails = ({data, fromDate, toDate, adult}) => {
       <div className="text-20 fw-500 mb-30">Your booking details</div>
       <div className="row x-gap-15 y-gap-20">
         <div className="col-auto">
-          <Image
-            width={140}
-            height={140}
-            src={data?.thumbnail || ''}
-            alt="image"
-            className="size-140 rounded-4 object-cover"
-          />
+          {
+            data?.thumbnail && (
+              <Image
+                width={140}
+                height={140}
+                src={data?.thumbnail}
+                alt="image"
+                className="size-140 rounded-4 object-cover"
+              />
+            )
+          }
+          
         </div>
         {/* End .col */}
         <div className="col">

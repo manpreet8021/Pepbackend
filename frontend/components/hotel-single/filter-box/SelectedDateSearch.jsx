@@ -1,11 +1,12 @@
 import DatePicker, { DateObject } from "react-multi-date-picker";
 
 const SelectedDateSearch = ({minDate, maxDate, selectedDate, setSelectedDate, duration}) => {
+
     const handleChange = (e) => {
         if(new DateObject(e[0]).add(duration, "days").setHour(0,0,0,0) > new DateObject(maxDate)) {
-            setSelectedDate([new DateObject(e[0]).format("YYYY-MM-DD"), null])
+            setSelectedDate([new DateObject(e[0])])
         } else {
-            setSelectedDate([new DateObject(e[0]).format("YYYY-MM-DD"), new DateObject(e[0]).add(duration, "days").format("YYYY-MM-DD")])
+            setSelectedDate([new DateObject(e[0]), new DateObject(e[0]).add(duration, "days")])
         }
     }
 
@@ -14,12 +15,13 @@ const SelectedDateSearch = ({minDate, maxDate, selectedDate, setSelectedDate, du
             <DatePicker
                 inputClass="custom_input-picker"
                 containerClassName="custom_container-picker"
-                range
-                rangeHover
                 minDate={new DateObject(minDate)}
                 maxDate={new DateObject(maxDate)}
-                value={selectedDate}
                 onChange={handleChange}
+                value={selectedDate}
+                range
+                rangeHover
+                currentDate={new DateObject(minDate)}
                 format="DD/MM/YYYY"
             />
         </div>
