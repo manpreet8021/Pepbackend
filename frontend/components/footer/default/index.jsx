@@ -1,5 +1,5 @@
 import AppButton from "./AppButton";
-import ContactInfo from "./ContactInfo";
+import ContactInfo from "@/components/common/ContactInfo";
 import Copyright from "./Copyright";
 import FooterContent from "./FooterContent";
 

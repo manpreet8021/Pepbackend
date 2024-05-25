@@ -194,7 +194,12 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
 
                               <div className="col-3">
                                 <div className="form-input ">
-                                  <Field type="text" name={`users.${index}.gender`} required/>
+                                  <Field type="text" name={`users.${index}.gender`} required as="select">
+                                    <option></option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                  </Field>
                                   <label className="lh-1 text-16 text-light-1">
                                     Gender
                                   </label>

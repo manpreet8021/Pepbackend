@@ -14,7 +14,7 @@ const Index = () => {
       content: <PersonalInfo />,
     },
     {
-      label: "Location Information",
+      label: "Booking Information",
       content: <LocationInfo />,
     },
     {

@@ -38,10 +38,17 @@ const userApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 credentials: 'include'
             })
+        }),
+        getUserDetail: builder.query({
+            query: () => ({
+                url: 'auth/getUserDetail',
+                method: 'GET',
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useLoginMutation, useSignupMutation, useGetInfoMutation, useLogoutMutation, useGoogleLoginMutation } = userApiSlice
+export const { useLoginMutation, useSignupMutation, useGetInfoMutation, useLogoutMutation, useGoogleLoginMutation, useGetUserDetailQuery } = userApiSlice
 
 export default userApiSlice

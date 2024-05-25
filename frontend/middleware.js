@@ -11,10 +11,16 @@ export function middleware(request) {
   if(request.nextUrl.pathname === '/admin') {
     return NextResponse.rewrite(new URL('/' , request.url))
   }
+
+  if(request.nextUrl.pathname === '/user' || request.nextUrl.pathname === '/booking') {
+    if(!auth) {
+      return NextResponse.redirect(new URL('/login' , request.url))
+    }
+  }
   
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/login', '/signup']
+  matcher: ['/admin/:path*', '/login', '/signup', '/user', '/booking']
 }

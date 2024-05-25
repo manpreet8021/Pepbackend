@@ -1,13 +1,10 @@
-
-'use client'
-
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import MainMenu from "./MainMenu";
 import CurrenctyMegaMenu from "./CurrenctyMegaMenu";
 import LanguageMegaMenu from "./LanguageMegaMenu";
 import MobileMenu from "./MobileMenu";
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useSelector } from "react-redux";
 import CustomToast from "../toast/toast";
 import { useLogoutMutation } from "@/store/slice/api/userApiSlice";
@@ -23,8 +20,9 @@ const Header1 = () => {
   const [navbar, setNavbar] = useState(false);
   const path = usePathname()
   const [dark, setDark] = useState('bg-dark-1')
-
   const userState = useSelector(state => state.auth)
+
+  const router = useRouter()
 
   const darkColorValue = () => {
     if(path !== '/') {
@@ -86,7 +84,7 @@ const Header1 = () => {
                 </div> */}
 
                 {/* Start btn-group */}
-                <div className="d-flex items-center ml-20 is-menu-opened-hide md:d-none">
+                {/* <div className="d-flex items-center ml-20 is-menu-opened-hide xl:d-none">
                   {
                     userState.userInfo ?
                     <>
@@ -100,6 +98,7 @@ const Header1 = () => {
                         onClick={() => {
                           logout()
                           googleLogout()
+                          router.push('/')
                         }}
                         className="button px-30 fw-400 text-14 border-white -outline-white h-50 text-white ml-20"
                       >
@@ -115,36 +114,32 @@ const Header1 = () => {
                     </Link>
                   }
                   
-                </div>
+                </div> */}
                 {/* End btn-group */}
 
                 {/* Start mobile menu icon */}
-                <div className="d-none xl:d-flex x-gap-20 items-center pl-30 text-white">
+                <div className="xl:d-flex x-gap-20 items-center pl-30 text-white">
                   <div>
-                    <Link
-                      href="/login"
-                      className="d-flex items-center icon-user text-inherit text-22"
-                    />
-                  </div>
-                  <div>
-                    <button
-                      className="d-flex items-center icon-menu text-inherit text-20"
-                      data-bs-toggle="offcanvas"
-                      aria-controls="mobile-sidebar_menu"
-                      data-bs-target="#mobile-sidebar_menu"
-                    />
+                    <div>
+                      <button
+                        className="d-flex items-center icon-menu text-inherit text-20"
+                        data-bs-toggle="offcanvas"
+                        aria-controls="mobile-sidebar_menu"
+                        data-bs-target="#mobile-sidebar_menu"
+                      />
 
-                    <div
-                      className="offcanvas offcanvas-start  mobile_menu-contnet "
-                      tabIndex="-1"
-                      id="mobile-sidebar_menu"
-                      aria-labelledby="offcanvasMenuLabel"
-                      data-bs-scroll="true"
-                    >
-                      <MobileMenu />
-                      {/* End MobileMenu */}
+                      <div
+                        className="offcanvas offcanvas-end  mobile_menu-contnet "
+                        tabIndex="-1"
+                        id="mobile-sidebar_menu"
+                        aria-labelledby="offcanvasMenuLabel"
+                        data-bs-scroll="true"
+                      >
+                        <MobileMenu logout={logout} googleLogout={googleLogout}/>
+                      </div>
                     </div>
                   </div>
+                  
                 </div>
                 {/* End mobile menu icon */}
               </div>

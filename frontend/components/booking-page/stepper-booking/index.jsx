@@ -62,11 +62,11 @@ const Index = ({user, query, data}) => {
             } = reason && reason.error ? reason.error : {};
 
             if (reason === undefined) {
-              setCurrentStep(0)
+              throw new Error("cancelled")
             } 
             
             else if (reason === 'timeout') {
-              setCurrentStep(0)
+              throw new Error("timeout")
             } 
             
             else {

@@ -4,8 +4,6 @@ const PersonalInfo = () => {
   return (
     <>
       <form>
-        <AvatarUploader />
-        {/* End AvatarUploader*/}
 
         <div className="border-top-light mt-30 mb-30" />
 

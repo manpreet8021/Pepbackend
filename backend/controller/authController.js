@@ -101,6 +101,23 @@ export const getUserInfo = asyncHandler(async(req, res) => {
     }
 })
 
+export const getUserDetail = asyncHandler(async(req, res) => {
+    if(req.user) {
+        const { displayName, email, phoneNumber, address } = req.user
+
+        const response = {}
+        response.name = displayName
+        response.email = email
+        response.phoneNumber = phoneNumber
+        response.address = address
+
+        res.status(200).json(response)
+    } else {
+        res.status(400)
+        throw new Error("User not found")
+    }
+})
+
 export const logout = asyncHandler(async(req, res) => {
     req.user.authentication.sessionStorage = null;
     const response = await req.user.save()

@@ -1,7 +1,7 @@
 const Social = () => {
   const socialContent = [
-    { id: 1, icon: "icon-facebook", link: "https://facebok.com/" },
-    { id: 2, icon: "icon-twitter", link: "https://twitter.com/" },
+    { id: 1, icon: "icon-facebook", link: "https://www.facebook.com/profile.php?id=61550632907794" },
+    { id: 2, icon: "icon-twitter", link: "https://x.com/soulcation_co" },
     { id: 3, icon: "icon-instagram", link: "https://www.instagram.com/soulcation.co/" },
     //{ id: 4, icon: "icon-linkedin", link: "https://linkedin.com/" },
   ];
