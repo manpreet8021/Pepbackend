@@ -1,12 +1,18 @@
 import CallToActions from "@/components/common/CallToActions";
-import Header from "@/components/header";
+import Header11 from "@/components/header/header-11";
 import DefaultFooter from "@/components/footer/default";
-import TopHeaderFilter from "@/components/hotel-list/hotel-list-v2/TopHeaderFilter";
-import HotelProperties from "@/components/hotel-list/hotel-list-v2/HotelProperties";
+import MainFilterSearchBox from "@/components/hotel-list/hotel-list-v1/MainFilterSearchBox";
+import TopHeaderFilter from "@/components/hotel-list/hotel-list-v1/TopHeaderFilter";
+import HotelProperties from "@/components/hotel-list/hotel-list-v1/HotelProperties";
 import Pagination from "@/components/hotel-list/common/Pagination";
-import Sidebar from "@/components/hotel-list/hotel-list-v2/Sidebar";
+import Sidebar from "@/components/hotel-list/hotel-list-v1/Sidebar";
 
-const search = () => {
+export const metadata = {
+  title: "Hotel List v1 || GoTrip - Travel & Tour React NextJS Template",
+  description: "GoTrip - Travel & Tour React NextJS Template",
+};
+
+const index = () => {
   return (
     <>
       {/* End Page Title */}
@@ -14,8 +20,24 @@ const search = () => {
       <div className="header-margin"></div>
       {/* header top margin */}
 
-      <Header />
+      <Header11 />
       {/* End Header 1 */}
+
+      <section className="pt-40 pb-40 bg-light-2">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <div className="text-center">
+                <h1 className="text-30 fw-600">Find Your Dream Luxury Hotel</h1>
+              </div>
+              {/* End text-center */}
+              <MainFilterSearchBox />
+            </div>
+            {/* End col-12 */}
+          </div>
+        </div>
+      </section>
+      {/* Top SearchBanner */}
 
       <section className="layout-pt-md layout-pb-lg">
         <div className="container">
@@ -81,4 +103,4 @@ const search = () => {
   );
 };
 
-export default search;
+export default index;

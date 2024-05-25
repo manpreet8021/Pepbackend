@@ -3,49 +3,32 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import MainMenu from "./MainMenu";
-import CurrenctyMegaMenu from "./CurrenctyMegaMenu";
-import LanguageMegaMenu from "./LanguageMegaMenu";
-import MobileMenu from "./MobileMenu";
-import { usePathname } from 'next/navigation'
-
-export const metadata = {
-  title: "Home-1 || GoTrip - Travel & Tour React NextJS Template",
-  description: "GoTrip - Travel & Tour React NextJS Template",
-};
+import MainMenu from "../MainMenu";
+import CurrenctyMegaMenu from "../CurrenctyMegaMenu";
+import LanguageMegaMenu from "../LanguageMegaMenu";
+import MobileMenu from "../MobileMenu";
 
 const Header1 = () => {
   const [navbar, setNavbar] = useState(false);
-  const path = usePathname()
-  const [dark, setDark] = useState('bg-dark-1')
 
-  const darkColorValue = () => {
-    if(path !== '/') {
-      setDark('bg-dark-3')
-      setNavbar(true)
+  const changeBackground = () => {
+    if (window.scrollY >= 10) {
+      setNavbar(true);
     } else {
-      if (window.scrollY >= 10) {
-        setNavbar(true);
-      } else {
-        setNavbar(false);
-      }
+      setNavbar(false);
     }
   };
 
   useEffect(() => {
-    darkColorValue();
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("scroll", darkColorValue);
+    window.addEventListener("scroll", changeBackground);
     return () => {
-      window.removeEventListener("scroll", darkColorValue);
+      window.removeEventListener("scroll", changeBackground);
     };
   }, []);
 
   return (
     <>
-      <header className={`header ${navbar ? `${dark} is-sticky` : ""}`}>
+      <header className={`header ${navbar ? "bg-dark-1 is-sticky" : ""}`}>
         <div className="header__container px-30 sm:px-20">
           <div className="row justify-between items-center">
             <div className="col-auto">
@@ -56,12 +39,11 @@ const Header1 = () => {
                 </Link>
                 {/* End logo */}
 
-                {/* <div className="header-menu">
+                <div className="header-menu">
                   <div className="header-menu__content">
                     <MainMenu style="text-white" />
                   </div>
-                </div> */}
-                
+                </div>
                 {/* End header-menu */}
               </div>
               {/* End d-flex */}

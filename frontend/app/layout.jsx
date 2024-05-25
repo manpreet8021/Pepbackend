@@ -27,7 +27,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <title>Soulcation - Perfect place for retreat</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"

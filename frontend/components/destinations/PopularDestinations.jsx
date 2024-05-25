@@ -65,11 +65,9 @@ const PopularDestinations = () => {
                   <h4 className="text-26 md:text-20 lh-13 text-white mb-20">
                     {item.city}
                   </h4>
-                  <Link href='/search'>
-                    <button type="button" className="button col-12 h-60 -blue-1 bg-white text-dark-1">
-                      Discover
-                    </button>
-                  </Link>
+                  <button className="button col-12 h-60 -blue-1 bg-white text-dark-1">
+                    Discover
+                  </button>
                 </div>
               </div>
             </Link>

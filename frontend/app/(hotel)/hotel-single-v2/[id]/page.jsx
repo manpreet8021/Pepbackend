@@ -1,19 +1,14 @@
 import dynamic from "next/dynamic";
 import "photoswipe/dist/photoswipe.css";
 import { hotelsData } from "@/data/hotels";
-import Header from "@/components/header";
-import Overview from "@/components/hotel-single/Overview";
-import PopularFacilities from "@/components/hotel-single/PopularFacilities";
-import PropertyHighlights from "@/components/hotel-single/PropertyHighlights";
+import DefaultHeader from "@/components/header/default-header";
 import RatingTag from "@/components/hotel-single/RatingTag";
-import StickyHeader from "@/components/hotel-single/StickyHeader";
 import TopBreadCrumb from "@/components/hotel-single/TopBreadCrumb";
-import SidebarRight from "@/components/hotel-single/SidebarRight";
-import AvailableRooms from "@/components/hotel-single/AvailableRooms";
-import ReviewProgress from "@/components/hotel-single/guest-reviews/ReviewProgress";
-import DetailsReview from "@/components/hotel-single/guest-reviews/DetailsReview";
+import AvailableRooms2 from "@/components/hotel-single/AvailableRooms2";
+import ReviewProgress2 from "@/components/hotel-single/guest-reviews/ReviewProgress2";
+import DetailsReview2 from "@/components/hotel-single/guest-reviews/DetailsReview2";
 import ReplyForm from "@/components/hotel-single/ReplyForm";
-import ReplyFormReview from "@/components/hotel-single/ReplyFormReview";
+import ReplyFormReview2 from "@/components/hotel-single/ReplyFormReview2";
 import Facilities from "@/components/hotel-single/Facilities";
 import Image from "next/image";
 import Surroundings from "@/components/hotel-single/Surroundings";
@@ -22,9 +17,16 @@ import Faq from "@/components/faq/Faq";
 import Hotels2 from "@/components/hotels/Hotels2";
 import CallToActions from "@/components/common/CallToActions";
 import DefaultFooter from "@/components/footer/default";
-import GalleryOne from "@/components/hotel-single/GalleryOne";
+import FilterBox2 from "@/components/hotel-single/filter-box-2";
+import StickyHeader2 from "@/components/hotel-single/StickyHeader2";
+import GalleryTwo from "@/components/hotel-single/GalleryTwo";
 
-const HotelSingleV1Dynamic = ({ params }) => {
+export const metadata = {
+  title: "Hotel Single v2 || GoTrip - Travel & Tour React NextJS Template",
+  description: "GoTrip - Travel & Tour React NextJS Template",
+};
+
+const HotelSingleV2Dynamic = ({ params }) => {
   const id = params.id;
   const hotel = hotelsData.find((item) => item.id == id) || hotelsData[0];
 
@@ -35,60 +37,39 @@ const HotelSingleV1Dynamic = ({ params }) => {
       <div className="header-margin"></div>
       {/* header top margin */}
 
-      <Header />
-      {/* End Header 1 */}
+      <DefaultHeader />
+      {/* End DefaultHeader */}
+
+      <div className="py-10 bg-dark-2">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <FilterBox2 />
+            </div>
+          </div>
+        </div>
+        {/* End .contaienr */}
+      </div>
+      {/* End Search filter top */}
+
+      <StickyHeader2 hotel={hotel} />
+      {/* End StickyHeader2 */}
 
       <TopBreadCrumb />
       {/* End top breadcrumb */}
 
-      <StickyHeader hotel={hotel} />
-      {/* sticky single header for hotel single */}
-
-      <GalleryOne hotel={hotel} />
+      <GalleryTwo hotel={hotel} />
 
       {/* End gallery grid wrapper */}
 
       <section className="pt-30">
         <div className="container">
           <div className="row y-gap-30">
-            <div className="col-xl-8">
-              <div className="row y-gap-40">
-                <div className="col-12">
-                  <h3 className="text-22 fw-500">Property highlights</h3>
-                  <PropertyHighlights />
-                </div>
-                {/* End .col-12 Property highlights */}
-
-                <div id="overview" className="col-12">
-                  <Overview />
-                </div>
-                {/* End .col-12  Overview */}
-
-                <div className="col-12">
-                  <h3 className="text-22 fw-500 pt-40 border-top-light">
-                    Most Popular Facilities
-                  </h3>
-                  <div className="row y-gap-10 pt-20">
-                    <PopularFacilities />
-                  </div>
-                </div>
-                {/* End .col-12 Most Popular Facilities */}
-
-                <div className="col-12">
-                  <RatingTag />
-                </div>
-                {/* End .col-12 This property is in high demand! */}
-              </div>
-              {/* End .row */}
+            <div className="col-12">
+              <RatingTag />
             </div>
-            {/* End .col-xl-8 */}
-
-            <div className="col-xl-4">
-              <SidebarRight hotel={hotel} />
-            </div>
-            {/* End .col-xl-4 */}
+            {/* End .col-12 This property is in high demand! */}
           </div>
-          {/* End .row */}
         </div>
         {/* End container */}
       </section>
@@ -102,67 +83,12 @@ const HotelSingleV1Dynamic = ({ params }) => {
             </div>
           </div>
           {/* End .row */}
-          <AvailableRooms hotel={hotel} />
+
+          <AvailableRooms2 hotel={hotel} />
         </div>
         {/* End .container */}
       </section>
       {/* End Available Rooms */}
-
-      <section className="pt-40" id="reviews">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <h3 className="text-22 fw-500">Guest reviews</h3>
-            </div>
-          </div>
-          {/* End .row */}
-
-          <ReviewProgress />
-          {/* End review with progress */}
-
-          <div className="pt-40">
-            <DetailsReview />
-            {/* End review with details */}
-          </div>
-
-          <div className="row pt-30">
-            <div className="col-auto">
-              <a href="#" className="button -md -outline-blue-1 text-blue-1">
-                Show all 116 reviews{" "}
-                <div className="icon-arrow-top-right ml-15"></div>
-              </a>
-            </div>
-          </div>
-          {/* End .row */}
-        </div>
-        {/* End .container */}
-        {/* End container */}
-      </section>
-      {/* End Review section */}
-
-      <section className="pt-40">
-        <div className="container">
-          <div className="row">
-            <div className="col-xl-8 col-lg-10">
-              <div className="row">
-                <div className="col-auto">
-                  <h3 className="text-22 fw-500">Leave a Reply</h3>
-                  <p className="text-15 text-dark-1 mt-5">
-                    Your email address will not be published.
-                  </p>
-                </div>
-              </div>
-              {/* End .row */}
-
-              <ReplyFormReview />
-              {/* End ReplyFormReview */}
-
-              <ReplyForm />
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* End Reply Comment box section */}
 
       <section className="mt-40" id="facilities">
         <div className="container">
@@ -181,6 +107,66 @@ const HotelSingleV1Dynamic = ({ params }) => {
         {/* End .container */}
       </section>
       {/* End facilites section */}
+
+      <div className="container mt-40 mb-40">
+        <div className="border-top-light"></div>
+      </div>
+
+      <section className="pt-40" id="reviews">
+        <div className="container">
+          <div className="row y-gap-40 justify-between">
+            <div className="col-xl-3">
+              <h3 className="text-22 fw-500">Guest reviews</h3>
+              <ReviewProgress2 />
+              {/* End review with progress */}
+            </div>
+            {/* End col-xl-3 */}
+
+            <div className="col-xl-8">
+              <DetailsReview2 />
+            </div>
+            {/* End col-xl-8 */}
+          </div>
+          {/* End .row */}
+        </div>
+        {/* End .container */}
+        {/* End container */}
+      </section>
+      {/* End Review section */}
+
+      <div className="container mt-40 mb-40">
+        <div className="border-top-light"></div>
+      </div>
+
+      <section>
+        <div className="container">
+          <div className="row y-gap-30 justify-between">
+            <div className="col-xl-3">
+              <div className="row">
+                <div className="col-auto">
+                  <h3 className="text-22 fw-500">Leave a Reply</h3>
+                  <p className="text-15 text-dark-1 mt-5">
+                    Your email address will not be published.
+                  </p>
+                </div>
+              </div>
+              {/* End .row */}
+
+              <ReplyFormReview2 />
+              {/* End ReplyFormReview */}
+            </div>
+            {/* End .col-xl-3 */}
+
+            <div className="col-xl-8">
+              <ReplyForm />
+            </div>
+            {/* End .col-xl-8 */}
+          </div>
+          {/* End .row */}
+        </div>
+        {/* End .container */}
+      </section>
+      {/* End Reply Comment box section */}
 
       <section className="pt-40">
         <div className="container">
@@ -316,6 +302,6 @@ const HotelSingleV1Dynamic = ({ params }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(HotelSingleV1Dynamic), {
+export default dynamic(() => Promise.resolve(HotelSingleV2Dynamic), {
   ssr: false,
 });

@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import AddBanner from "@/components/add-banner/AddBanner";
 import PopularDestinations from "@/components/destinations/PopularDestinations";
 import DefaultFooter from "@/components/footer/default";
-import Header from "@/components/header";
+import Header1 from "@/components/header/header-1";
 import Hero1 from "@/components/hero/hero-1";
 import BlockGuide from "@/components/block/BlockGuide";
 import Blog from "@/components/blog/Blog3";
@@ -12,13 +12,23 @@ import Testimonial from "@/components/home/home-1/Testimonial";
 import TestimonialLeftCol from "@/components/home/home-1/TestimonialLeftCol";
 import Hotels from "@/components/hotels/Hotels";
 import SelectFilter from "@/components/hotels/filter-tabs/SelectFilter";
-import Link from 'next/link'
 
-const Home = () => {
+export const metadata = {
+  title: "Home-1 || GoTrip - Travel & Tour React NextJS Template",
+  description: "GoTrip - Travel & Tour React NextJS Template",
+};
+
+const Home_1 = () => {
   return (
     <>
-      <Header />
+      {/* End Page Title */}
+
+      <Header1 />
+      {/* End Header 1 */}
+
       <Hero1 />
+      {/* End Hero 1 */}
+
       <section className="layout-pt-lg layout-pb-md" data-aos="fade-up">
         <div className="container">
           <div className="row y-gap-20 justify-between items-end">
@@ -33,13 +43,13 @@ const Home = () => {
             {/* End col-auto */}
 
             <div className="col-auto md:d-none">
-              <Link
-                href="/search"
+              <a
+                href="#"
                 className="button -md -blue-1 bg-blue-1-05 text-blue-1"
               >
                 View All Destinations
                 <div className="icon-arrow-top-right ml-15" />
-              </Link>
+              </a>
             </div>
             {/* End col-auto */}
           </div>
@@ -176,4 +186,4 @@ const Home = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Home), { ssr: false });
+export default dynamic(() => Promise.resolve(Home_1), { ssr: false });

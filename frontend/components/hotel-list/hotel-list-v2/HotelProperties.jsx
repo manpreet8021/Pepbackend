@@ -154,7 +154,7 @@ const HotelProperties = () => {
                   </div>
 
                   <Link
-                    href={`/search/${item.id}`}
+                    href={`/hotel-single-v2/${item.id}`}
                     className="button -md -dark-1 bg-blue-1 text-white mt-24"
                   >
                     See Availability{" "}
