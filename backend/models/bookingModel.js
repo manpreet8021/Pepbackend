@@ -40,6 +40,27 @@ const bookingSchema = new mongoose.Schema({
     },
     method: {
         type: String
+    },
+    address: {
+        line1: {
+            type: String,
+            required: true
+        },
+        line2: {
+            type: String
+        },
+        state: {
+            type: String,
+            required: true
+        },
+        country: {
+            type: String,
+            required: true
+        }
+    },
+    phoneNumber: {
+        type: String,
+        required: true
     }
 },{
     timestamps: true

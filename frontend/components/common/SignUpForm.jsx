@@ -13,24 +13,36 @@ const SignUpForm = () => {
   const navigation = useRouter()
   const dispatch = useDispatch()
 
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
   const initalValues = {
     displayName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    privacyBox: false
+    line1: '',
+    line2: '',
+    state: '',
+    country: '',
+    phoneNumber: '',
+    privacyBox: false,
   }
 
   const validationSchema = Yup.object({
     displayName: Yup.string().required("Name is required"),
     email: Yup.string().email("It should be a valid email").required("Email is required"),
     password: Yup.string().required("Password is required"),
-    confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Password doesnot match')
+    confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Password doesnot match'),
+    line1: Yup.string().required(),
+    line2: Yup.string(),
+    state: Yup.string().required(),
+    country: Yup.string().required(),
+    phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid')
   })
 
   const handleSubmit = async(values) => {
     try {
-      const res = await signup({displayName: values.displayName, email: values.email, password: values.password, privacyBox: values.privacyBox})
+      const res = await signup(values)
       if(res.error) throw new Error(JSON.stringify(res.error))
       navigation.push('/')
     } catch (error) {
@@ -76,6 +88,14 @@ const SignUpForm = () => {
 
           <div className="col-12">
             <div className="form-input ">
+              <Field type="text" name="phoneNumber" required/>
+              <label className="lh-1 text-14 text-light-1">Phone number</label>
+            </div>
+            <ErrorMessage name="phoneNumber" component="div" className="error-message"/>
+          </div>
+
+          <div className="col-md-6">
+            <div className="form-input ">
               <Field type="password" name="password" required/>
               <label className="lh-1 text-14 text-light-1">Password</label>
             </div>
@@ -83,7 +103,7 @@ const SignUpForm = () => {
           </div>
           {/* End .col */}
 
-          <div className="col-12">
+          <div className="col-md-6">
             <div className="form-input ">
               <Field type="password" name="confirmPassword" required/>
               <label className="lh-1 text-14 text-light-1">Confirm Password</label>
@@ -91,6 +111,38 @@ const SignUpForm = () => {
             <ErrorMessage name="confirmPassword" component="div" className="error-message"/>
           </div>
           {/* End .col */}
+
+          <div className="col-md-6">
+            <div className="form-input ">
+              <Field type="text" name="line1" required/>
+              <label className="lh-1 text-14 text-light-1">Line 1</label>
+            </div>
+            <ErrorMessage name="line1" component="div" className="error-message"/>
+          </div>
+
+          <div className="col-md-6">
+            <div className="form-input ">
+              <Field type="text" name="line2" required/>
+              <label className="lh-1 text-14 text-light-1">Line 2</label>
+            </div>
+            <ErrorMessage name="line2" component="div" className="error-message"/>
+          </div>
+
+          <div className="col-md-6">
+            <div className="form-input ">
+              <Field type="text" name="state" required/>
+              <label className="lh-1 text-14 text-light-1">State</label>
+            </div>
+            <ErrorMessage name="state" component="div" className="error-message"/>
+          </div>
+
+          <div className="col-md-6">
+            <div className="form-input ">
+              <Field type="text" name="country" required/>
+              <label className="lh-1 text-14 text-light-1">Country</label>
+            </div>
+            <ErrorMessage name="country" component="div" className="error-message"/>
+          </div>
 
           <div className="col-12">
             <div className="d-flex ">

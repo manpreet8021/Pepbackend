@@ -5,7 +5,6 @@ import { createPaymentLog } from "../models/paymentLogModel.js";
 import { commonRetreatDetail } from "./retreatController.js";
 import { createBooking, getBookingByOrderId, getBookings, updateBookingById } from "../models/bookingModel.js";
 import { createBulkUserForBooking } from "../models/bookingUserModel.js";
-import { updateUserById } from "../models/userModel.js";
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY,
@@ -60,16 +59,23 @@ const createOrder = asyncHandler(async(req, res) => {
             };
             const response = await razorpayInstance.orders.create(options);
             if(response) {
-                const booking = await createBooking({retreat: retreatId, room: roomId, status: 'intialize', user: req.user._id, request: request, order: response.id, price: amount})
+                const booking = await createBooking({
+                    retreat: retreatId, 
+                    room: roomId, 
+                    status: 'intialize', 
+                    user: req.user._id, 
+                    request: request, 
+                    order: response.id, 
+                    price: amount,
+                    address: {
+                        line1: line1,
+                        line2: line2,
+                        state: state,
+                        country: country,
+                    },
+                    phoneNumber: phone
+                })
                 if(booking) {
-                    req.user.address.line1 = line1;
-                    req.user.address.line2 = line2;
-                    req.user.address.state = state;
-                    req.user.address.country = country;
-                    req.user.phoneNumber = phone;
-
-                    await updateUserById(req.user._id, req.user)
-                
                     const userWithBookingId = users.map(user => {
                         return {
                             ...user,

@@ -1,19 +1,35 @@
-import { createUser, getUserByEmail, getUserBySessionToken } from '../models/userModel.js';
+import { createUser, getUserByEmail, getUserBySessionToken, updateUserById } from '../models/userModel.js';
 import {authentication, random} from '../helpers/index.js'
 import Joi from 'joi';
 import asyncHandler from '../middleware/asyncHandler.js';
 import { OAuth2Client } from 'google-auth-library'
 
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
 const registerSchema = Joi.object({
     displayName: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
-    privacyBox: Joi.boolean()
+    confirmPassword: Joi.any().valid(Joi.ref('password')).required(),
+    privacyBox: Joi.boolean(),
+    line1: Joi.string().required(),
+    line2: Joi.string().allow(''),
+    state: Joi.string().required(),
+    country: Joi.string().required(),
+    phoneNumber: Joi.string().regex(phoneRegExp).required()
 })
 
 const loginSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().required()
+})
+
+const updateUserSchema = Joi.object({
+    line1: Joi.string().required(),
+    line2: Joi.string().allow(''),
+    state: Joi.string().required(),
+    country: Joi.string().required(),
+    phone: Joi.string().regex(phoneRegExp).required()
 })
 
 const googleSchemaValidation = Joi.object({
@@ -30,7 +46,7 @@ export const register = asyncHandler(async (req,res)=>{
         throw new Error(error)
     }
 
-    const { email, password, displayName } = req.body;
+    const { email, password, displayName, line1, line2, state, country, phoneNumber } = req.body;
 
     const existingUser= await getUserByEmail(email);
     
@@ -45,8 +61,16 @@ export const register = asyncHandler(async (req,res)=>{
         displayName,
         authentication:{
             salt,password:authentication(salt,password)
-        }
+        },
+        address: {
+            line1,
+            line2,
+            state,
+            country,
+        },
+        phoneNumber
     })
+
     res.status(201).json()
 })
  
@@ -180,6 +204,35 @@ export const googleLogin = asyncHandler(async(req, res) => {
     } catch (error) {
         res.status(400)
         throw new Error("Invalid Login")
+    }
+})
+
+export const updateUserDetail = asyncHandler(async(req, res) => {
+    const { error } = updateUserSchema.validate(req.body, {abortEarly: false})
+
+    if(error) {
+        res.status(400)
+        throw new Error("Data is not valid")
+    }
+    try {
+        const { line1, line2, state, country, phoneNumber } = req.body
+
+        const user = {
+            address: {
+                line1: line1,
+                line2: line2,
+                state: state,
+                country: country
+            },
+            phoneNumber: phoneNumber
+        }
+
+        await updateUserById(req.user._id, user)
+
+        res.status(200).json()
+    } catch(error) {
+        res.status(400)
+        throw new Error("Failed updating the user")
     }
 })
 

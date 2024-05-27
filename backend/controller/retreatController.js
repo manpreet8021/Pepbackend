@@ -482,4 +482,8 @@ export const commonRetreatDetail = async({inDate, outDate, adult, retreatId, roo
     return response
 }
 
+const getBookedRetreatForUser = asyncHandler(async(req, res) => {
+    
+})
+
 export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat, getRetreatDetailById, getRetreatByParameter, getRetreatDetailForBooking }
