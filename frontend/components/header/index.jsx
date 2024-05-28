@@ -1,28 +1,26 @@
+'use client'
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import MainMenu from "./MainMenu";
 import CurrenctyMegaMenu from "./CurrenctyMegaMenu";
 import LanguageMegaMenu from "./LanguageMegaMenu";
 import MobileMenu from "./MobileMenu";
-import { usePathname, useRouter } from 'next/navigation'
-import { useSelector } from "react-redux";
+import { usePathname } from 'next/navigation'
 import CustomToast from "../toast/toast";
 import { useLogoutMutation } from "@/store/slice/api/userApiSlice";
 import { googleLogout } from '@react-oauth/google';
 
-export const metadata = {
-  title: "Home-1 || GoTrip - Travel & Tour React NextJS Template",
-  description: "GoTrip - Travel & Tour React NextJS Template",
-};
+// export const metadata = {
+//   title: "Home-1 || GoTrip - Travel & Tour React NextJS Template",
+//   description: "GoTrip - Travel & Tour React NextJS Template",
+// };
 
 const Header1 = () => {
   const [logout] = useLogoutMutation()
   const [navbar, setNavbar] = useState(false);
   const path = usePathname()
   const [dark, setDark] = useState('bg-dark-1')
-  const userState = useSelector(state => state.auth)
-
-  const router = useRouter()
 
   const darkColorValue = () => {
     if(path !== '/') {
