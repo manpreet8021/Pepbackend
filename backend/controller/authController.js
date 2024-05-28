@@ -25,11 +25,13 @@ const loginSchema = Joi.object({
 })
 
 const updateUserSchema = Joi.object({
+    name: Joi.string().required(),
     line1: Joi.string().required(),
     line2: Joi.string().allow(''),
     state: Joi.string().required(),
     country: Joi.string().required(),
-    phone: Joi.string().regex(phoneRegExp).required()
+    phoneNumber: Joi.string().regex(phoneRegExp).required(),
+    email: Joi.string().allow('')
 })
 
 const googleSchemaValidation = Joi.object({
@@ -133,7 +135,10 @@ export const getUserDetail = asyncHandler(async(req, res) => {
         response.name = displayName
         response.email = email
         response.phoneNumber = phoneNumber
-        response.address = address
+        response.line1 = address.line1
+        response.line2 = address.line2
+        response.state = address.state
+        response.country = address.country
 
         res.status(200).json(response)
     } else {
@@ -215,9 +220,10 @@ export const updateUserDetail = asyncHandler(async(req, res) => {
         throw new Error("Data is not valid")
     }
     try {
-        const { line1, line2, state, country, phoneNumber } = req.body
+        const { name, line1, line2, state, country, phoneNumber } = req.body
 
         const user = {
+            displayName: name,
             address: {
                 line1: line1,
                 line2: line2,
@@ -229,7 +235,7 @@ export const updateUserDetail = asyncHandler(async(req, res) => {
 
         await updateUserById(req.user._id, user)
 
-        res.status(200).json()
+        res.status(201).json()
     } catch(error) {
         res.status(400)
         throw new Error("Failed updating the user")

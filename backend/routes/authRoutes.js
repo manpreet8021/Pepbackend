@@ -8,7 +8,7 @@ router.route('/login').post(login)
 router.route('/register').post(register)
 router.route('/auth').get(protect, getUserInfo)
 router.route('/getUserDetail').get(protect, getUserDetail)
-router.route('/updateUserDetail').post(protect, updateUserDetail)
+router.route('/updateUserDetail').put(protect, updateUserDetail)
 router.route('/logout').post(protect, logout)
 router.route('/google').post(googleLogin)
 

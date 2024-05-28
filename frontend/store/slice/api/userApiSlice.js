@@ -45,10 +45,18 @@ const userApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
                 credentials: 'include'
             })
+        }),
+        updateUserDetail: builder.mutation({
+            query: (data) => ({
+                url: 'auth/updateUserDetail',
+                method: 'PUT',
+                body: data,
+                credentials: 'include'
+            }) 
         })
     })
 })
 
-export const { useLoginMutation, useSignupMutation, useGetInfoMutation, useLogoutMutation, useGoogleLoginMutation, useGetUserDetailQuery } = userApiSlice
+export const { useLoginMutation, useSignupMutation, useGetInfoMutation, useLogoutMutation, useGoogleLoginMutation, useGetUserDetailQuery, useUpdateUserDetailMutation } = userApiSlice
 
 export default userApiSlice

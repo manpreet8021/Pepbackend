@@ -145,7 +145,7 @@ const Home = () => {
       </section>
       {/* End blog Section */}
 
-      <section className="layout-pt-md layout-pb-lg">
+      {/* <section className="layout-pt-md layout-pb-lg">
         <div className="container">
           <div className="row">
             <div className="col-auto">
@@ -157,14 +157,11 @@ const Home = () => {
               </div>
             </div>
           </div>
-          {/* End .row */}
-
-          {/* <div className="tabs -pills pt-40 js-tabs">
+          <div className="tabs -pills pt-40 js-tabs">
             <Destinations />
-          </div> */}
-          {/* End tabs */}
+          </div>
         </div>
-      </section>
+      </section> */}
       {/* End Destination we love Section */}
 
       <CallToActions />
