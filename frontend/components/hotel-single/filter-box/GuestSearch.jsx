@@ -3,8 +3,7 @@
 
 import React, { useState } from "react";
 const counters = [
-  { name: "Adults", defaultValue: 1 },
-  { name: "Children", defaultValue: 0 }
+  { name: "Adults", defaultValue: 1 }
 ];
 
 const Counter = ({ name, defaultValue, onCounterChange }) => {
@@ -14,7 +13,7 @@ const Counter = ({ name, defaultValue, onCounterChange }) => {
     onCounterChange(name, count + 1);
   };
   const decrementCount = () => {
-    if (count > 0) {
+    if (count > 1) {
       setCount(count - 1);
       onCounterChange(name, count - 1);
     }
@@ -25,9 +24,9 @@ const Counter = ({ name, defaultValue, onCounterChange }) => {
       <div className="row y-gap-10 justify-between items-center">
         <div className="col-auto">
           <div className="text-15 lh-12 fw-500">{name}</div>
-          {name === "Children" && (
+          {/* {name === "Children" && (
             <div className="text-14 lh-12 text-light-1 mt-5">Ages 5 - 17</div>
-          )}
+          )} */}
         </div>
         {/* End .col-auto */}
         <div className="col-auto">
@@ -76,8 +75,9 @@ const GuestSearch = ({ guestCounts, setGuestCounts }) => {
       >
         <h4 className="text-15 fw-500 ls-2 lh-16">Guest</h4>
         <div className="text-15 text-light-1 ls-2 lh-16">
-          <span className="js-count-adult">{guestCounts.Adults}</span> adults -{" "}
-          <span className="js-count-child">{guestCounts.Children}</span>{" "}childeren
+          <span className="js-count-adult">{guestCounts.Adults}</span> adults 
+          {/* -{" "}
+          <span className="js-count-child">{guestCounts.Children}</span>{" "}childeren */}
         </div>
       </div>
       {/* End guest */}
