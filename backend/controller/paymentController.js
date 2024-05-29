@@ -44,7 +44,7 @@ const createOrder = asyncHandler(async(req, res) => {
             throw new Error("Data is not valid")
         }
 
-        const {inDate, outDate, adult, retreatId, roomId, users, phone, line1, line2, state, country, request} = req.body
+        const {name, email, inDate, outDate, adult, retreatId, roomId, users, phone, line1, line2, state, country, request} = req.body
         const { detail } = await commonRetreatDetail({inDate, outDate, adult, retreatId, roomId})
 
         if(detail.length) {
@@ -73,7 +73,9 @@ const createOrder = asyncHandler(async(req, res) => {
                         state: state,
                         country: country,
                     },
-                    phoneNumber: phone
+                    phoneNumber: phone,
+                    name: name,
+                    email: email
                 })
                 if(booking) {
                     const userWithBookingId = users.map(user => {
@@ -141,16 +143,12 @@ const getBookingDetail = asyncHandler(async(req, res) => {
         const detail = await getBookingByOrderId({user: req.user._id, bookingNumber: req.params.id})
         if(detail) {
             response.detail = detail
-            const {address, email, phoneNumber, displayName } = req.user
-            response.address = address
-            response.email = email
-            response.phoneNumber = phoneNumber
-            response.name = displayName
             res.status(200).json(response)
         } else {
             throw new Error()
         }
     } catch (error) {
+        console.log
         res.status(400)
         throw new Error("Failed to get booking detail")
     }

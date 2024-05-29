@@ -7,13 +7,13 @@ const OrderSubmittedInfo = ({data}) => {
           <div className="order-completed-wrapper">
             <div className="d-flex flex-column items-center mt-40 lg:md-40 sm:mt-24">
               <div className="size-80 flex-center rounded-full bg-dark-3">
-                <i className={`${data.detail?.status === 'success' ? 'icon-check': 'icon-close'} text-30 text-white`} />
+                <i className={`${data?.status === 'success' ? 'icon-check': 'icon-close'} text-30 text-white`} />
               </div>
               <div className="text-30 lh-1 fw-600 mt-20">
                 {data.detail?.status === 'success'? `${data.name}, your booking was submitted successfully!` : `${data.name}, your booking was failed to submit!`}
               </div>
               <div className="text-15 text-light-1 mt-10">
-                Booking details has been sent to: 
+                Booking details has been sent to: {data.email}
               </div>
             </div>
             {/* End header */}
@@ -23,27 +23,27 @@ const OrderSubmittedInfo = ({data}) => {
                 <div className="col-lg-3 col-md-6">
                   <div className="text-15 lh-12">Order Number</div>
                   <div className="text-15 lh-12 fw-500 text-blue-1 mt-10">
-                    {data.detail?.bookingNumber}
+                    {data?.bookingNumber}
                   </div>
                 </div>
                 {/* End .col */}
                 <div className="col-lg-3 col-md-6">
                   <div className="text-15 lh-12">Title</div>
                   <div className="text-15 lh-12 fw-500 text-blue-1 mt-10">
-                    {data.detail?.retreat?.title}
+                    {data?.retreat?.title}
                   </div>
                 </div>
                 <div className="col-lg-3 col-md-6">
                   <div className="text-15 lh-12">Total</div>
                   <div className="text-15 lh-12 fw-500 text-blue-1 mt-10">
-                    <span>&#8377;</span>{data.detail?.price}
+                    <span>&#8377;</span>{data?.price}
                   </div>
                 </div>
                 {/* End .col */}
                 <div className="col-lg-3 col-md-6">
                   <div className="text-15 lh-12">Payment Method</div>
                   <div className="text-15 lh-12 fw-500 text-blue-1 mt-10">
-                    {data.detail?.method}
+                    {data?.method}
                   </div>
                 </div>
                 {/* End .col */}

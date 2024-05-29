@@ -37,81 +37,81 @@ const PersonalInfo = ({data}) => {
   return (
     <>
       <div className="col-xl-9">
-      <div className="border-top-light mt-30 mb-30" />
+        <div className="border-top-light mt-30 mb-30" />
 
-      <Formik initialValues={initialState} enableReinitialize onSubmit={(values) => handleSubmit(values)} validationSchema={validationSchema}>
-        {({ handleSubmit, isSubmitting, isValid, dirty }) => (
-          <Form onSubmit={handleSubmit}>
-            <>
-              <div className="row x-gap-20 y-gap-20">
-                <div className="col-md-12">
-                  <div className="form-input ">
-                    <Field type="text" required name="name" />
-                    <label className="lh-1 text-16 text-light-1">Full Name</label>
+        <Formik initialValues={initialState} enableReinitialize onSubmit={(values) => handleSubmit(values)} validationSchema={validationSchema}>
+          {({ handleSubmit, isSubmitting, isValid, dirty }) => (
+            <Form onSubmit={handleSubmit}>
+              <>
+                <div className="row x-gap-20 y-gap-20">
+                  <div className="col-md-12">
+                    <div className="form-input ">
+                      <Field type="text" required name="name" />
+                      <label className="lh-1 text-16 text-light-1">Full Name</label>
+                    </div>
+                    <ErrorMessage name="name" component="div" className="error-message"/>
                   </div>
-                  <ErrorMessage name="name" component="div" className="error-message"/>
-                </div>
 
-                <div className="col-md-12">
-                  <div className="form-input ">
-                    <Field type="text" required name="email" disabled/>
-                    <label className="lh-1 text-16 text-light-1">Email</label>
+                  <div className="col-md-12">
+                    <div className="form-input ">
+                      <Field type="text" required name="email" disabled/>
+                      <label className="lh-1 text-16 text-light-1">Email</label>
+                    </div>
+                    <ErrorMessage name="email" component="div" className="error-message"/>
                   </div>
-                  <ErrorMessage name="email" component="div" className="error-message"/>
-                </div>
 
-                <div className="col-md-12">
-                  <div className="form-input ">
-                    <Field type="text" required name="phoneNumber" />
-                    <label className="lh-1 text-16 text-light-1">Phone Number</label>
+                  <div className="col-md-12">
+                    <div className="form-input ">
+                      <Field type="text" required name="phoneNumber" />
+                      <label className="lh-1 text-16 text-light-1">Phone Number</label>
+                    </div>
+                    <ErrorMessage name="phoneNumber" component="div" className="error-message"/>
                   </div>
-                  <ErrorMessage name="phoneNumber" component="div" className="error-message"/>
-                </div>
 
-                <div className="col-md-6">
-                  <div className="form-input ">
-                    <Field type="text" required name="line1" />
-                    <label className="lh-1 text-16 text-light-1">Address line 1</label>
+                  <div className="col-md-6">
+                    <div className="form-input ">
+                      <Field type="text" required name="line1" />
+                      <label className="lh-1 text-16 text-light-1">Address line 1</label>
+                    </div>
+                    <ErrorMessage name="line1" component="div" className="error-message"/>
                   </div>
-                  <ErrorMessage name="line1" component="div" className="error-message"/>
-                </div>
 
-                <div className="col-md-6">
-                  <div className="form-input ">
-                    <Field type="text" required name="line2" />
-                    <label className="lh-1 text-16 text-light-1">Address line 2</label>
+                  <div className="col-md-6">
+                    <div className="form-input ">
+                      <Field type="text" required name="line2" />
+                      <label className="lh-1 text-16 text-light-1">Address line 2</label>
+                    </div>
+                    <ErrorMessage name="line2" component="div" className="error-message"/>
                   </div>
-                  <ErrorMessage name="line2" component="div" className="error-message"/>
-                </div>
 
-                <div className="col-md-6">
-                  <div className="form-input ">
-                    <Field type="text" required name="state" />
-                    <label className="lh-1 text-16 text-light-1">State</label>
+                  <div className="col-md-6">
+                    <div className="form-input ">
+                      <Field type="text" required name="state" />
+                      <label className="lh-1 text-16 text-light-1">State</label>
+                    </div>
+                    <ErrorMessage name="state" component="div" className="error-message"/>
                   </div>
-                  <ErrorMessage name="state" component="div" className="error-message"/>
-                </div>
 
-                <div className="col-md-6">
-                  <div className="form-input ">
-                    <Field type="text" required name="country" />
-                    <label className="lh-1 text-16 text-light-1">Country</label>
+                  <div className="col-md-6">
+                    <div className="form-input ">
+                      <Field type="text" required name="country" />
+                      <label className="lh-1 text-16 text-light-1">Country</label>
+                    </div>
+                    <ErrorMessage name="country" component="div" className="error-message"/>
                   </div>
-                  <ErrorMessage name="country" component="div" className="error-message"/>
                 </div>
-              </div>
-              <div className="d-inline-block pt-30">
-                <button
-                  type="submit"
-                  className="button h-50 px-24 -dark-1 bg-blue-1 text-white"
-                >
-                  Save Changes <div className="icon-arrow-top-right ml-15" />
-                </button>
-              </div>
-            </>
-          </Form>
-        )}
-      </Formik>
+                <div className="d-inline-block pt-30">
+                  <button
+                    type="submit"
+                    className="button h-50 px-24 -dark-1 bg-blue-1 text-white"
+                  >
+                    Save Changes <div className="icon-arrow-top-right ml-15" />
+                  </button>
+                </div>
+              </>
+            </Form>
+          )}
+        </Formik>
       </div>
     </>
   );

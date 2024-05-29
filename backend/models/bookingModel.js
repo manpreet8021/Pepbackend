@@ -41,6 +41,14 @@ const bookingSchema = new mongoose.Schema({
     method: {
         type: String
     },
+    name: {
+        type: String,
+        required: true
+    }, 
+    email: {
+        type: String,
+        required: true
+    },
     address: {
         line1: {
             type: String,
@@ -76,4 +84,5 @@ export const getBookings = (params) => bookingModel.findOne(params);
 export const getBookingById = (id) => bookingModel.findById(id);
 export const createBooking = (values) => new bookingModel(values).save();
 export const updateBookingById = (id, value) => bookingModel.findByIdAndUpdate(id, value, {new: true}).select('bookingNumber');
-export const getBookingByOrderId = (params) => bookingModel.findOne(params).populate('retreat', 'title').select('bookingNumber method price retreat status');
+export const getBookingByOrderId = (params) => bookingModel.findOne(params).populate('retreat', 'title').select('bookingNumber method price retreat status address phoneNumber name email');
+export const getBookingForUser = (params) => bookingModel.find({params});

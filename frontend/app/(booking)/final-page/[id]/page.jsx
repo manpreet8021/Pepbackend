@@ -49,7 +49,7 @@ const Index = ({params}) => {
                 {/* End stepper header part */}
 
                 <div className="row">
-                  <OrderSubmittedInfo data={data}/>
+                  { data && data.detail && <OrderSubmittedInfo data={data?.detail}/>}
                 </div>
               </div>
             </section>
