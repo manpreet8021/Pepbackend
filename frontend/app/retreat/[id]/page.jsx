@@ -259,7 +259,7 @@ const HotelSingleV1Dynamic = ({ params }) => {
               </div>
             </section> */}
 
-            <section className="layout-pt-md layout-pb-lg">
+            {/* <section className="layout-pt-md layout-pb-lg">
               <div className="container">
                 <div className="row justify-center text-center">
                   <div className="col-auto">
@@ -275,7 +275,7 @@ const HotelSingleV1Dynamic = ({ params }) => {
                   <Hotels2 />
                 </div>
               </div>
-            </section>
+            </section> */}
 
             <CallToActions />
 
