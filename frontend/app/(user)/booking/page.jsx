@@ -5,8 +5,11 @@ import CallToActions from "@/components/common/CallToActions";
 import DefaultFooter from "@/components/footer/default";
 import dynamic from "next/dynamic";
 import BookingInfo from "@/components/common/user/LocationInfo"
+import { useGetUserBookingQuery } from "@/store/slice/api/bookingApiSlice";
 
 const page = () => {
+	const {isLoading, data} = useGetUserBookingQuery();
+
 	return(
 		<>
 			{/* End Page Title */}
@@ -25,7 +28,8 @@ const page = () => {
 							<label className="tabs__button text-20 lg:text-16 text-light-1 fw-500 pb-5 lg:pb-0 js-tabs-button">
 								Booking Information
 							</label>
-							<BookingInfo />
+							{data && <BookingInfo data={data} />}
+							
 							</div>
 						</div>
 					</div>

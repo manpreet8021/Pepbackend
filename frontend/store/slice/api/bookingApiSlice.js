@@ -4,7 +4,7 @@ const bookingApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getUserBooking: builder.query({
             query: () => ({
-                url: '/booking',
+                url: '/protect/booking',
                 credentials: 'include'
             })
         })

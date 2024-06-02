@@ -4,7 +4,7 @@ import Razorpay from "razorpay";
 import { createPaymentLog } from "../models/paymentLogModel.js";
 import { commonRetreatDetail } from "./retreatController.js";
 import { createBooking, getBookingByOrderId, getBookings, updateBookingById } from "../models/bookingModel.js";
-import { createBulkUserForBooking } from "../models/bookingUserModel.js";
+import moment from "moment";
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY,
@@ -75,17 +75,13 @@ const createOrder = asyncHandler(async(req, res) => {
                     },
                     phoneNumber: phone,
                     name: name,
-                    email: email
+                    email: email,
+                    attendee: users,
+                    startDate: new Date(moment(inDate).startOf("day").format("YYYY-MM-DD")),
+                    endDate: new Date(moment(outDate).startOf("day").format("YYYY-MM-DD"))
                 })
                 if(booking) {
-                    const userWithBookingId = users.map(user => {
-                        return {
-                            ...user,
-                            booking: booking._id
-                        }
-                    })
-                    await createBulkUserForBooking(userWithBookingId)
-                    await createPaymentLog({user: req.user._id, status: 'intialize', orderId: JSON.stringify(response), retreat: retreatId, room: roomId, amount: amount, reciept: receipt})
+                    await createPaymentLog({user: req.user._id, status: 'intialize', orderId: JSON.stringify(response), retreat: retreatId, room: roomId, amount: amount, reciept: receipt, booking: booking._id})
                     res.status(200).json(response)
                 } else {
                     throw new Error("Failed adding the booking information")

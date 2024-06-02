@@ -2,6 +2,26 @@ import mongoose from "mongoose";
 import sequence from 'mongoose-sequence';
 
 const AutoIncrement = sequence(mongoose);
+
+const bookingUserSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    gender: {
+        type: String,
+        required: true
+    },
+    age: {
+        type: Number,
+        required: true
+    },
+    active: {
+        type: Boolean,
+        default: true
+    }
+})
+
 const bookingSchema = new mongoose.Schema({
     retreat: {
         type: mongoose.Schema.Types.ObjectId,
@@ -69,6 +89,18 @@ const bookingSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
         required: true
+    },
+    attendee: {
+        type: [bookingUserSchema],
+        required: true
+    },
+    startDate: {
+        type: Date,
+        required: true
+    },
+    endDate: {
+        type: Date,
+        required: true
     }
 },{
     timestamps: true
@@ -85,4 +117,4 @@ export const getBookingById = (id) => bookingModel.findById(id);
 export const createBooking = (values) => new bookingModel(values).save();
 export const updateBookingById = (id, value) => bookingModel.findByIdAndUpdate(id, value, {new: true}).select('bookingNumber');
 export const getBookingByOrderId = (params) => bookingModel.findOne(params).populate('retreat', 'title').select('bookingNumber method price retreat status address phoneNumber name email');
-export const getBookingForUser = (params) => bookingModel.find({params});
+export const getBookingForUser = (id) => bookingModel.find({user: new mongoose.Types.ObjectId(id)}).populate('retreat', 'title thumbnail.location retreatDuration').select('_id price retreat bookingNumber startDate endDate request');

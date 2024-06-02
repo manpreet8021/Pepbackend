@@ -23,6 +23,10 @@ const paymentLogSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room'
     },
+    booking: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Booking'
+    },
     amount: {
         type: Number,
         required: true

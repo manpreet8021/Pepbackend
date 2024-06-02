@@ -471,7 +471,6 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
 export const commonRetreatDetail = async({inDate, outDate, adult, retreatId, roomId}) => {
     inDate = new Date(moment(inDate).startOf("day").format("YYYY-MM-DD"))
     outDate = new Date(moment(outDate).startOf("day").format("YYYY-MM-DD"))
-    console.log(inDate)
     
     const response = {}
     response.inReturnDate = inDate

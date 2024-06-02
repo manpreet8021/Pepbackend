@@ -77,18 +77,18 @@ const HotelProperties = ({retreat}) => {
                       </button>
                     </div> */}
 
-                    <div className="col-auto">
+                    {/* <div className="col-auto">
                       <div className="size-3 rounded-full bg-light-1"></div>
                     </div>
 
                     <div className="col-auto">
                       <p className="text-14">2 km to city center</p>
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="text-14 lh-15 mt-20">
-                    <div className="fw-500">King Room</div>
-                    <div className="text-light-1">1 extra-large double bed</div>
+                    <div className="fw-500"></div>
+                    {/* <div className="text-light-1">1 extra-large double bed</div> */}
                   </div>
 
                   <div className="text-14 text-green-2 lh-15 mt-10">
