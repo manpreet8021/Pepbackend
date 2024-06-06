@@ -3,14 +3,12 @@ import CallToActions from "@/components/common/CallToActions";
 import DefaultFooter from "@/components/footer/default";
 import WhyChoose from "@/components/block/BlockGuide";
 import Block1 from "@/components/about/Block1";
-import Image from "next/image";
 import Counter from "@/components/counter/Counter";
 import Team1 from "@/components/team/Team1";
 import Testimonial from "@/components/testimonial/Testimonial";
 import Counter2 from "@/components/counter/Counter2";
 import Brand from "@/components/brand/Brand"; 
 import Header1 from "@/components/header";
-import Block2 from "@/components/about/Block2";
 
 const About = () => {
   const block = [
@@ -44,10 +42,10 @@ const About = () => {
       
       <section className="section-bg layout-pt-lg layout-pb-lg">
         <div className="custom-section col-12 ">
-          <Image
+          <img
             width={1920}
             height={400}
-            src="/img/about/6.jpg"
+            src="/img/about/6.JPG"
             alt="image"
             priority
           />

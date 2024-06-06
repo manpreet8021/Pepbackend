@@ -1,7 +1,5 @@
-import Image from "next/image";
-
 const Block1 = ({block}) => {
-  console.log(block)
+  
   return (
     <>
       <div className="col-lg-5">
@@ -13,7 +11,7 @@ const Block1 = ({block}) => {
       {/* End .col */}
 
       <div className="col-lg-6">
-        <Image
+        <img
           width={400}
           height={400}
           src={block.image}
