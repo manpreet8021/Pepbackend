@@ -48,7 +48,7 @@ const Header1 = ({background="dark"}) => {
 
   return (
     <>
-      <header className={`header ${navbar ? `is-sticky` : ""} ${background === "dark" ? dark : '-dashboard bg-white'}`}>
+      <header className={`header ${background !== 'dark' ? `is-sticky -dashboard bg-white` : navbar && `is-sticky ${dark}`}`}>
         <div className="header__container px-30 sm:px-20">
           <div className="row justify-between items-center">
             <div className="col-auto">
