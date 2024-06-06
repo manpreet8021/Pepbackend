@@ -28,8 +28,7 @@ const page = () => {
 							<label className="tabs__button text-20 lg:text-16 text-light-1 fw-500 pb-5 lg:pb-0 js-tabs-button">
 								Booking Information
 							</label>
-							{data && <BookingInfo data={data} />}
-							
+								{data && <BookingInfo data={data} />}
 							</div>
 						</div>
 					</div>

@@ -9,3 +9,16 @@
 .custom-image{
     padding: 2px
 }
+.custom-section {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    z-index: -1;
+}
+.custom-section img {
+    width: 100%;
+    object-fit: cover;
+}
+.inverse {
+    flex-direction: row-reverse;
+}

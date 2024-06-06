@@ -16,7 +16,7 @@ import { googleLogout } from '@react-oauth/google';
 //   description: "GoTrip - Travel & Tour React NextJS Template",
 // };
 
-const Header1 = () => {
+const Header1 = ({background="dark"}) => {
   const [logout] = useLogoutMutation()
   const [navbar, setNavbar] = useState(false);
   const path = usePathname()
@@ -48,14 +48,13 @@ const Header1 = () => {
 
   return (
     <>
-      <header className={`header ${navbar ? `${dark} is-sticky` : ""}`}>
+      <header className={`header ${navbar ? `is-sticky` : ""} ${background === "dark" ? dark : '-dashboard bg-white'}`}>
         <div className="header__container px-30 sm:px-20">
           <div className="row justify-between items-center">
             <div className="col-auto">
               <div className="d-flex items-center">
                 <Link href="/" className="header-logo mr-20">
-                  <img src="/img/general/logo-light.png" alt="logo icon" />
-                  <img src="/img/general/logo-dark.png" alt="logo icon" />
+                  {background === 'dark' ? <img src="/img/general/logo-light.png" alt="logo icon" /> : <img src="/img/general/logo-dark.png" alt="logo icon" />}
                 </Link>
                 {/* End logo */}
 
@@ -120,14 +119,14 @@ const Header1 = () => {
                   <div>
                     <div>
                       <button
-                        className="d-flex items-center icon-menu text-inherit text-20"
+                        className={`d-flex items-center icon-menu text-20 ${background==='dark' ? 'text-inherit' : ''}`}
                         data-bs-toggle="offcanvas"
                         aria-controls="mobile-sidebar_menu"
                         data-bs-target="#mobile-sidebar_menu"
                       />
 
                       <div
-                        className="offcanvas offcanvas-end  mobile_menu-contnet "
+                        className="offcanvas offcanvas-end mobile_menu-contnet "
                         tabIndex="-1"
                         id="mobile-sidebar_menu"
                         aria-labelledby="offcanvasMenuLabel"
