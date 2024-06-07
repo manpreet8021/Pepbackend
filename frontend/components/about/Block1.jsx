@@ -15,6 +15,7 @@ const Block1 = ({block}) => {
           height={400}
           src={block.image}
           alt="image"
+          style={{objectFit: 'cover'}}
           className="rounded-4 w-100"
         />
       </div>
