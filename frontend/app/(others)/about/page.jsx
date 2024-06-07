@@ -47,7 +47,6 @@ const About = () => {
             height={400}
             src="/img/about/6.JPG"
             alt="image"
-            priority
           />
         </div>
         {/* End section-bg__item */}

@@ -4,9 +4,8 @@ const Block1 = ({block}) => {
     <>
       <div className="col-lg-5">
         <h2 className="text-20 fw-600">{block.title}</h2>
-        <p className="text-dark-1 mt-30 lg:mt-40 md:mt-20">
-          {block.body}
-        </p>
+        <p className="mt-5">{block.subtitle}</p>
+        <p className="text-dark-1 mt-30 lg:mt-40 md:mt-20" dangerouslySetInnerHTML={{ __html: block.body }} />
       </div>
       {/* End .col */}
 
@@ -16,7 +15,6 @@ const Block1 = ({block}) => {
           height={400}
           src={block.image}
           alt="image"
-          style={{objectFit: 'cover'}}
           className="rounded-4 w-100"
         />
       </div>
