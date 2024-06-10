@@ -14,15 +14,17 @@ const bookingApiSlice = apiSlice.injectEndpoints({
                 credentials: 'include'
             })
         }),
-        updateUserFavorite: builder.query({
-            query: (id) => ({
-                url: `/protect/user/favorite/${id}`,
+        updateUserFavorite: builder.mutation({
+            query: (data) => ({
+                url: `/protect/user/favorite/`,
+                method: 'POST',
+                body: data,
                 credentials: 'include'
             })
         })
     })
 })
 
-export const { useGetUserBookingQuery, useGetUserFavoriteQuery, useUpdateUserFavoriteQuery } = bookingApiSlice;
+export const { useGetUserBookingQuery, useGetUserFavoriteQuery, useUpdateUserFavoriteMutation } = bookingApiSlice;
 
 export default bookingApiSlice

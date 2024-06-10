@@ -22,3 +22,8 @@
 .inverse {
     flex-direction: row-reverse;
 }
+.favorite {
+    background-color: var(--color-blue-1) !important;
+    color: white !important;
+    border-color: var(--color-blue-1) !important;
+}

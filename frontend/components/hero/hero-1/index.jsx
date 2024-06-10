@@ -11,7 +11,7 @@ const index = () => {
           <div className="col-auto">
             <div className="text-center">
               <h1
-                className="text-60 lg:text-40 md:text-30 text-white"
+                className="text-50 lg:text-40 md:text-30 text-white"
                 data-aos="fade-up"
               >
                 Explore & Book Your Perfect Retreat 

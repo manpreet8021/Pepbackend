@@ -5,7 +5,7 @@ dotenv.config()
 const SECRET = process.env.SECRET;
 
 export const authentication = (salt, password) => {
-    return crypto.createHmac('sha256', [salt, password].join('/')).update(SECRET).digest('hex');
-  }
-  
-  export const random = () => crypto.randomBytes(128).toString('base64');
+  return crypto.createHmac('sha256', [salt, password].join('/')).update(SECRET).digest('hex');
+}
+
+export const random = () => crypto.randomBytes(128).toString('base64');

@@ -1,4 +1,3 @@
-
 'use client'
 
 import { hotelsData } from "../../../data/hotels";
@@ -6,8 +5,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import Image from "next/image";
 import Link from "next/link";
+import { useUpdateUserFavoriteMutation } from "@/store/slice/api/bookingApiSlice";
 
 const HotelProperties = ({retreat}) => {
+  const [updateUserFavorite] = useUpdateUserFavoriteMutation()
+
   return (
     <>
       <div className="row y-gap-30">
@@ -42,7 +44,18 @@ const HotelProperties = ({retreat}) => {
                     {/* End image */}
 
                     <div className="cardImage__wishlist">
-                      <button className="button -blue-1 bg-white size-30 rounded-full shadow-2">
+                      <button className={`button -blue-1 bg-white size-30 rounded-full shadow-2`} id={item._id} onClick={async(e) => {
+                        e.preventDefault(); 
+                        const {data} = await updateUserFavorite({id: item?._id});
+                        if(data) {
+                          const element = document.getElementById(item._id);
+                          if (data.newInsert) {
+                            element.classList.add('favorite')
+                          } else {
+                            element.classList.remove('favorite')
+                          }
+                        }
+                      }}>
                         <i className="icon-heart text-12"></i>
                       </button>
                     </div>

@@ -351,7 +351,6 @@ const getRetreatDetailById = asyncHandler(async(req, res) => {
             throw new Error("Retreat not found")
         }
     } catch (error) {
-        console.log(error)
         res.status(404)
         throw new Error("Retreat not found")
     }
@@ -480,9 +479,5 @@ export const commonRetreatDetail = async({inDate, outDate, adult, retreatId, roo
 
     return response
 }
-
-const getBookedRetreatForUser = asyncHandler(async(req, res) => {
-    
-})
 
 export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat, getRetreatDetailById, getRetreatByParameter, getRetreatDetailForBooking }

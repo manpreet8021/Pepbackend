@@ -5,9 +5,12 @@ import ModalVideo from "react-modal-video";
 import { Gallery, Item } from "react-photoswipe-gallery";
 import Link from "next/link";
 import React, { useState } from 'react'
+import { useUpdateUserFavoriteMutation } from "@/store/slice/api/bookingApiSlice";
 
 export default function GalleryOne({detail}) {
-    const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState(false);
+  const [updateUserFavorite] = useUpdateUserFavoriteMutation()
+
   return (
     <>
      <ModalVideo
@@ -112,7 +115,20 @@ export default function GalleryOne({detail}) {
                   )}
                 </Item>
                 <div className="absolute px-20 py-20 col-12 d-flex justify-end">
-                  <button className="button -blue-1 size-40 rounded-full flex-center bg-white text-dark-1">
+                  <button className="button -blue-1 size-40 rounded-full flex-center bg-white text-dark-1" id={detail?._id}
+                    onClick={async(e) => {
+                      e.preventDefault(); 
+                      const {data} = await updateUserFavorite({id: detail?._id});
+                      
+                      if(data) {
+                        const element = document.getElementById(detail._id);
+                        if (data.newInsert) {
+                          element.classList.add('favorite')
+                        } else {
+                          element.classList.remove('favorite')
+                        }
+                      }
+                    }}>
                     <i className="icon-heart text-16" />
                   </button>
                 </div>

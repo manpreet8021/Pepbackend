@@ -8,9 +8,12 @@ import { Navigation, Pagination } from "swiper";
 import { hotelsData } from "../../data/hotels";
 import isTextMatched from "../../utils/isTextMatched";
 import { useGetRecommendedRetreatQuery } from "@/store/slice/api/retreatApiSlice";
+import { useUpdateUserFavoriteMutation } from "@/store/slice/api/bookingApiSlice";
 
 const Hotels = () => {
   const {data} = useGetRecommendedRetreatQuery()
+  const [updateUserFavorite] = useUpdateUserFavoriteMutation()
+
   return (
     <>
       <Swiper
@@ -80,7 +83,20 @@ const Hotels = () => {
                 {/* End .cardImage */}
 
                 <div className="cardImage__wishlist">
-                  <button className="button -blue-1 bg-white size-30 rounded-full shadow-2">
+                  <button id={item?._id} className="button -blue-1 bg-white size-30 rounded-full shadow-2"
+                    onClick={async(e) => {
+                      e.preventDefault(); 
+                      const {data} = await updateUserFavorite({id: item?._id});
+                      
+                      if(data) {
+                        const element = document.getElementById(item._id);
+                        if (data.newInsert) {
+                          element.classList.add('favorite')
+                        } else {
+                          element.classList.remove('favorite')
+                        }
+                      }
+                  }}>
                     <i className="icon-heart text-12" />
                   </button>
                 </div>

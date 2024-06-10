@@ -43,7 +43,7 @@ const bookingSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['intialize', 'success', 'failure'],
+        enum: ['intialize', 'success', 'failure', 'cancelled'],
         required: true
     },
     request: {

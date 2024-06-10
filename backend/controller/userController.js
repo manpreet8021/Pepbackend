@@ -30,22 +30,24 @@ const getAllFavorite = asyncHandler(async(req, res) => {
 const updateFavorite = asyncHandler(async(req, res) => {
     try {
         const user = req.user._id
-        const retreatId = req.params.id
+        const {id: retreatId} = req.body
+        const response = {newInsert: true}
 
         const favorite = await getFavoriteByUser(user)
 
         if(favorite) {
             if (favorite.retreat.includes(retreatId)) {
                 await removeFavorite(user, retreatId);
+                response.newInsert= false;
             } else {
                 favorite.retreat.push(retreatId);
                 await favorite.save();
             }
         } else {
             await saveFavorite({ user: user, retreat: [retreatId] });
-            console.log('Favorite document created and retreat added to favorites');
         }
-        res.status(201).json()
+
+        res.status(201).json(response)
     } catch (error) {
         res.status(400)
         throw new Error("Unable to find favorite retreat for this user")

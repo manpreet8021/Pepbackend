@@ -5,6 +5,6 @@ const router = express.Router()
 
 router.route('/booking').get(getUserBooking)
 router.route('/favorite').get(getAllFavorite)
-router.route('/favorite/:id').get(updateFavorite)
+router.route('/favorite/').post(updateFavorite)
 
 export default router
