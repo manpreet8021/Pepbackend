@@ -233,14 +233,6 @@ export const getRetreatDetails = (value, date) => retreatModel.aggregate(
         },
         {
             $lookup: {
-                from: 'schedules',
-                localField: '_id',
-                foreignField: 'retreat',
-                as: 'schedules'
-            }
-        },
-        {
-            $lookup: {
                 from: 'lookupvalues',
                 localField: 'type',
                 foreignField: '_id',
@@ -280,11 +272,41 @@ export const getRetreatDetails = (value, date) => retreatModel.aggregate(
             }
         },
         {
+            $lookup: {
+                from: 'schedules',
+                localField: '_id',
+                foreignField: 'retreat',
+                as: 'schedules'
+            }
+        },
+        {
             $unwind: '$schedules'
         },
         {
             $match: {
                 'schedules.endDate': {$gt: date}
+            }
+        },
+        {
+            $lookup: {
+                from: 'favorites',
+                let: { retreatId: '$_id' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: { $in: ['$$retreatId', '$retreat'] }
+                        }
+                    },
+                    {
+                        $project: { _id: 1 }
+                    }
+                ],
+                as: 'fav'
+            }
+        },
+        {
+            $addFields: {
+                fav: { $cond: { if: { $gt: [{ $size: '$fav' }, 0] }, then: true, else: false } }
             }
         },
         {
@@ -306,7 +328,8 @@ export const getRetreatDetails = (value, date) => retreatModel.aggregate(
                 retreatHighlights: { $first: '$retreatHighlights' },
                 retreatTypes: { $first: '$retreatTypes' },
                 thumbnail: { $first: '$thumbnail' },
-                price: { $first: '$price' }
+                price: { $first: '$price' },
+                fav: { $first: '$fav' }
             }
         },
         {
@@ -344,7 +367,8 @@ export const getRetreatDetails = (value, date) => retreatModel.aggregate(
                     name: 1
                 },
                 thumbnail: '$thumbnail.location',
-                price: 1
+                price: 1,
+                fav: 1
             }
         }
     ]
@@ -378,7 +402,29 @@ export const getClientRetreaties = ({params, limit, skip, extra=null}) => {
                 foreignField: '_id',
                 as: 'city'
             }
-        }
+        },
+        {
+            $lookup: {
+                from: 'favorites',
+                let: { retreatId: '$_id' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: { $in: ['$$retreatId', '$retreat'] }
+                        }
+                    },
+                    {
+                        $project: { _id: 1 }
+                    }
+                ],
+                as: 'fav'
+            }
+        },
+        {
+            $addFields: {
+                fav: { $cond: { if: { $gt: [{ $size: '$fav' }, 0] }, then: true, else: false } }
+            }
+        },
     ]
 
     if(extra && extra.retreatType?.length) {
@@ -432,7 +478,8 @@ export const getClientRetreaties = ({params, limit, skip, extra=null}) => {
                 country: { $arrayElemAt: ['$country.name', 0] },
                 city: { $arrayElemAt: ['$city.name', 0] },
                 retreatDuration: 1,
-                price: 1
+                price: 1,
+                fav: 1
             }
         }
     );

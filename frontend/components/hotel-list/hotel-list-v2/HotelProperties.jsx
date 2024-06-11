@@ -44,7 +44,7 @@ const HotelProperties = ({retreat}) => {
                     {/* End image */}
 
                     <div className="cardImage__wishlist">
-                      <button className={`button -blue-1 bg-white size-30 rounded-full shadow-2`} id={item._id} onClick={async(e) => {
+                      <button className={`button -blue-1 bg-white size-30 rounded-full shadow-2 ${item.fav && 'favorite'}`} id={item._id} onClick={async(e) => {
                         e.preventDefault(); 
                         const {data} = await updateUserFavorite({id: item?._id});
                         if(data) {

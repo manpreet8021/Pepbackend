@@ -115,7 +115,7 @@ export default function GalleryOne({detail}) {
                   )}
                 </Item>
                 <div className="absolute px-20 py-20 col-12 d-flex justify-end">
-                  <button className="button -blue-1 size-40 rounded-full flex-center bg-white text-dark-1" id={detail?._id}
+                  <button className={`button -blue-1 size-40 rounded-full flex-center bg-white text-dark-1 ${detail.fav && 'favorite'}`} id={detail?._id}
                     onClick={async(e) => {
                       e.preventDefault(); 
                       const {data} = await updateUserFavorite({id: detail?._id});

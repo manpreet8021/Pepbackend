@@ -4,7 +4,7 @@ import Header from "@/components/header";
 import CallToActions from "@/components/common/CallToActions";
 import DefaultFooter from "@/components/footer/default";
 import dynamic from "next/dynamic";
-import BookingInfo from "@/components/common/user/LocationInfo"
+import BookingInfo from "@/components/common/user/BookingInfo"
 import { useGetUserBookingQuery } from "@/store/slice/api/bookingApiSlice";
 
 const page = () => {

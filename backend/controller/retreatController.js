@@ -358,7 +358,11 @@ const getRetreatDetailById = asyncHandler(async(req, res) => {
 
 const getRecommendedRetreat = asyncHandler(async(req, res) => {
     try {
-        const retreat = await getClientRetreaties({params: {active: true}, limit: 8, skip: 0})
+        const extra = {}
+        extra.inDate = new Date(moment(new Date()).startOf("day").format("YYYY-MM-DD"))
+        extra.outDate = new Date(moment(new Date().setFullYear(extra.inDate.getFullYear() + 1)).startOf("day").format("YYYY-MM-DD"))
+
+        const retreat = await getClientRetreaties({params: {active: true}, limit: 8, skip: 0, extra: extra})
         
         const finalRetreat = retreat.map(({rooms, price, ...data}) => {
             let finalPrice = 0;

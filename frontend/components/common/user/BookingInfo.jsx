@@ -4,9 +4,9 @@ import Link from "next/link";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-const LocationInfo = ({data}) => {
+const BookingInfo = ({data}) => {
   return (
-    <div className="col-xl-9">
+    <div className="col-xl-10">
       <div className="row y-gap-30">
         {data?.map((item, index) => (
           <div className="col-12" key={index}>
@@ -108,4 +108,4 @@ const LocationInfo = ({data}) => {
   );
 };
 
-export default LocationInfo;
+export default BookingInfo;

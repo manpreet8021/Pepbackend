@@ -3,8 +3,8 @@
 
 import React, { useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import PasswordInfo from "./PasswordInfo";
-import LocationInfo from "./LocationInfo";
+import PasswordInfo from "./FavoriteInfo";
+import BookingInfo from "./BookingInfo";
 import PersonalInfo from "./PersonalInfo";
 
 const Index = () => {
@@ -15,7 +15,7 @@ const Index = () => {
     },
     {
       label: "Booking Information",
-      content: <LocationInfo />,
+      content: <BookingInfo />,
     },
     {
       label: "Change Password",
