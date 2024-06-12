@@ -12,11 +12,11 @@ const RelatedBlog = () => {
           >
             <div className="blogCard__image">
               <div className="rounded-4">
-                <Image
+                <img
                   width={400}
                   height={300}
-                  className="cover w-100 img-fluid"
-                  src={item.img}
+                  className="w-100 cover"
+                  src={item.img[0]}
                   alt="image"
                 />
               </div>

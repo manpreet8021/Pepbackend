@@ -6,11 +6,13 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar } from "swiper";
 import { Navigation } from "swiper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetTopCitiesQuery } from "@/store/slice/api/cityApiSlice";
+import { locationUpdate } from "@/store/slice/searchSlice";
 
 const PopularDestinations = () => {
   const {data: city} = useGetTopCitiesQuery()
+  const dispatch = useDispatch()
 
   return (
     <>
@@ -61,14 +63,14 @@ const PopularDestinations = () => {
               <div className="citiesCard__content d-flex flex-column justify-between text-center pt-30 pb-20 px-20">
                 <div className="citiesCard__bg" />
                 <div className="citiesCard__top">
-                  <div className="text-14 text-white">test</div>
+                  <div className="text-14 text-white"></div>
                 </div>
                 <div className="citiesCard__bottom">
                   <h4 className="text-26 md:text-20 lh-13 text-white mb-20">
                     {item.name}
                   </h4>
                   <Link href='/retreat'>
-                    <button type="button" className="button col-12 h-60 -blue-1 bg-white text-dark-1">
+                    <button type="button" className="button col-12 h-60 -blue-1 bg-white text-dark-1" onClick={() => {dispatch(locationUpdate({id: item._id,name: item.name}))}}>
                       Discover
                     </button>
                   </Link>

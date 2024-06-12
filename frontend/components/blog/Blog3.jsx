@@ -18,11 +18,11 @@ const Blog3 = () => {
           >
             <div className="blogCard__image">
               <div className="ratio ratio-4:3 rounded-4 rounded-8">
-                <Image
+                <img
                   width={400}
                   height={300}
                   className="img-ratio js-lazy"
-                  src={item.img}
+                  src={item.img[0]}
                   alt="image"
                 />
               </div>
