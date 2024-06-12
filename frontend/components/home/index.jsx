@@ -53,14 +53,13 @@ const Home = () => {
       </section>
       {/* End Popular Destinations */}
 
-      <section className="layout-pt-md layout-pb-md">
+      {/* <section className="layout-pt-md layout-pb-md">
         <div className="container">
           <div className="row y-gap-20">
             <AddBanner />
           </div>
         </div>
-        {/* End .container */}
-      </section>
+      </section> */}
       {/* End AddBanner */}
 
       <section className="layout-pt-md layout-pb-md">
