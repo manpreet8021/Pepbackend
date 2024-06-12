@@ -15,7 +15,7 @@ const RelatedBlog = () => {
                 <img
                   width={400}
                   height={300}
-                  className="w-100 cover"
+                  className="w-100 cover rounded-4"
                   src={item.img[0]}
                   alt="image"
                 />
