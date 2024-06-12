@@ -117,4 +117,5 @@ export const getBookingById = (id) => bookingModel.findById(id);
 export const createBooking = (values) => new bookingModel(values).save();
 export const updateBookingById = (id, value) => bookingModel.findByIdAndUpdate(id, value, {new: true}).select('bookingNumber');
 export const getBookingByOrderId = (params) => bookingModel.findOne(params).populate('retreat', 'title').select('bookingNumber method price retreat status address phoneNumber name email');
-export const getBookingForUser = (id) => bookingModel.find({user: new mongoose.Types.ObjectId(id)}).populate('retreat', 'title thumbnail.location retreatDuration').select('_id price retreat bookingNumber startDate endDate request');
+export const getAllBookingForUser = (params) => bookingModel.find(params).populate('retreat', 'title thumbnail.location retreatDuration').select('_id price retreat bookingNumber startDate endDate request');
+export const getBookingForUser = (params) => bookingModel.findOne(params).populate('retreat', 'title retreatDuration').select('_id price retreat bookingNumber startDate endDate request name address email attendee createdAt');

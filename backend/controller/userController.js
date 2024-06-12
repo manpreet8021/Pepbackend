@@ -1,11 +1,11 @@
 import moment from "moment";
 import asyncHandler from "../middleware/asyncHandler.js";
-import { getBookingForUser } from "../models/bookingModel.js";
+import { getAllBookingForUser, getBookingForUser } from "../models/bookingModel.js";
 import { getFavorite, getFavoriteByUser, removeFavorite, saveFavorite } from "../models/favoriteModel.js";
 
 const getUserBooking = asyncHandler(async(req, res) => {
     try {
-        const booking = await getBookingForUser(req.user._id)
+        const booking = await getAllBookingForUser({user: req.user._id})
         res.status(200).json(booking)
     } catch (error) {
         res.status(400)
@@ -54,4 +54,21 @@ const updateFavorite = asyncHandler(async(req, res) => {
     }
 })
 
-export { getUserBooking, getAllFavorite, updateFavorite }
+const getInvoiceDetailForBooking = asyncHandler(async(req, res) => {
+    const {id} = req.params
+    const {_id: userId} = req.user
+
+    try {
+        const bookingDetail = await getBookingForUser({bookingNumber: id, user: userId})
+        if(!bookingDetail){
+            throw new Error()
+        }
+        
+        res.status(200).json(bookingDetail)
+    } catch (error) {
+        res.status(400)
+        throw new Error("Failed getting Invoice detail")
+    }
+})
+
+export { getUserBooking, getAllFavorite, updateFavorite, getInvoiceDetailForBooking }

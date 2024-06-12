@@ -14,11 +14,11 @@ const Testimonial = () => {
       <div className="row items-center x-gap-15 y-gap-20 justify-center">
         <div className="col-auto">
           <img
-            width={150}
-            height={150}
-            src={'/img/testimonials/testimonial.JPEG'}
+            width={300}
+            height={300}
+            src={'/img/testimonials/testimonial.jpg'}
             alt="image"
-            className="js-lazy rounded-circle"
+            className="js-lazy rounded-4"
           />
         </div>
         {/* <div className="col-auto">

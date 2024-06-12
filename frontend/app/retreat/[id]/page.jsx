@@ -31,7 +31,6 @@ import { useSelector } from "react-redux";
 
 const HotelSingleV1Dynamic = ({ params }) => {
   const id = params.id;
-  const hotel = hotelsData.find((item) => item.id == id) || hotelsData[0];
   const {isLoading} = useGetRetreatDetailByIdQuery(id)
   const data = useSelector(state => state.retreat?.selectedRetreat)
 

@@ -89,14 +89,25 @@ const BookingInfo = ({data}) => {
                     <div className="text-22 lh-12 fw-600 mt-5">
                       INR <span>&#8377;</span>{item?.price}
                     </div>
+                  </div>
 
+                  <div className="row">
+                    <div className="col-auto">
+                    <Link
+                      href={`/invoice/${item.bookingNumber}`}
+                      className="button -md -dark-1 bg-blue-1 text-white mt-24"
+                    >
+                      Invoice {" "}
+                    </Link>
+                    </div>
+                    <div className="col-auto">
                     <Link
                       href={`/retreat/${item._id}`}
                       className="button -md -dark-1 bg-red-1 text-white mt-24"
                     >
                       Cancel booking{" "}
-                      <div className="icon-arrow-top-right ml-15"></div>
                     </Link>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -3,6 +3,7 @@ import CallToActions from "@/components/common/CallToActions";
 import DefaultHeader from "@/components/header/default-header";
 import DefaultFooter from "@/components/footer/default";
 import NotFound from "@/components/common/NotFound";
+import Header1 from "@/components/header";
 
 export const metadata = {
   title: "404 || GoTrip - Travel & Tour React NextJS Template",
@@ -17,7 +18,7 @@ const index = () => {
       <div className="header-margin"></div>
       {/* header top margin */}
 
-      <DefaultHeader />
+      <Header1 background="white" />
       {/* End Header 1 */}
 
       <NotFound />

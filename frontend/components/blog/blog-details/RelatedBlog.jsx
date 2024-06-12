@@ -11,11 +11,11 @@ const RelatedBlog = () => {
             className="blogCard -type-2 d-block bg-white rounded-4 shadow-4"
           >
             <div className="blogCard__image">
-              <div className="rounded-4">
+              <div className="ratio ratio-4:3 rounded-4 rounded-8">
                 <img
                   width={400}
                   height={300}
-                  className="w-100 cover rounded-4"
+                  className="img-ratio js-lazy"
                   src={item.img[0]}
                   alt="image"
                 />

@@ -21,10 +21,16 @@ const bookingApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 credentials: 'include'
             })
+        }),
+        getInvoiceDetailForBooking: builder.query({
+            query: (id) => ({
+                url: `/protect/user/invoice/${id}`,
+                credentials: 'include'
+            })
         })
     })
 })
 
-export const { useGetUserBookingQuery, useGetUserFavoriteQuery, useUpdateUserFavoriteMutation } = bookingApiSlice;
+export const { useGetUserBookingQuery, useGetUserFavoriteQuery, useUpdateUserFavoriteMutation, useGetInvoiceDetailForBookingQuery } = bookingApiSlice;
 
 export default bookingApiSlice
