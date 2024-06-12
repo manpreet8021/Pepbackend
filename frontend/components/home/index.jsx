@@ -104,7 +104,7 @@ const Home = () => {
             </div>
             {/* End col */}
 
-            <div className="col-lg-6">
+            <div className="col-lg-6 m-auto">
               <div
                 className="overflow-hidden js-testimonials-slider-3"
                 data-aos="fade-up"
@@ -126,10 +126,10 @@ const Home = () => {
             <div className="col-auto">
               <div className="sectionTitle -md">
                 <h2 className="sectionTitle__title">
-                  Get inspiration for your next trip
+                  Live the Experience Through Our Blogs
                 </h2>
                 <p className=" sectionTitle__text mt-5 sm:mt-0">
-                  Interdum et malesuada fames
+                  
                 </p>
               </div>
             </div>
