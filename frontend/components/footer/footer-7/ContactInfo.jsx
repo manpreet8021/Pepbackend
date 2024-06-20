@@ -9,8 +9,8 @@ const ContactInfo = () => {
     {
       id: 2,
       title: "Need support?",
-      action: "mailto:help@soulcation.com",
-      text: "help@soulcation.com",
+      action: "mailto:help@soulcation.co",
+      text: "help@soulcation.co",
     },
   ];
   return (
