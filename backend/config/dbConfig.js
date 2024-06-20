@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const connectDb = async ()=> {
+const connectDb = async () => {
   try {
     const URI = process.env.MONGO_URL
     const connection = await mongoose.connect(URI, {autoIndex: true});
