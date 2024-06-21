@@ -11,14 +11,14 @@ const SidebarRight = ({ detail }) => {
           </div>
           <div className="d-flex items-center">
             <div className="text-14 text-right mr-10">
-              <div className="lh-15 fw-500">Exceptional</div>
-              <div className="lh-15 text-light-1">
-                5 reviews
-              </div>
+              <span className="lh-15 fw-500">Duration </span>
+              <span className="lh-15 text-light-1">
+                {detail.retreatDuration} days
+              </span>
             </div>
-            <div className="size-40 flex-center bg-blue-1 rounded-4">
+            {/* <div className="size-40 flex-center bg-blue-1 rounded-4">
               <div className="text-14 fw-600 text-white">3.5</div>
-            </div>
+            </div> */}
           </div>
         </div>
         {/* End d-flex */}

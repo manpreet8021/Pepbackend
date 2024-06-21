@@ -258,7 +258,7 @@ const CustomerInfo = ({user, query, data, createRazorPayOrder}) => {
 
       <div className="col-xl-5 col-lg-4 mt-30">
         <div className="booking-sidebar">
-          <BookingDetails data={data?.retreat} fromDate={data?.fromDate} toDate={data?.toDate} adult={data?.adult}/>
+          <BookingDetails data={data?.retreat} fromDate={data?.fromDate} toDate={data?.toDate} adult={data?.adult} price={data?.price}/>
         </div>
       </div>
       {/*  */}

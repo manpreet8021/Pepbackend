@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const BookingDetails = ({data, fromDate, toDate, adult}) => {
+const BookingDetails = ({data, fromDate, toDate, adult, price}) => {
   return (
     <div className="px-30 py-30 border-light rounded-4">
       <div className="text-20 fw-500 mb-30">Your booking details</div>
@@ -71,9 +71,19 @@ const BookingDetails = ({data, fromDate, toDate, adult}) => {
       {/* End row */}
 
       <div className="border-top-light mt-30 mb-20" />
-      <div>
-        <div className="text-15">Total length of stay:</div>
-        <div className="fw-500">{data?.retreatDuration} Days</div>
+      <div className="row y-gap-20 justify-between">
+        <div className="col-auto">
+          <div className="text-15">Total length of stay:</div>
+          <div className="fw-500">{data?.retreatDuration} Days</div>
+        </div>
+        <div className="col-auto md:d-none">
+          <div className="h-full w-1 bg-border" />
+        </div>
+        <div className="col-auto text-right md:text-left">
+          <div className="text-15">Amount:</div>
+          <div className="fw-500">INR <span>&#8377;</span>{price}</div>
+          <div className="text-15 text-light-1">Including taxes</div>
+        </div>
       </div>
 
       <div className="border-top-light mt-30 mb-20" />

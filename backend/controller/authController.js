@@ -11,7 +11,7 @@ const registerSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
     confirmPassword: Joi.any().valid(Joi.ref('password')).required(),
-    privacyBox: Joi.boolean(),
+    subscribe: Joi.boolean(),
     line1: Joi.string().required(),
     line2: Joi.string().allow(''),
     state: Joi.string().required(),
