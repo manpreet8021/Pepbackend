@@ -14,6 +14,7 @@ import { Provider } from "react-redux";
 import { store } from "../store/store";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Auth from "./auth";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 if (typeof window !== "undefined") {
   require("bootstrap/dist/js/bootstrap");
@@ -52,6 +53,7 @@ export default function RootLayout({ children }) {
               <SrollTop />
             </Provider>
           </GoogleOAuthProvider>
+          <GoogleAnalytics gaId="G-0106MRQN4Z" />
         </main>
       </body>
     </html>
