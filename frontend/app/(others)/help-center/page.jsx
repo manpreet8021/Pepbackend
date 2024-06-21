@@ -5,6 +5,7 @@ import DefaultHeader from "@/components/header/default-header";
 import DefaultFooter from "@/components/footer/default";
 import HelpSearchBlock from "@/components/block/HelpSearchBlock";
 import HelpBlock from "@/components/block/HelpBlock";
+import Header1 from "@/components/header";
 
 export const metadata = {
   title: "Help Center || GoTrip - Travel & Tour React NextJS Template",
@@ -19,7 +20,7 @@ const HelpCenter = () => {
       <div className="header-margin"></div>
       {/* header top margin */}
 
-      <DefaultHeader />
+      <Header1 background="white" />
       {/* End Header 1 */}
 
       <section className="layout-pt-md">

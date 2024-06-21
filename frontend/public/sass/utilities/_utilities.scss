@@ -1201,6 +1201,13 @@ $_displays: none, inline-block, block, flex;
   }
 }
 
+.list-number {
+  li {
+    list-style-type: decimal;
+    list-style-position: inside;
+  }
+}
+
 .w-360 {
   width: 360px;
 }

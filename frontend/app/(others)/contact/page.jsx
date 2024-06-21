@@ -7,6 +7,7 @@ import Address from "@/components/block/Address";
 import Social from "@/components/common/social/Social";
 import ContactForm from "@/components/common/ContactForm";
 import LocationTopBar from "@/components/common/LocationTopBar";
+import Header1 from "@/components/header";
 
 export const metadata = {
   title: "Contact || GoTrip - Travel & Tour React NextJS Template",
@@ -21,7 +22,7 @@ const Contact = () => {
       <div className="header-margin"></div>
       {/* header top margin */}
 
-      <DefaultHeader />
+      <Header1 background="white" />
       {/* End Header 1 */}
 
       <LocationTopBar />

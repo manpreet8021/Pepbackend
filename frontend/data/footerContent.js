@@ -14,16 +14,15 @@ module.exports = [
     id: 2,
     title: "Support",
     menuList: [
-      { name: "Contact", routerPath: "/contact" },
-      { name: "Privacy Policy", routerPath: "/" },
-      { name: "Terms and Conditions", routerPath: "/" }
+      { name: "Privacy Policy", routerPath: "/privacy" },
+      { name: "Terms and Conditions", routerPath: "/terms" }
     ],
   },
   {
     id: 3,
     title: "Other Services",
     menuList: [
-      { name: "Car hire", routerPath: "/" }
+      { name: "FAQ", routerPath: "/faq" }
     ],
   },
 ];
