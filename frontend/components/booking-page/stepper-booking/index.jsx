@@ -38,7 +38,7 @@ const Index = ({user, query, data}) => {
       const { amount, id: order_id, currency } = value.data;
 
       const options = {
-        key: "rzp_test_NC7HqdpPDJRgJY",
+        key: "rzp_live_69KiiF5e00TiKS",
         amount: amount.toString(),
         currency: currency,
         name: "Soulcation",

@@ -71,11 +71,11 @@ const LoginForm = ({query}) => {
           </div>
           {/* End .col */}
 
-          <div className="col-12">
+          {/* <div className="col-12">
             <a href="#" className="text-14 fw-500 text-blue-1 underline">
               Forgot your password?
             </a>
-          </div>
+          </div> */}
           {/* End .col */}
 
           <div className="col-12">

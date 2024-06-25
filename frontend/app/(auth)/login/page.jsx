@@ -6,6 +6,7 @@ import LoginWithSocial from "@/components/common/LoginWithSocial";
 import LoginForm from "@/components/common/LoginForm";
 import Header from "@/components/header";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 
 const LogIn = () => {
@@ -37,8 +38,8 @@ const LogIn = () => {
                   <LoginWithSocial query={q}/>
                   <div className="col-12">
                     <div className="text-center px-30">
-                      By creating an account, you agree to our Terms of Service
-                      and Privacy Statement.
+                      By creating an account, you agree to our <Link href='/terms' className="text-blue-1">Terms of Service </Link>
+                      and <Link href='/privacy' className="text-blue-1">Privacy Statement</Link>.
                     </div>
                   </div>
                 </div>
