@@ -223,7 +223,7 @@ export const getAdminRetreaties = (value) => retreatModel.populate(retreatModel.
     ]),'type', 'name'
 );
 
-export const getRetreatDetails = (value, date) => retreatModel.aggregate(
+export const getRetreatDetails = (value, date, user_id) => retreatModel.aggregate(
     [
         {
             $match: {
@@ -294,7 +294,8 @@ export const getRetreatDetails = (value, date) => retreatModel.aggregate(
                 pipeline: [
                     {
                         $match: {
-                            $expr: { $in: ['$$retreatId', '$retreat'] }
+                            $expr: { $in: ['$$retreatId', '$retreat'] },
+                            user: user_id
                         }
                     },
                     {
@@ -410,7 +411,8 @@ export const getClientRetreaties = ({params, limit, skip, extra=null}) => {
                 pipeline: [
                     {
                         $match: {
-                            $expr: { $in: ['$$retreatId', '$retreat'] }
+                            $expr: { $in: ['$$retreatId', '$retreat'] },
+                            user: extra.user_id
                         }
                     },
                     {
@@ -455,8 +457,7 @@ export const getClientRetreaties = ({params, limit, skip, extra=null}) => {
             },
             {
                 $match: {
-                    'schedule.startDate': { $gte: extra.inDate },
-                    'schedule.endDate': { $lte: extra.outDate }
+                    'schedule.startDate': { $gte: extra.inDate, $lte: extra.outDate }
                 }
             }
         );

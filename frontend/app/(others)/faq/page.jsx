@@ -31,13 +31,13 @@ const HelpCenter = () => {
                 <h2 className="sectionTitle__title">
                   Welcome to the Help Center
                 </h2>
-                <p className=" sectionTitle__text mt-5 sm:mt-0">
-                  Lorem ipsum is placeholder text commonly used in site.
-                </p>
+                {/* <p className=" sectionTitle__text mt-5 sm:mt-0">
+                  
+                </p> */}
               </div>
               {/* End .sectiontitle */}
 
-              <HelpSearchBlock />
+              {/* <HelpSearchBlock /> */}
             </div>
           </div>
           {/* End .row */}
@@ -58,9 +58,7 @@ const HelpCenter = () => {
                 <h2 className="sectionTitle__title">
                   Frequently Asked Questions
                 </h2>
-                <p className=" sectionTitle__text mt-5 sm:mt-0">
-                  Interdum et malesuada fames
-                </p>
+                <p className=" sectionTitle__text mt-5 sm:mt-0"></p>
               </div>
             </div>
           </div>

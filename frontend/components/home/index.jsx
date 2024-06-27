@@ -89,7 +89,17 @@ const Home = () => {
 
       <section className="layout-pt-md layout-pb-lg">
         <div className="container">
-          <div className="row y-gap-20 justify-between">
+        <div className="row justify-center text-center">
+            <div className="col-auto">
+              <div className="sectionTitle -md">
+                <h2 className="sectionTitle__title">Why Choose Us</h2>
+                {/* <p className=" sectionTitle__text mt-5 sm:mt-0">
+                  These popular destinations have a lot to offer
+                </p> */}
+              </div>
+            </div>
+          </div>
+          <div className="row y-gap-40 justify-between pt-50">
             <BlockGuide />
           </div>
         </div>

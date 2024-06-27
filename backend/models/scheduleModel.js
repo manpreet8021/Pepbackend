@@ -32,3 +32,4 @@ export const getScheduleById = (id) => scheduleModel.findById(id);
 export const deleteScheduleById = (id) => scheduleModel.findOneAndDelete({ _id: id });
 export const updateScheduleById = (id, value) => scheduleModel.findByIdAndUpdate(id, value, {new: true});
 export const saveSchedule = (values, session) => new scheduleModel(values).save({session}).then((schedule) => schedule.toObject());
+export const deleteScheduleByRetreatId = (id) => scheduleModel.deleteMany({ retreat: id })

@@ -1,7 +1,7 @@
 import Joi from "joi";
 import asyncHandler from "../middleware/asyncHandler.js"
 import { getRetreatByParams, getAdminRetreaties, saveRetreat, updateRetreatById, getClientRetreaties, getRetreatDetails, getRetreatDetailForBookingTable } from "../models/retreatModel.js";
-import { saveSchedule } from "../models/scheduleModel.js";
+import { deleteScheduleByRetreatId, saveSchedule } from "../models/scheduleModel.js";
 import { getRoomById, getRoomByRetreat, saveRoom, updateRoomById } from "../models/roomModel.js";
 import { deleteImageFromCloudinary, uploadMultipleImages } from "../helpers/imageUpload.js";
 import mongoose from "mongoose";
@@ -181,9 +181,14 @@ const updateRetreat = asyncHandler(async(req, res) => {
         try{
             const retreat = await updateRetreatById(existingRetreat._id, { title, overview, description, youtubeUrl, price, type, retreatDuration, active, directBook, address: { line1, line2, city, country, zipcode}, Guest: {max: maxGuest, min: minGuest}, images: updatedImages, thumbnail: updatedThumbnail, retreatType, retreatHighlight }, session)
             if(retreat) {
+                await deleteScheduleByRetreatId(retreat._id, session)
+                for(let i=0; i<duration.length; i++) {
+                    await saveSchedule({startDate: duration[i][0], endDate: duration[i][1], retreat: retreat._id},session)
+                }
                 if(rooms && rooms.length){
-                    for(let i=0; i< rooms.length; i++) {
+                    for(let i=0; i < rooms.length; i++) {
                         let uploadedRoomImage = []
+
                         if(rooms[i].roomImageUpdated) {
                             if(!req.files[`rooms[${i}][images]`]) {
                                 res.status(400)
@@ -194,7 +199,6 @@ const updateRetreat = asyncHandler(async(req, res) => {
 
                         if(rooms[i]._id) {
                             const existingRoom = await getRoomById(rooms[i]._id)
-
                             if(existingRoom) {
                                 let roomTotalImage = existingRoom.images.length + uploadedRoomImage.length
                                 if(roomTotalImage <= 5) {
@@ -335,7 +339,11 @@ const deleteRoomImage = asyncHandler(async(req, res) => {
 const getRetreatDetailById = asyncHandler(async(req, res) => {
     try {
         const todayDate = new Date(moment().startOf("day").format("YYYY-MM-DD"))
-        const retreat = await getRetreatDetails(req.params.id, todayDate)
+        
+        const user = await getUserId(req.cookies['PEPRELIER-AUTH'])
+        const user_id = user?._id
+        
+        const retreat = await getRetreatDetails(req.params.id, todayDate, user_id)
         retreat[0].rooms = await getRoomByRetreat(req.params.id)
         
         if(retreat.length) {
@@ -343,6 +351,9 @@ const getRetreatDetailById = asyncHandler(async(req, res) => {
                 
                 let defaultRoom = rooms.length ? rooms[0]._id : ''
                 let finalPrice = rooms.length ? rooms[0].price : price
+
+                let tax = finalPrice * 0.18
+                finalPrice = finalPrice + tax
 
                 return {...data, roomId: defaultRoom, price: finalPrice, rooms}
             })
@@ -361,7 +372,10 @@ const getRecommendedRetreat = asyncHandler(async(req, res) => {
         const extra = {}
         extra.inDate = new Date(moment(new Date()).startOf("day").format("YYYY-MM-DD"))
         extra.outDate = new Date(moment(new Date().setFullYear(extra.inDate.getFullYear() + 1)).startOf("day").format("YYYY-MM-DD"))
+        
+        const user = await getUserId(req.cookies['PEPRELIER-AUTH'])
 
+        extra.user_id = user?._id
         const retreat = await getClientRetreaties({params: {active: true}, limit: 8, skip: 0, extra: extra})
         
         const finalRetreat = retreat.map(({rooms, price, ...data}) => {
@@ -371,6 +385,8 @@ const getRecommendedRetreat = asyncHandler(async(req, res) => {
             } else {
                 finalPrice = price
             }
+            let tax = finalPrice * 0.18
+            finalPrice = finalPrice + tax
             return {...data, price: finalPrice}
         })
         
@@ -382,40 +398,52 @@ const getRecommendedRetreat = asyncHandler(async(req, res) => {
 })
 
 const getRetreatByParameter = asyncHandler(async(req, res) => {
-    const {city, dates, adult, limit, skip, title, retreatType, price} = req.body
-    const params = {}
-    const extra = {}
+    try{
+        const {city, dates, adult, limit, skip, title, retreatType, price} = req.body
+        const params = {}
+        const extra = {}
 
-    params.active = true
-    if(city) 
-        params['address.city'] = new mongoose.Types.ObjectId(city)
-    if(adult)
-        params['Guest.max'] = {$gte: adult}
-    if(title)
-        params.title = { $regex: title, $options: 'i' };
-    if(retreatType) {
-        const mongooseRetreatType = retreatType.map(type => new mongoose.Types.ObjectId(type))
-        extra.retreatType = mongooseRetreatType
-    }
+        params.active = true
+        if(city) 
+            params['address.city'] = new mongoose.Types.ObjectId(city)
+        if(adult)
+            params['Guest.max'] = {$gte: adult}
+        if(title)
+            params.title = { $regex: title, $options: 'i' };
+        if(retreatType) {
+            const mongooseRetreatType = retreatType.map(type => new mongoose.Types.ObjectId(type))
+            extra.retreatType = mongooseRetreatType
+        }
 
-    if(dates && dates.length === 2) {
-        extra.inDate = new Date(moment(dates[0]).startOf("day").format("YYYY-MM-DD"))
-        extra.outDate = new Date(moment(dates[1]).startOf("day").format("YYYY-MM-DD"))
-    }
-    
-    const retreat = await getClientRetreaties({limit: limit, skip: skip, params: params, extra: extra})
-    
-    const finalRetreat = retreat.map(({rooms, price, ...data}) => {
-        let finalPrice = 0;
+        if(dates && dates.length === 2) {
+            extra.inDate = new Date(moment(dates[0]).startOf("day").format("YYYY-MM-DD"))
+            extra.outDate = new Date(moment(dates[1]).startOf("day").format("YYYY-MM-DD"))
+        }
+
+        const user = await getUserId(req.cookies['PEPRELIER-AUTH'])
+        extra.user_id = user?._id
+
+        const retreat = await getClientRetreaties({limit: limit, skip: skip, params: params, extra: extra})
+        
+        const finalRetreat = retreat.map(({rooms, price, ...data}) => {
+            let finalPrice = 0;
             if(rooms.length) {
                 finalPrice = rooms.sort()[0]
             } else {
                 finalPrice = price
             }
+
+            let tax = finalPrice * 0.18
+            finalPrice = finalPrice + tax
+
             return {...data, price: finalPrice}
-    })
-    
-    res.status(200).json(finalRetreat)
+        })
+        
+        res.status(200).json(finalRetreat)
+    } catch (error) {
+        res.status(400)
+        throw new Error("Error finding retreat")
+    }
 })
 
 const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
@@ -427,14 +455,8 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
             throw new Error("Data is not valid")
         }
 
-        let loggedInUser = null
-
-        if(req.cookies['PEPRELIER-AUTH']) {
-            const user = await getUserBySessionToken(req.cookies['PEPRELIER-AUTH']);
-            if(user) {
-                loggedInUser = user
-            }
-        }
+        const loggedInUser = await getUserId(req.cookies['PEPRELIER-AUTH'])
+        
         const {inDate, outDate, adult, retreatId, roomId} = req.body
         const returnValue = await commonRetreatDetail({inDate, outDate, adult, retreatId, roomId})
         const {inReturnDate, outReturnDate, detail} = returnValue
@@ -449,6 +471,9 @@ const getRetreatDetailForBooking = asyncHandler(async(req, res) => {
                 finalPrice = rooms ? rooms : price
                 return { ...data }
             })
+
+            let tax = finalPrice * 0.18
+            finalPrice = finalPrice + tax
             
             response.retreat = finalDetail[0]
             response.price = adult * finalPrice
@@ -482,6 +507,16 @@ export const commonRetreatDetail = async({inDate, outDate, adult, retreatId, roo
     response.detail = await getRetreatDetailForBookingTable({ retreatId, inDate, outDate, roomId })
 
     return response
+}
+
+const getUserId = async(cookie) => {
+    if(cookie) {
+        const user = await getUserBySessionToken(cookie);
+        if(user) {
+            return user
+        }
+    }
+    return null
 }
 
 export { getRetreat, addRetreat, updateRetreat, deleteRetreat, deleteRetreatImage, deleteRoomImage, getRecommendedRetreat, getRetreatDetailById, getRetreatByParameter, getRetreatDetailForBooking }

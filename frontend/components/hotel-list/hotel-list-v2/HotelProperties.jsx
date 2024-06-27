@@ -156,13 +156,13 @@ const HotelProperties = ({retreat}) => {
 
                   <div className="">
                     <div className="text-14 text-light-1 mt-50 md:mt-20">
-                      Duration {item.retreatDuration} nights
+                      Duration {item.retreatDuration} days
                     </div>
                     <div className="text-22 lh-12 fw-600 mt-5">
                       INR <span>&#8377;</span>{item?.price}
                     </div>
                     <div className="text-14 text-light-1 mt-5">
-                      Including tax and services
+                      Including all tax and services
                     </div>
 
                     <Link

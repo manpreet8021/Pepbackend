@@ -276,9 +276,11 @@ const HotelSingleV1Dynamic = ({ params }) => {
               </div>
             </section> */}
 
-            <CallToActions />
+            <section className="layout-pt-md layout-pb-lg">
+              <CallToActions />
+            </section>
 
-            {/* <DefaultFooter /> */}
+            <DefaultFooter />
           </>
           : null
       }
