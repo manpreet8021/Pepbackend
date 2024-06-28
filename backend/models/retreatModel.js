@@ -457,7 +457,7 @@ export const getClientRetreaties = ({params, limit, skip, extra=null}) => {
             },
             {
                 $match: {
-                    'schedule.startDate': { $gte: extra.inDate, $lte: extra.outDate }
+                    'schedule.endDate': { $gte: extra.inDate, $lte: extra.outDate },
                 }
             }
         );
